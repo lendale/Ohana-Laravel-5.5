@@ -1,0 +1,11 @@
+main {
+    padding-top: 70px;
+}
+
+.tab-content.main-raised {
+    margin-top: 0px;
+}
+
+.modal {
+    overflow: auto !important;
+}

@@ -1,0 +1,147 @@
+body {
+    background-color: #FBFBFD;
+}
+
+
+/* body.tree {
+    background-color: #9b9b9b;
+} */
+
+.navbar-fixed .nav-wrapper ul li.active {
+    background-color: #DFCFE0;
+}
+
+.navbar-fixed .nav-wrapper ul li:hover {
+    background-color: #DFCFE0;
+}
+
+.parallax-container {
+    min-height: 380px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255, 255, 255, .9);
+}
+
+.parallax-container .section {
+    width: 100%;
+}
+
+@media only screen and (max-width: 992px) {
+    .parallax-container .section {
+        position: absolute;
+        top: 40%;
+    }
+    #index-banner .section {
+        top: 10%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #index-banner .section {
+        top: 0;
+    }
+}
+
+.modal.profilebox {
+    position: relative;
+    background: #22242a;
+    min-height: 230px;
+    max-width: 700px;
+    width: calc(60% - 120px);
+    border-radius: 8px;
+    padding: 50px 20px 20px 100px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.23), 0 10px 40px rgba(0, 0, 0, 0.19);
+    display: flex;
+    flex-direction: column;
+}
+
+.profpic {
+    position: absolute;
+    top: 20px;
+    left: -60px;
+    height: 120px;
+    width: 120px;
+    border-radius: 50%;
+    border: 4px solid #22242a;
+    background: #22242a;
+    display: inline-block;
+    box-shadow: 0 1.5px 4px rgba(0, 0, 0, 0.24), 0 1.5px 6px rgba(0, 0, 0, 0.12);
+}
+
+.tabs-vertical .tabs {
+    height: auto;
+    -ms-flex-direction: column;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+
+.tabs-vertical .tab {
+    width: 100%;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    display: block;
+    float: left;
+    text-align: left;
+    line-height: 48px;
+    height: 48px;
+    padding: 0;
+    margin: 0;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+}
+
+.tabs-vertical .tab .active {
+    -moz-transition: border-color .5s ease;
+    -o-transition: border-color .5s ease;
+    -webkit-transition: border-color .5s ease;
+    transition: border-color .5s ease;
+    border-right: 3px solid #7280ce;
+    color: #3f51b5;
+}
+
+.tabs-vertical .tab a {
+    color: #3f51b5;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    -webkit-transition: color 0.28s ease;
+    -moz-transition: color 0.28s ease;
+    -o-transition: color 0.28s ease;
+    -ms-transition: color 0.28s ease;
+    transition: color 0.28s ease;
+}
+
+.tabs-vertical .tab a:hover {
+    color: #8591d5;
+}
+
+.tabs-vertical .tab.disabled a {
+    color: #8591d5;
+    cursor: default;
+}
+
+.tabs-vertical .indicator {
+    display: none;
+}
+
+.card .card-header {
+    padding: 10px 20px;
+    border-radius: 0 0 2px 2px;
+}
+
+.card .card-header p {
+    margin: 0;
+    color: inherit;
+}
+
+.card .card-header .card-title {
+    line-height: 36px;
+}
+
+.no-padding {
+    padding: 0 !important;
+}

@@ -116,19 +116,20 @@ function getTreeData(uid, clanId) {
 }
 
 function addFamilyMember() {
-    var gender = $("#select_gender").val();
-    var relationship = $("#select_relationship").val();
-    var livingStatus = $("#select_living_status").val();
-    var firstName = $("#first_name").val();
-    var middleName = $("#middle_name").val();
-    var lastName = $("#last_name").val();
-    var birthDate = $('#birth_date').val();
-    var birthPlace = $('#birth_place').val();
+    var gender = $("select.select-gender").val();
+    var livingStatus = $("select.select-status").val();
+    var role = $("select.select-role").val();
+    var firstName = $(".first-name").val();
+    var middleName = $(".middle-name").val();
+    var lastName = $(".last-name").val();
+    var birthDate = $(".birth-date").val();
+    var birthPlace = $(".birth-place").val();
 
     var person = {
         gender: gender,
-        relationship: relationship,
+        relationship: "father",
         livingStatus: livingStatus,
+        role: role,
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
@@ -136,43 +137,27 @@ function addFamilyMember() {
         clanId: userClanId
     };
 
-    if ($("#middle_name").length > 0) {
+    if (middleName.length > 0) {
         person.middleName = middleName;
     }
 
-    if ($("#birth_place").length > 0) {
+    if (birthPlace.length > 0) {
         person.birthPlace = birthPlace;
     }
 
-    if (relationship === "mother") {
-        person.loc = "user_mothers";
-        userMothersRef.child(currentUser.uid).push(person);
-    } else if (relationship === "father") {
-        person.loc = "user_fathers";
-        userFathersRef.child(currentUser.uid).push(person);
-    } else if (relationship === "wife") {
-        person.loc = "user_wivess";
-        userWivesRef.child(currentUser.uid).push(person);
-    } else if (relationship === "husband") {
-        person.loc = "user_husbands";
-        userHusbandssRef.child(currentUser.uid).push(person);
-    } else if (relationship === "daughter") {
-        person.loc = "user_daughters";
-        userDaughtersRef.child(currentUser.uid).push(person);
-    } else if (relationship === "son") {
-        person.loc = "user_sons";
-        userSonsRef.child(currentUser.uid).push(person);
-    }
+    console.log(person);
 
-    resetAddFamilyForm();
+    //   userFamilyRef.child(currentUser.uid).child("fathers").push(person);
 }
 
 function addFather() {
     var gender = $("#father_gender").val();
     var livingStatus = $("#father_living_status").val();
+    var role = $("#father_role_in_tree").val();
     var firstName = $("#father_first_name").val();
     var middleName = $("#father_middle_name").val();
     var lastName = $("#father_last_name").val();
+    var email = $("#father_email").val();
     var birthDate = $('#father_birth_date').val();
     var birthPlace = $('#father_birth_place').val();
 
@@ -180,6 +165,7 @@ function addFather() {
         gender: gender,
         relationship: "father",
         livingStatus: livingStatus,
+        role: role,
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
@@ -187,12 +173,16 @@ function addFather() {
         clanId: userClanId
     };
 
-    if ($("#father_middle_name").length > 0) {
+    if (middleName.length > 0) {
         person.middleName = middleName;
     }
 
-    if ($("#father_birth_place").length > 0) {
+    if (birthPlace.length > 0) {
         person.birthPlace = birthPlace;
+    }
+
+    if (email.length > 0) {
+        person.email = email;
     }
 
     userFamilyRef.child(currentUser.uid).child('fathers').push(person);
@@ -201,9 +191,11 @@ function addFather() {
 function addMother() {
     var gender = $("#mother_gender").val();
     var livingStatus = $("#mother_living_status").val();
+    var role = $("#mother_role_in_tree").val();
     var firstName = $("#mother_first_name").val();
     var middleName = $("#mother_middle_name").val();
     var lastName = $("#mother_maiden_name").val();
+    var email = $("#mother_email").val();
     var birthDate = $('#mother_birth_date').val();
     var birthPlace = $('#mother_birth_place').val();
 
@@ -211,6 +203,7 @@ function addMother() {
         gender: gender,
         relationship: "mother",
         livingStatus: livingStatus,
+        role: role,
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
@@ -218,12 +211,16 @@ function addMother() {
         clanId: userClanId
     };
 
-    if ($("#mother_middle_name").length > 0) {
+    if (middleName.length > 0) {
         person.middleName = middleName;
     }
 
-    if ($("#mother_birth_place").length > 0) {
+    if (birthPlace.length > 0) {
         person.birthPlace = birthPlace;
+    }
+
+    if (email.length > 0) {
+        person.email = email;
     }
 
     userFamilyRef.child(currentUser.uid).child('mothers').push(person);
@@ -232,15 +229,18 @@ function addMother() {
 function addSpouse() {
     var gender = $("#spouse_gender").val();
     var livingStatus = $("#spouse_living_status").val();
+    var role = $("#spouse_role_in_tree").val();
     var firstName = $("#spouse_first_name").val();
     var middleName = $("#spouse_middle_name").val();
     var lastName = $("#spouse_last_name").val();
+    var email = $("#spouse_email").val();
     var birthDate = $('#spouse_birth_date').val();
     var birthPlace = $('#spouse_birth_place').val();
 
     var person = {
         gender: gender,
         livingStatus: livingStatus,
+        role: role,
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
@@ -248,12 +248,16 @@ function addSpouse() {
         clanId: userClanId
     };
 
-    if ($("#spouse_middle_name").length > 0) {
+    if (middleName.length > 0) {
         person.middleName = middleName;
     }
 
-    if ($("#spouse_birth_place").length > 0) {
+    if (birthPlace.length > 0) {
         person.birthPlace = birthPlace;
+    }
+
+    if (email.length > 0) {
+        person.email = email;
     }
 
     if (gender === "male") {
@@ -268,15 +272,18 @@ function addSpouse() {
 function addChild() {
     var gender = $("#child_gender").val();
     var livingStatus = $("#child_living_status").val();
+    var role = $("#child_role_in_tree").val();
     var firstName = $("#child_first_name").val();
     var middleName = $("#child_middle_name").val();
     var lastName = $("#child_last_name").val();
+    var email = $('#child_email').val();
     var birthDate = $('#child_birth_date').val();
     var birthPlace = $('#child_birth_place').val();
 
     var person = {
         gender: gender,
         livingStatus: livingStatus,
+        role: role,
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
@@ -284,12 +291,16 @@ function addChild() {
         clanId: userClanId
     };
 
-    if ($("#child_middle_name").length > 0) {
+    if (middleName.length > 0) {
         person.middleName = middleName;
     }
 
-    if ($("#child_birth_place").length > 0) {
+    if (lastName.length > 0) {
         person.birthPlace = birthPlace;
+    }
+
+    if (email.length > 0) {
+        person.email = birthPlace;
     }
 
     if (gender === "male") {

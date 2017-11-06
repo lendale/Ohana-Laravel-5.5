@@ -170,7 +170,8 @@ function addFather() {
         lastName: lastName,
         displayName: firstName + " " + lastName,
         birthDate: birthDate,
-        clanId: userClanId
+        clanId: userClanId,
+        merged: false
     };
 
     if (middleName.length > 0) {
@@ -208,7 +209,8 @@ function addMother() {
         lastName: lastName,
         displayName: firstName + " " + lastName,
         birthDate: birthDate,
-        clanId: userClanId
+        clanId: userClanId,
+        merged: false
     };
 
     if (middleName.length > 0) {
@@ -245,7 +247,8 @@ function addSpouse() {
         lastName: lastName,
         displayName: firstName + " " + lastName,
         birthDate: birthDate,
-        clanId: userClanId
+        clanId: userClanId,
+        merged: false
     };
 
     if (middleName.length > 0) {
@@ -288,7 +291,8 @@ function addChild() {
         lastName: lastName,
         displayName: firstName + " " + lastName,
         birthDate: birthDate,
-        clanId: userClanId
+        clanId: userClanId,
+        merged: false
     };
 
     if (middleName.length > 0) {

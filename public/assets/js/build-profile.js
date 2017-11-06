@@ -70,7 +70,7 @@ window.fbAsyncInit = function() {
             FB.api(
                 "/me",
                 "GET", {
-                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender,family{first_name,middle_name,last_name,name,relationship}",
+                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender,family{first_name,middle_name,last_name,name,relationship,picture.height(961)}",
                     access_token: fbAccessToken
                 },
                 function(response) {
@@ -198,7 +198,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 } else {
                     person = {
@@ -208,7 +210,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 }
                 fbFamily.push(person);
@@ -223,7 +227,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 } else {
                     person = {
@@ -233,7 +239,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 }
                 fbFamily.push(person);
@@ -248,7 +256,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 } else {
                     person = {
@@ -258,7 +268,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 }
                 fbFamily.push(person);
@@ -270,7 +282,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 } else {
                     person = {
@@ -280,7 +294,9 @@ function getFbFamilyData(graphResponse) {
                         lastName: element.last_name,
                         displayName: element.name,
                         relationship: element.relationship,
-                        clanId: clan_id
+                        clanId: clan_id,
+                        merged: false,
+                        photoUrl: element.picture.data.url
                     };
                 }
                 fbFamily.push(person);

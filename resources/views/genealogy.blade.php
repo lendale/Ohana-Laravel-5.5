@@ -276,7 +276,7 @@
 
                             <!-- Dropdowns start -->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="father_gender" class="selectpicker" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
                                         <option disabled>Gender</option>
                                         <option value="male" selected>Male</option>
@@ -284,15 +284,37 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="father_living_status" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                         <option disabled selected>Select Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <select id="father_role_in_tree" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
+                                        <option disabled selected>Role in Tree</option>
+                                        <option value="guest">Guest</option>
+                                        <option value="contributor">Contributor</option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- Dropdowns end -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                        <div id="group_father_email" class="form-group label-floating">
+                                            <label class="control-label">Email address <small>(required for Contributor Role)</small></label>
+                                            <input id="father_email" name="email" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Birth row start -->
                             <div class="row">
@@ -399,7 +421,7 @@
 
                             <!-- Dropdowns start -->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="mother_gender" class="selectpicker" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
                                         <option disabled>Gender</option>
                                         <option value="male">Male</option>
@@ -407,15 +429,37 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="mother_living_status" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                         <option disabled selected>Select Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <select id="mother_role_in_tree" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
+                                        <option disabled selected>Role in Tree</option>
+                                        <option value="guest">Guest</option>
+                                        <option value="contributor">Contributor</option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- Dropdowns end -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">email</i>
+                                        </span>
+                                        <div id="group_mother_email" class="form-group label-floating">
+                                            <label class="control-label">Email address <small>(required for Contributor Role)</small></label>
+                                            <input id="mother_email" name="email" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Birth row start -->
                             <div class="row">
@@ -522,7 +566,7 @@
 
                             <!-- Dropdowns start -->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="spouse_gender" class="selectpicker" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
                                         <option disabled selected>Select Gender</option>
                                         <option value="male">Male</option>
@@ -530,15 +574,37 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="spouse_living_status" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                         <option disabled selected>Select Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <select id="spouse_role_in_tree" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
+                                        <option disabled selected>Role in Tree</option>
+                                        <option value="guest">Guest</option>
+                                        <option value="contributor">Contributor</option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- Dropdowns end -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                        <div id="group_spouse_email" class="form-group label-floating">
+                                            <label class="control-label">Email address <small>(required for Contributor Role)</small></label>
+                                            <input id="spouse_email" name="email" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Birth row start -->
                             <div class="row">
@@ -645,7 +711,7 @@
 
                             <!-- Dropdowns start -->
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="child_gender" class="selectpicker" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
                                         <option disabled selected>Select Gender</option>
                                         <option value="male">Male</option>
@@ -653,15 +719,37 @@
                                     </select>
                                 </div>
 
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <select id="child_living_status" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                         <option disabled selected>Select Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
                                 </div>
+
+                                <div class="col-md-4">
+                                    <select id="child_role_in_tree" class="selectpicker" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
+                                        <option disabled selected>Role in Tree</option>
+                                        <option value="guest">Guest</option>
+                                        <option value="contributor">Contributor</option>
+                                    </select>
+                                </div>
                             </div>
                             <!-- Dropdowns end -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                        <div id="group_child_email" class="form-group label-floating">
+                                            <label class="control-label">Email address <small>(required for Contributor Role)</small></label>
+                                            <input id="child_email" name="email" type="text" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <!-- Birth row start -->
                             <div class="row">

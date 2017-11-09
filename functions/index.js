@@ -4,13 +4,25 @@ admin.initializeApp(functions.config().firebase)
 
 // Deploy specific functions => firebase deploy --only functions:func1,func2,etc..
 
-exports.helloWorld = functions.https.onRequest((request, response) => {
-    response.send("Hello from Firebase!");
-});
+// exports.helloWorld = functions.https.onRequest((request, response) => {
+//     response.send("Hello from Firebase!");
+// });
 
 /* ========================
         Tree Functions
     ======================== */
+
+exports.genealogy = functions.https.onRequest((req, res) => {
+    res.status(200).send(`<!doctype html>
+    <head>
+      <title>Time</title>
+    </head>
+    <body>
+      <h1>Hello!</h1>
+    </body>
+  </html>`);
+})
+
 exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(event => {
     const root = event.data.ref.root
     let uid = event.params.uid
@@ -35,9 +47,9 @@ exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pu
     let treeObj = new Object()
 
     if (userObj.photoUrl === undefined) {
-        treeObj = { key: pushKey, n: userObj.displayName, s: "female", loc: "user_mothers" }
+        treeObj = { key: pushKey, n: userObj.displayName, s: "female", loc: "/user_family/" + uid + "/mothers/" }
     } else {
-        treeObj = { key: pushKey, n: userObj.displayName, s: "female", loc: "user_mothers", img: userObj.photoUrl }
+        treeObj = { key: pushKey, n: userObj.displayName, s: "female", loc: "/user_family/" + uid + "/mothers/", img: userObj.photoUrl }
     }
 
     updateCurrentUser(uid, clanId, pushKey, "m", root)
@@ -56,9 +68,9 @@ exports.addFatherToClan = functions.database.ref('/user_family/{uid}/fathers/{pu
     let treeObj = new Object()
 
     if (userObj.photoUrl === undefined) {
-        treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "user_fathers" }
+        treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "/user_family/" + uid + "/fathers/" }
     } else {
-        treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "user_fathers", img: userObj.photoUrl }
+        treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "/user_family/" + uid + "/fathers/", img: userObj.photoUrl }
     }
 
     updateCurrentUser(uid, clanId, pushKey, "f", root)
@@ -85,9 +97,9 @@ exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}
         })
         .then(function() {
             if (userObj.photoUrl === undefined) {
-                treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "user_sons" };
+                treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "/user_family/" + uid + "/sons/" };
             } else {
-                treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "user_sons", img: userObj.photoUrl };
+                treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "/user_family/" + uid + "/sons/", img: userObj.photoUrl };
             }
 
             if (currentUserGender === "male") {
@@ -96,14 +108,10 @@ exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}
                 treeObj.m = uid;
             }
         })
-        .then(() => {
-            root
-                .child("user_tree_go")
-                .child(clanId)
-                .child(pushKey)
-                .set(treeObj);
+        .then(function() {
+            return root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj);
         })
-        .then(() => {
+        .then(function() {
             createPotentialUser(event);
         });
 })
@@ -117,34 +125,30 @@ exports.addDaughterToClan = functions.database.ref('/user_family/{uid}/daughters
 
     const root = event.data.ref.root
     const currentUser = root.child('users').child(uid).once('value')
-    var currentUserGender;
+    var currentUserGender
 
     return currentUser
         .then(function(snapshot) {
-            currentUserGender = snapshot.val().gender;
+            currentUserGender = snapshot.val().gender
         })
         .then(() => {
             if (userObj.photoUrl === undefined) {
-                treeObj = { key: pushKey, n: userObj.displayName, s: "female", loc: "user_daughters" };
+                treeObj = { key: pushKey, n: userObj.displayName, s: "female", loc: "/user_family/" + uid + "/daughters/" }
             } else {
-                treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "user_daughters", img: userObj.photoUrl };
+                treeObj = { key: pushKey, n: userObj.displayName, s: "male", loc: "/user_family/" + uid + "/daughters/", img: userObj.photoUrl }
             }
 
             if (currentUserGender === "male") {
-                treeObj.f = uid;
+                treeObj.f = uid
             } else {
-                treeObj.m = uid;
+                treeObj.m = uid
             }
         })
-        .then(() => {
-            root
-                .child("user_tree_go")
-                .child(clanId)
-                .child(pushKey)
-                .set(treeObj);
+        .then(function() {
+            return root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj)
         })
         .then(function() {
-            createPotentialUser(event);
+            createPotentialUser(event)
         });
 })
 
@@ -162,7 +166,7 @@ exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKe
             key: pushKey,
             n: userObj.displayName,
             s: 'female',
-            loc: "user_wives",
+            loc: "/user_family/" + uid + "/wives/",
             vir: uid
         };
     } else {
@@ -171,7 +175,7 @@ exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKe
             n: userObj.displayName,
             s: 'female',
             img: userObj.photoUrl,
-            loc: "user_wives",
+            loc: "/user_family/" + uid + "/wives/",
             vir: uid
         };
     }
@@ -200,16 +204,20 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
 
     if (parentType === "mother") {
         parent.then(function(snapshot) {
-            if (snapshot.val().f !== null) {
-                userTreeRef.child(clanId).child(key).update({ vir: snapshot.val().f })
-                userTreeRef.child(clanId).child(snapshot.val().f).update({ ux: key })
+            if ((snapshot.val().f !== null)) {
+                const pr1 = userTreeRef.child(clanId).child(key).update({ vir: snapshot.val().f })
+                const pr2 = userTreeRef.child(clanId).child(snapshot.val().f).update({ ux: key })
+
+                return Promise.all([pr1, pr2])
             }
         })
     } else if (parentType === "father") {
         parent.then(function(snapshot) {
-            if (snapshot.val().m !== null) {
-                userTreeRef.child(clanId).child(key).update({ ux: snapshot.val().m })
-                userTreeRef.child(clanId).child(snapshot.val().m).update({ vir: key })
+            if ((snapshot.val().m !== null)) {
+                const pr1 = userTreeRef.child(clanId).child(key).update({ ux: snapshot.val().m })
+                const pr2 = userTreeRef.child(clanId).child(snapshot.val().m).update({ vir: key })
+
+                return Promise.all([pr1, pr2]);
             }
         })
     }
@@ -221,7 +229,7 @@ function createPotentialUser(event) {
 
     userObj.tempKeyInClan = event.params.pushKey
 
-    potentialUsersRef.push(userObj)
+    return potentialUsersRef.push(userObj)
 }
 
 function updateChildParentKey(uid, clanId, key, parentType) {
@@ -238,7 +246,7 @@ function updateChildParentKey(uid, clanId, key, parentType) {
         });
 }
 
-function checkPotentialUser(displayName) {
+function checkPotentialUser(email) {
     var newDisplayName;
     var exists = false;
 
@@ -247,8 +255,8 @@ function checkPotentialUser(displayName) {
         .ref()
         .child("potential_users")
         .once("value")
-        .then(function(snapshot) {
-            snapshot.forEach(function(childsnapshot) {
+        .then(snapshot => {
+            snapshot.forEach(childsnapshot => {
                 newDisplayName = childsnapshot.val().displayName;
 
                 if (displayName === newDisplayName) {

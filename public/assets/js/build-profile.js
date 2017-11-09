@@ -18,8 +18,9 @@ const FIREBASE_AUTH = firebase.auth();
 const FIREBASE_DATABASE = firebase.database();
 const FIREBASE_STORAGE = firebase.storage();
 
-const usersRef = FIREBASE_DATABASE.ref().child("users");
-const userFamilyRef = FIREBASE_DATABASE.ref().child('user_family');
+const rootRef = FIREBASE_DATABASE.ref();
+const usersRef = rootRef.child("users");
+const userFamilyRef = rootRef.child('user_family');
 const displayPicStorageRef = FIREBASE_STORAGE.ref().child("display_pics")
 
 /* ========================
@@ -31,6 +32,7 @@ FIREBASE_AUTH.onAuthStateChanged(handleAuthStateChanged);
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user;
+        checkPotentialUser();
         if (user.providerData[0].providerId === "facebook.com") {
             provider = user.providerData[0].providerId;
         } else if (user.providerData[0].providerId === "password") {
@@ -116,7 +118,8 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
-                clanId: clan_id
+                clanId: clan_id,
+                merged: true
             };
         } else {
             fbUser = {
@@ -130,7 +133,8 @@ function segregateFbData(response, uid) {
                 birthPlace: response.hometown.name,
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
-                clanId: clan_id
+                clanId: clan_id,
+                merged: true
             };
         }
     } else if (response.hometown === undefined) {
@@ -145,7 +149,8 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
-                clanId: clan_id
+                clanId: clan_id,
+                merged: true
             };
         } else {
             fbUser = {
@@ -159,7 +164,8 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
-                clanId: clan_id
+                clanId: clan_id,
+                merged: true
             };
         }
     } else {
@@ -175,7 +181,8 @@ function segregateFbData(response, uid) {
             birthPlace: response.hometown.name,
             gender: response.gender,
             photoUrl: response.picture.data.url,
-            clanId: clan_id
+            clanId: clan_id,
+            merged: true
         };
     }
 
@@ -362,7 +369,8 @@ function createAcctWithEmailAndPass() {
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
         // photoUrl: response.picture.data.url,
-        clanId: clan_id
+        clanId: clan_id,
+        merged: true
     }
 
     if ($("input:checked").val() === "male") {
@@ -426,6 +434,50 @@ function handleWizardPic(eventData) {
     // displayPicStorageRef
     //     .child(currentUser.uid)
     //     .
+}
+
+function showAvailableMergeData(data) {
+    // $('#potential_data').modal('show')
+    // $('div#potential_data h4').empty()
+    // $('div#potential_data h4').append("Are you " + data.displayName + "?")
+    console.log(data)
+
+    // $("#wizard_picture_preview").attr("src", fbResponse.picture.data.url);
+    $("#group_first_name").addClass("is-focused");
+    $("#first_name").val(data.firstName);
+    $("#group_last_name").addClass("is-focused");
+    $("#last_name").val(data.lastName);
+    $("#birth_date").val(data.birthDate);
+    $("#group_email").addClass("is-focused");
+    $("#email").val(data.email);
+    if (data.middleName !== null) {
+        $("#group_middle_name").addClass("is-focused");
+        $("#middle_name").text(data.middleName);
+    }
+    if (data.birthPlace !== null) {
+        $("#group_birth_place").addClass("is-focused");
+        $("#birth_place").val(data.birthPlace);
+    }
+    if (data.gender === "male") {
+        $("#radio_group_male").addClass("active");
+        $("#radio_male").attr("checked", true);
+    } else {
+        $("#radio_group_female").addClass("active");
+        $("#radio_female").attr("checked", true);
+    }
+}
+
+function checkPotentialUser() {
+    rootRef
+        .child('potential_users')
+        .once('value')
+        .then(snapshot => {
+            snapshot.forEach(childSnapshot => {
+                if (currentUser.email === childSnapshot.val().email) {
+                    showAvailableMergeData(childSnapshot.val())
+                }
+            })
+        })
 }
 
 function showSuccess() {

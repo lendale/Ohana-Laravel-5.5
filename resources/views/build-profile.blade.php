@@ -18,7 +18,6 @@
 </head>
 
 <body class="image-container set-full-height" style="background-image: url('assets/img/wizard-profile.jpg'); background-repeat: no-repeat; background-attachment: fixed;">
-    <!--   Big container   -->
     <main class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
@@ -205,7 +204,6 @@
         </div>
         <!-- end row -->
     </main>
-    <!--  big container -->
 
     <footer class="footer">
         <div class="container text-center">
@@ -218,6 +216,41 @@
             </div>
         </div>
     </footer>
+    
+    <div class="modal fade" id="potential_data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                    <h4 class="modal-title"></h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img src="assets/img/default-avatar.png" class="picture-src" id="potential_pic" title="" style="height: 150px; width: 150px" />
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+									<i class="material-icons">face</i>
+								</span>
+                                                <div id="group_first_name" class="form-group label-floating">
+                                                    <label class="control-label">First Name <small>(required)</small></label>
+                                                    <input id="first_name" name="firstname" type="text" class="form-control">
+                                                </div>
+                                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js "></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js "></script>

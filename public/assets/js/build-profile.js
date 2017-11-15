@@ -11,6 +11,8 @@ var fbResponse;
 var fbUser = new Object();
 var fbFamily = [];
 
+var potentialUser;
+var potentialFlag = false;
 var currentUser;
 var provider;
 
@@ -37,7 +39,7 @@ function handleAuthStateChanged(user) {
             provider = user.providerData[0].providerId;
         } else if (user.providerData[0].providerId === "password") {
             provider = user.providerData[0].providerId;
-            assignSignUpDataToForm();
+            // assignSignUpDataToForm();
         }
         console.log("user is signed in");
     } else {
@@ -77,7 +79,7 @@ window.fbAsyncInit = function() {
                 },
                 function(response) {
                     fbResponse = response;
-                    assignFbDataToForm();
+                    // assignFbDataToForm();
                     segregateFbData(response, currentUser.uid);
                 }
             );
@@ -392,6 +394,19 @@ function createAcctWithEmailAndPass() {
     showSuccess();
 }
 
+function assignUserDataToForm() {
+    if (!potentialFlag) {
+        if (provider === "facebook.com") {
+            assignFbDataToForm();
+        } else if (provider === "password") {
+            $("#group_email").addClass("is-focused");
+            $("#email").val(currentUser.email);
+        }
+    } else {
+        showAvailableMergeData(potentialUser);
+    }
+}
+
 function assignFbDataToForm() {
     $("#wizard_picture_preview").attr("src", fbResponse.picture.data.url);
     $("#group_first_name").addClass("is-focused");
@@ -474,9 +489,12 @@ function checkPotentialUser() {
         .then(snapshot => {
             snapshot.forEach(childSnapshot => {
                 if (currentUser.email === childSnapshot.val().email) {
-                    showAvailableMergeData(childSnapshot.val())
+                    // showAvailableMergeData(childSnapshot.val())
+                    potentialUser = childSnapshot.val();
+                    potentialFlag = true;
                 }
             })
+            assignUserDataToForm();
         })
 }
 

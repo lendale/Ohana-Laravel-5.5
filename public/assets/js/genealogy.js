@@ -7,13 +7,6 @@ const usersRef = rootRef.child('users');
 const userFamilyRef = rootRef.child('user_family');
 const userTreeRef = rootRef.child('user_tree_go');
 
-// const userWivesRef = rootRef.child("user_wives");
-// const userHusbandssRef = rootRef.child("user_husbands");
-// const userMothersRef = rootRef.child("user_mothers");
-// const userFathersRef = rootRef.child("user_fathers");
-// const userDaughtersRef = rootRef.child("user_daughters");
-// const userSonsRef = rootRef.child("user_sons");
-
 var treeData = [];
 var userClanId;
 var currentUser;
@@ -27,8 +20,7 @@ firebase.auth().onAuthStateChanged(handleAuthStateChanged);
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user
-        console.log(user)
-        getUserClanId(currentUser.uid);
+        getUserClanId(user.uid);
     } else {}
 }
 
@@ -39,11 +31,13 @@ function handleAuthStateChanged(user) {
 function getUserClanId(uid) {
     usersRef
         .child(uid)
+        .child("clanId")
         .once("value")
-        .then(function(snapshot) {
-            userClanId = snapshot.val().clanId;
+        .then(result => {
+            userClanId = result.val();
+            return userClanId;
         })
-        .then(function() {
+        .then(userClanId => {
             getTreeData(uid, userClanId);
         });
 }
@@ -52,16 +46,15 @@ function getTreeData(uid, clanId) {
     userTreeRef
         .child(clanId)
         .once("value")
-        .then(function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-                var obj = childSnapshot.val();
-                // keys.push(childSnapshot.key);
-                treeData.push(obj);
+        .then(snapshot => {
+            snapshot.forEach(childSnapshot => {
+                treeData.push(childSnapshot.val());
             });
+            return treeData;
         })
-        .then(function() {
+        .then(treeData => {
             initGenogram(treeData, uid);
-        });
+        })
 }
 
 function addFamilyMember() {
@@ -180,6 +173,7 @@ function addMother() {
 function addSpouse() {
     var gender = $("#spouse_gender").val();
     var livingStatus = $("#spouse_living_status").val();
+    var marital = $("#spouse_relationship").val();
     var role = $("#spouse_role_in_tree").val();
     var firstName = $("#spouse_first_name").val();
     var middleName = $("#spouse_middle_name").val();
@@ -191,6 +185,7 @@ function addSpouse() {
     var person = {
         gender: gender,
         livingStatus: livingStatus,
+        maritalStatus: marital,
         role: role,
         firstName: firstName,
         lastName: lastName,
@@ -253,7 +248,7 @@ function addChild() {
     }
 
     if (email.length > 0) {
-        person.email = birthPlace;
+        person.email = email;
     }
 
     if (gender === "male") {

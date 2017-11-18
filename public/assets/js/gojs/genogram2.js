@@ -430,6 +430,8 @@ function setupDiagram(diagram, array, focusId) {
     setupParents(diagram);
     setupChild(diagram);
 
+    console.log("LINK DATA", diagram.model.linkData)
+
     var node = diagram.findNodeForKey(focusId);
     if (node !== null) {
         diagram.select(node);
@@ -510,55 +512,78 @@ function setupMarriages(diagram) {
         var key = data.key;
         var uxs = data.ux;
         var virs = data.vir;
+        var ms = data.ms;
+
+        console.log("Key", key)
+
+
+        console.log("MS", ms)
 
         if (uxs !== undefined) {
             if (typeof uxs === "String") uxs = [uxs];
-            // uxs = [uxs];
+            if (typeof ms === "String") ms = [ms];
+            console.log("Ux", uxs);
             for (var a = 0; a < uxs.length; a++) {
-                var wife = uxs[a];
-                if (key === wife) {
-                    // or warn no reflexive marriages
-                    continue;
-                }
-                var linkMarriage = findMarriage(diagram, key, wife);
-                if (linkMarriage === null) {
-                    // add a label node for the marriage link
-                    var node = { s: "Married" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: wife,
-                        labelKeys: [node.key],
-                        category: "Marriage"
-                    };
-                    model.addLinkData(link);
+                for (let b = 0; b < ms.length; b++) {
+                    var wife = uxs[a];
+                    if (key === wife) {
+                        // or warn no reflexive marriages
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, wife);
+                    if (connect === null) {
+                        if (marstat === "married") {
+                            // add a label node for the marriage link
+                            var node = { s: "Married" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Marriage"
+                            };
+                            console.log("M Link Ux", link)
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }
 
         if (virs !== undefined) {
             if (typeof virs === "String") virs = [virs];
-            // virs = [virs];
+            if (typeof ms === "String") ms = [ms];
+            console.log("Vir", virs);
             for (var j = 0; j < virs.length; j++) {
-                var husband = virs[j];
-                if (key === husband) {
-                    // or warn no reflexive marriages
-                    continue;
-                }
-                var link = findMarriage(diagram, key, husband);
-                if (link === null) {
-                    // add a label node for the marriage link
-                    var node = { s: "Married" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: husband,
-                        labelKeys: [node.key],
-                        category: "Marriage"
-                    };
-                    model.addLinkData(link);
+                for (let b = 0; b < ms.length; b++) {
+                    var husband = virs[j];
+
+                    if (key === husband) {
+                        // or warn no reflexive marriages
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, husband);
+                    if (connect === null) {
+                        if (marstat === "married") {
+                            // add a label node for the marriage link
+                            var node = { s: "Married" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: husband,
+                                labelKeys: [node.key],
+                                category: "Marriage"
+                            };
+                            console.log("M Link Vir", link);
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }
@@ -578,20 +603,16 @@ function setupDivorces(diagram) {
 
         if (uxs !== undefined) {
             if (typeof uxs === "String") uxs = [uxs];
-            console.log("UX", uxs);
-            // uxs = [uxs];
-            ms = [ms];
+            if (typeof ms === "String") ms = [ms];
             for (var a = 0; a < uxs.length; a++) {
                 for (var b = 0; b < ms.length; b++) {
                     var wife = uxs[a];
-                    console.log('A', wife)
                     if (key === wife) {
                         continue;
                     }
 
                     var marstat = ms[b];
                     var connect = findMarriage(diagram, key, wife)
-                    console.log('WIFE', wife)
                     if (connect === null) {
                         if (marstat === "divorced") {
                             // add a label node for the marriage link
@@ -604,7 +625,7 @@ function setupDivorces(diagram) {
                                 labelKeys: [node.key],
                                 category: "Divorced"
                             };
-                            console.log("Link", link)
+                            console.log("D Link Ux", link);
                             model.addLinkData(link);
                         }
                     }
@@ -614,11 +635,11 @@ function setupDivorces(diagram) {
 
         if (virs !== undefined) {
             if (typeof virs === "String") virs = [virs];
-            // virs = [virs];
-            ms = [ms];
+            if (typeof ms === "String") ms = [ms];
             for (var j = 0; j < virs.length; j++) {
                 for (var b = 0; b < ms.length; b++) {
                     var husband = virs[j];
+
                     if (key === husband) {
                         continue;
                     }
@@ -637,6 +658,7 @@ function setupDivorces(diagram) {
                                 labelKeys: [node.key],
                                 category: "Divorced"
                             };
+                            console.log("D Link Vir", link);
                             model.addLinkData(link);
                         }
                     }

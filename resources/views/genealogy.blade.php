@@ -286,7 +286,7 @@
 
                                 <div class="col-md-4">
                                     <select id="father_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
-                                        <option disabled selected>Select Status</option>
+                                        <option disabled selected>Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
@@ -431,7 +431,7 @@
 
                                 <div class="col-md-4">
                                     <select id="mother_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
-                                        <option disabled selected>Select Status</option>
+                                        <option disabled selected>Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
@@ -566,24 +566,35 @@
 
                             <!-- Dropdowns start -->
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <select id="spouse_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
-                                        <option disabled selected>Select Gender</option>
+                                        <option disabled selected>Gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                     </select>
                                 </div>
 
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <select id="spouse_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
-                                        <option disabled selected>Select Status</option>
+                                        <option disabled selected>Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
                                 </div>
+                            </div>
 
-                                <div class="col-md-4">
-                                    <select id="spouse_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <select id="spouse_relationship" class="selectpicker select-relationship" data-style="btn btn-danger btn-round" title="Relationship Status Select" data-size="7">
+                                        <option disabled selected>Relationship</option>
+                                        <option value="married">Married</option>
+                                        <option value="divorced">Divorced</option>
+                                        <option value="separated">Separated</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <select id="spouse_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Role Select" data-size="7">
                                         <option disabled selected>Role in Tree</option>
                                         <option value="guest">Guest</option>
                                         <option value="contributor">Contributor</option>
@@ -713,7 +724,7 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <select id="child_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
-                                        <option disabled selected>Select Gender</option>
+                                        <option disabled selected>Gender</option>
                                         <option value="male">Male</option>
                                         <option value="female">Female</option>
                                     </select>
@@ -721,7 +732,7 @@
 
                                 <div class="col-md-4">
                                     <select id="child_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
-                                        <option disabled selected>Select Status</option>
+                                        <option disabled selected>Status</option>
                                         <option value="living">Living</option>
                                         <option value="deceased">Deceased</option>
                                     </select>
@@ -776,6 +787,28 @@
                                 </div>
                             </div>
                             <!-- Birth row end -->
+
+                            {{--  <div class=row>
+                                <p class="col-md-12"><b>Parents</b></p>
+                                <div class="col-md-12" style="height: 50px;">
+                                    <div class="row">
+                                        <div class="radio">
+                                            <label>
+                                                <input class="danger" type="radio" name="optionsRadios">
+                                                Radio is off
+                                            </label>
+                                            <label>
+                                                <input class="danger" type="radio" name="optionsRadios">
+                                                Radio is off
+                                            </label>
+                                            <label>
+                                                <input class="danger" type="radio" name="optionsRadios">
+                                                Radio is off
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>  --}}
                         </form>
                 </div>
 
@@ -832,7 +865,7 @@
 
 <!-- Go JS -->
 <script src="assets/js/gojs/go-debug.js"></script>
-<script src="assets/js/gojs/genogram.js"></script>
+<script src="assets/js/gojs/genogram2.js"></script>
 <script src="assets/js/genealogy.js"></script>
 
 </html>

@@ -11,6 +11,8 @@ var fbResponse;
 var fbUser = new Object();
 var fbFamily = [];
 
+var potentialUser;
+var potentialFlag = false;
 var currentUser;
 var provider;
 
@@ -37,7 +39,7 @@ function handleAuthStateChanged(user) {
             provider = user.providerData[0].providerId;
         } else if (user.providerData[0].providerId === "password") {
             provider = user.providerData[0].providerId;
-            assignSignUpDataToForm();
+            // assignSignUpDataToForm();
         }
         console.log("user is signed in");
     } else {
@@ -77,7 +79,7 @@ window.fbAsyncInit = function() {
                 },
                 function(response) {
                     fbResponse = response;
-                    assignFbDataToForm();
+                    // assignFbDataToForm();
                     segregateFbData(response, currentUser.uid);
                 }
             );
@@ -119,7 +121,7 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
                 clanId: clan_id,
-                merged: true
+                merged: false
             };
         } else {
             fbUser = {
@@ -134,7 +136,7 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
                 clanId: clan_id,
-                merged: true
+                merged: false
             };
         }
     } else if (response.hometown === undefined) {
@@ -150,7 +152,7 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
                 clanId: clan_id,
-                merged: true
+                merged: false
             };
         } else {
             fbUser = {
@@ -165,7 +167,7 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoUrl: response.picture.data.url,
                 clanId: clan_id,
-                merged: true
+                merged: false
             };
         }
     } else {
@@ -182,7 +184,7 @@ function segregateFbData(response, uid) {
             gender: response.gender,
             photoUrl: response.picture.data.url,
             clanId: clan_id,
-            merged: true
+            merged: false
         };
     }
 
@@ -222,6 +224,11 @@ function getFbFamilyData(graphResponse) {
                         photoUrl: element.picture.data.url
                     };
                 }
+
+                if (potentialFlag) {
+                    person.clanId = potentialUser.clanId;
+                }
+
                 fbFamily.push(person);
             }
 
@@ -251,6 +258,11 @@ function getFbFamilyData(graphResponse) {
                         photoUrl: element.picture.data.url
                     };
                 }
+
+                if (potentialFlag) {
+                    person.clanId = potentialUser.clanId;
+                }
+
                 fbFamily.push(person);
             }
 
@@ -280,6 +292,11 @@ function getFbFamilyData(graphResponse) {
                         photoUrl: element.picture.data.url
                     };
                 }
+
+                if (potentialFlag) {
+                    person.clanId = potentialUser.clanId;
+                }
+
                 fbFamily.push(person);
             } else if (element.relationship === "daugther") {
                 if (element.middle_name === undefined) {
@@ -306,6 +323,11 @@ function getFbFamilyData(graphResponse) {
                         photoUrl: element.picture.data.url
                     };
                 }
+
+                if (potentialFlag) {
+                    person.clanId = potentialUser.clanId;
+                }
+
                 fbFamily.push(person);
             }
         });
@@ -343,6 +365,12 @@ function createAcctWithFacebook() {
         fbUser.birthPlace = birth_place;
     }
 
+    if (potentialFlag) {
+        fbUser.tempKeyInClan = potentialUser.tempKeyInClan;
+        fbUser.clanId = potentialUser.clanId;
+        fbUser.wasPotential = true;
+    }
+
     if (fbResponse.family !== undefined) {
         console.log(fbUser)
         usersRef.child(currentUser.uid).set(fbUser);
@@ -370,7 +398,7 @@ function createAcctWithEmailAndPass() {
         birthDate: $('#birth_date').val(),
         // photoUrl: response.picture.data.url,
         clanId: clan_id,
-        merged: true
+        merged: false
     }
 
     if ($("input:checked").val() === "male") {
@@ -387,9 +415,41 @@ function createAcctWithEmailAndPass() {
         person.birth_place = birth_place;
     }
 
+    if (potentialFlag) {
+        person.tempKeyInClan = potentialUser.tempKeyInClan;
+        person.clanId = potentialUser.clanId;
+        person.wasPotential = true;
+    }
+
     usersRef.child(currentUser.uid).set(person);
 
     showSuccess();
+}
+
+function createUserAccount() {
+    if (!potentialFlag) {
+        if (provider === "facebook.com") {
+            createAcctWithFacebook()
+        } else if (provider === "password") {
+            createAcctWithEmailAndPass();
+        }
+    } else {
+
+    }
+}
+
+function assignUserDataToForm() {
+    console.log(potentialFlag)
+    if (!potentialFlag) {
+        if (provider === "facebook.com") {
+            assignFbDataToForm();
+        } else if (provider === "password") {
+            $("#group_email").addClass("is-focused");
+            $("#email").val(currentUser.email);
+        }
+    } else {
+        showAvailableMergeData(potentialUser);
+    }
 }
 
 function assignFbDataToForm() {
@@ -442,7 +502,7 @@ function showAvailableMergeData(data) {
     // $('div#potential_data h4').append("Are you " + data.displayName + "?")
     console.log(data)
 
-    // $("#wizard_picture_preview").attr("src", fbResponse.picture.data.url);
+    $("#wizard_picture_preview").attr("src", data.photoUrl);
     $("#group_first_name").addClass("is-focused");
     $("#first_name").val(data.firstName);
     $("#group_last_name").addClass("is-focused");
@@ -450,11 +510,12 @@ function showAvailableMergeData(data) {
     $("#birth_date").val(data.birthDate);
     $("#group_email").addClass("is-focused");
     $("#email").val(data.email);
-    if (data.middleName !== null) {
+
+    if (data.middleName !== undefined) {
         $("#group_middle_name").addClass("is-focused");
-        $("#middle_name").text(data.middleName);
+        $("#middle_name").val(data.middleName);
     }
-    if (data.birthPlace !== null) {
+    if (data.birthPlace !== undefined) {
         $("#group_birth_place").addClass("is-focused");
         $("#birth_place").val(data.birthPlace);
     }
@@ -474,9 +535,13 @@ function checkPotentialUser() {
         .then(snapshot => {
             snapshot.forEach(childSnapshot => {
                 if (currentUser.email === childSnapshot.val().email) {
-                    showAvailableMergeData(childSnapshot.val())
+                    potentialUser = childSnapshot.val();
+                    potentialFlag = true;
                 }
             })
+        })
+        .then(() => {
+            assignUserDataToForm();
         })
 }
 

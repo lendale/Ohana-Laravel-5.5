@@ -787,28 +787,13 @@
                                 </div>
                             </div>
                             <!-- Birth row end -->
-
-                            {{--  <div class=row>
-                                <p class="col-md-12"><b>Parents</b></p>
-                                <div class="col-md-12" style="height: 50px;">
-                                    <div class="row">
-                                        <div class="radio">
-                                            <label>
-                                                <input class="danger" type="radio" name="optionsRadios">
-                                                Radio is off
-                                            </label>
-                                            <label>
-                                                <input class="danger" type="radio" name="optionsRadios">
-                                                Radio is off
-                                            </label>
-                                            <label>
-                                                <input class="danger" type="radio" name="optionsRadios">
-                                                Radio is off
-                                            </label>
-                                        </div>
-                                    </div>
+                            <br>
+                            <p class="col-md-12"><b>Parents</b></p>
+                            <div class="row">
+                                <div id="parents_container" class="col-md-12" style="height: 100px; overflow: auto;">
+                                    
                                 </div>
-                            </div>  --}}
+                            </div>
                         </form>
                 </div>
 

@@ -449,8 +449,8 @@ function setupChild(diagram) {
         var ct = data.ct;
 
         if (f !== undefined && m !== undefined) {
-            f = [f];
-            m = [m];
+            if (typeof f === "String") f = [f];
+            if (typeof m === "String") m = [m];
 
             for (var a = 0; a < f.length; a++) {
                 for (var b = 0; b < m.length; b++) {
@@ -512,7 +512,8 @@ function setupMarriages(diagram) {
         var virs = data.vir;
 
         if (uxs !== undefined) {
-            uxs = [uxs];
+            if (typeof uxs === "String") uxs = [uxs];
+            // uxs = [uxs];
             for (var a = 0; a < uxs.length; a++) {
                 var wife = uxs[a];
                 if (key === wife) {
@@ -537,8 +538,8 @@ function setupMarriages(diagram) {
         }
 
         if (virs !== undefined) {
-            // if (typeof virs === "number")
-            virs = [virs];
+            if (typeof virs === "String") virs = [virs];
+            // virs = [virs];
             for (var j = 0; j < virs.length; j++) {
                 var husband = virs[j];
                 if (key === husband) {
@@ -576,48 +577,69 @@ function setupDivorces(diagram) {
         var ms = data.ms;
 
         if (uxs !== undefined) {
-            uxs = [uxs];
+            if (typeof uxs === "String") uxs = [uxs];
+            console.log("UX", uxs);
+            // uxs = [uxs];
+            ms = [ms];
             for (var a = 0; a < uxs.length; a++) {
-                var wife = uxs[a];
-                if (key === wife) {
-                    continue;
-                }
-                if (ms === "divorced") {
-                    // add a label node for the marriage link
-                    var node = { s: "Divorced" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: wife,
-                        labelKeys: [node.key],
-                        category: "Divorced"
-                    };
-                    model.addLinkData(link);
+                for (var b = 0; b < ms.length; b++) {
+                    var wife = uxs[a];
+                    console.log('A', wife)
+                    if (key === wife) {
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, wife)
+                    console.log('WIFE', wife)
+                    if (connect === null) {
+                        if (marstat === "divorced") {
+                            // add a label node for the marriage link
+                            var node = { s: "Divorced" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Divorced"
+                            };
+                            console.log("Link", link)
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }
 
         if (virs !== undefined) {
-            virs = [virs];
+            if (typeof virs === "String") virs = [virs];
+            // virs = [virs];
+            ms = [ms];
             for (var j = 0; j < virs.length; j++) {
-                var husband = virs[j];
-                if (key === husband) {
-                    // or warn no reflexive marriages
-                    continue;
-                }
-                if (ms === "divorced") {
-                    // add a label node for the marriage link
-                    var node = { s: "Divorced" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: husband,
-                        labelKeys: [node.key],
-                        category: "Divorced"
-                    };
-                    model.addLinkData(link);
+                for (var b = 0; b < ms.length; b++) {
+                    var husband = virs[j];
+                    if (key === husband) {
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, husband);
+                    if (connect === null) {
+                        if (marstat === "divorced") {
+                            // add a label node for the marriage link
+                            var node = { s: "Divorced" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: husband,
+                                labelKeys: [node.key],
+                                category: "Divorced"
+                            };
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }

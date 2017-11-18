@@ -48,13 +48,101 @@ function getTreeData(uid, clanId) {
         .once("value")
         .then(snapshot => {
             snapshot.forEach(childSnapshot => {
-                treeData.push(childSnapshot.val());
+                let obj = childSnapshot.val();
+                let virs = [];
+                let uxs = [];
+
+                if (!(obj.ux === undefined)) {
+                    let arrUx = Object.values(obj.ux);
+
+                    obj.ux = arrUx;
+                }
+
+                if (!(obj.vir === undefined)) {
+                    let arrVir = Object.values(obj.vir);
+
+                    obj.vir = arrVir;
+                }
+
+                if (!(obj.ms === undefined)) {
+                    let arrMs = Object.values(obj.ms);
+
+                    obj.ms = arrMs;
+                }
+
+                treeData.push(obj);
             });
+
+            console.log("TREE", treeData);
             return treeData;
         })
         .then(treeData => {
             initGenogram(treeData, uid);
         })
+        .then(() => {
+            getAvailableParents(uid);
+        });
+}
+
+function getAvailableParents(uid) {
+    var motherKeys = [];
+    var motherNames = [];
+    var fatherKeys = [];
+    var fatherNames = [];
+
+    let single = $(`
+            <div class="radio">
+                <label>
+                    <input type="radio" name="availableParents" value="${currentUser.uid}">
+                    ${currentUser.displayName}
+                </label>
+            </div>
+        `);
+    single.appendTo("#parents_container");
+
+    userFamilyRef.child(uid).child('spouse_keys').child('ux').once('value').then(snap => {
+
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            motherKeys = Object.keys(snap.val());
+            motherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                let div = $(`
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="availableParents" value="${childSnap.key}">
+                                ${currentUser.displayName} and ${childSnap.val()}
+                            </label>
+                        </div>
+                    `);
+                div.appendTo("#parents_container");
+            });
+        } else {
+            return;
+        }
+    });
+
+    userFamilyRef.child(uid).child('spouse_keys').child('vir').once('value').then(snap => {
+
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            fatherKeys = Object.keys(snap.val());
+            fatherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                let div = $(`
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="availableParents" value="${childSnap.key}">
+                                ${currentUser.displayName} and ${childSnap.val()}
+                            </label>
+                        </div>
+                    `);
+                div.appendTo("#parents_container");
+            });
+        } else {
+            return;
+        }
+    });
 }
 
 function addFamilyMember() {

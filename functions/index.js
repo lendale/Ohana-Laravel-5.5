@@ -98,7 +98,7 @@ exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pu
         treeObj.bd = userObj.birthDate
     }
 
-    return root.child('user_tree_go').child(clanId).child(uid).update({ m: pushKey })
+    return root.child(`user_tree_go/${clanId}/${uid}`).update({ m: pushKey })
         .then(() => {
             return root.child('user_tree_go').child(clanId).child(pushKey).set(treeObj)
         })
@@ -170,24 +170,24 @@ exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}
         loc: "/user_family/" + uid + "/sons/"
     }
 
-    return currentUserGender.then(result => {
-        if (userObj.photoUrl !== undefined) {
-            treeObj.img = userObj.photoUrl
-        }
+    if (!(userObj.photoUrl === undefined)) {
+        treeObj.img = userObj.photoUrl
+    }
 
-        if (userObj.birthDate !== undefined) {
-            treeObj.bd = userObj.birthDate
-        }
+    if (!(userObj.birthDate === undefined)) {
+        treeObj.bd = userObj.birthDate
+    }
 
-        if (result.val() === "male") {
-            treeObj.f = uid
-        } else {
-            treeObj.m = uid
-        }
+    if (!(userObj.parentKeys.f === undefined)) {
+        treeObj.f = userObj.parentKeys.f
+    }
 
-        return root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj)
-    }).then(function() {
-        createPotentialUser(event);
+    if (!(userObj.parentKeys.m === undefined)) {
+        treeObj.m = userObj.parentKeys.m
+    }
+
+    return root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(() => {
+        createPotentialUser(event)
     }).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
@@ -211,29 +211,51 @@ exports.addDaughterToClan = functions.database.ref('/user_family/{uid}/daughters
         loc: "/user_family/" + uid + "/daughters/"
     }
 
-    return currentUserGender.then(result => {
-        if (userObj.photoUrl !== undefined) {
-            treeObj.img = userObj.photoUrl
-        }
+    if (!(userObj.photoUrl === undefined)) {
+        treeObj.img = userObj.photoUrl
+    }
 
-        if (userObj.birthDate !== undefined) {
-            treeObj.bd = userObj.birthDate
-        }
+    if (!(userObj.birthDate === undefined)) {
+        treeObj.bd = userObj.birthDate
+    }
 
-        if (result.val() === "male") {
-            treeObj.f = uid
-        } else {
-            treeObj.m = uid
-        }
+    if (!(userObj.parentKeys.f === undefined)) {
+        treeObj.f = userObj.parentKeys.f
+    }
 
-        return root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj)
-    }).then(function() {
+    if (!(userObj.parentKeys.m === undefined)) {
+        treeObj.m = userObj.parentKeys.m
+    }
+
+    return root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(() => {
         createPotentialUser(event)
     }).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
 
+    // return currentUserGender.then(result => {
+    //     if (userObj.photoUrl !== undefined) {
+    //         treeObj.img = userObj.photoUrl
+    //     }
+
+    //     if (userObj.birthDate !== undefined) {
+    //         treeObj.bd = userObj.birthDate
+    //     }
+
+    //     if (result.val() === "male") {
+    //         treeObj.f = uid
+    //     } else {
+    //         treeObj.m = uid
+    //     }
+
+    //     return root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj)
+    // }).then(function() {
+    //     createPotentialUser(event)
+    // }).catch(err => {
+    //     console.log('Error code', err.code)
+    //     console.log(err)
+    // })
 })
 
 exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKey}').onCreate(event => {
@@ -328,13 +350,17 @@ function updateCurrentUser(uid, clanId, pushKey, property, ref) {
 
 function connectCurrentUserParents(uid, clanId, key, parentType) {
     const userTreeRef = admin.database().ref().child('user_tree_go')
-    const parent = userTreeRef.child(clanId).child(uid).once("value")
+    const parent = userTreeRef.child(`${clanId}/${uid}`).once("value")
 
     if (parentType === "mother") {
         parent.then(snapshot => {
-            if (!(snapshot.val().f === undefined)) {
-                const pr1 = userTreeRef.child(clanId).child(key).update({ vir: snapshot.val().f })
-                const pr2 = userTreeRef.child(clanId).child(snapshot.val().f).update({ ux: key })
+            if (!(snapshot.val().f === null || snapshot.val().f === undefined)) {
+                const pr1 = userTreeRef.child(`${clanId}/${key}/vir`).push(snapshot.val().f).then(() => {
+                    userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().f}`).set('married')
+                })
+                const pr2 = userTreeRef.child(`${clanId}/${snapshot.val().f}/ux`).push(key).then(() => {
+                    userTreeRef.child(`${clanId}/${snapshot.val().f}/ms/${key}`).set('married')
+                })
 
                 return Promise.all([pr1, pr2]).catch(err => {
                     console.log('Error code', err.code)
@@ -346,9 +372,13 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
         })
     } else if (parentType === "father") {
         parent.then(snapshot => {
-            if (!(snapshot.val().m === undefined)) {
-                const pr1 = userTreeRef.child(clanId).child(key).update({ ux: snapshot.val().m })
-                const pr2 = userTreeRef.child(clanId).child(snapshot.val().m).update({ vir: key })
+            if (!(snapshot.val().m === null || snapshot.val().m === undefined)) {
+                const pr1 = userTreeRef.child(`${clanId}/${key}/ux`).push(snapshot.val().m).then(() => {
+                    userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().m}`).set('married')
+                })
+                const pr2 = userTreeRef.child(`${clanId}/${snapshot.val().m}/vir`).push(key).then(() => {
+                    userTreeRef.child(`${clanId}/${snapshot.val().m}/ms/${key}`).set('married')
+                })
 
                 return Promise.all([pr1, pr2]).catch(err => {
                     console.log('Error code', err.code)

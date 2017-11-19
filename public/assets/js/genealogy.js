@@ -10,6 +10,7 @@ const userTreeRef = rootRef.child('user_tree_go');
 var treeData = [];
 var userClanId;
 var currentUser;
+var currentUserGender;
 
 /* ========================
       Event Listeners
@@ -20,7 +21,7 @@ firebase.auth().onAuthStateChanged(handleAuthStateChanged);
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user
-        getUserClanId(user.uid);
+        getUserData(user.uid);
     } else {}
 }
 
@@ -28,13 +29,13 @@ function handleAuthStateChanged(user) {
       Functions
     ======================== */
 
-function getUserClanId(uid) {
+function getUserData(uid) {
     usersRef
         .child(uid)
-        .child("clanId")
         .once("value")
         .then(result => {
-            userClanId = result.val();
+            currentUserGender = result.val().gender;
+            userClanId = result.val().clanId;
             return userClanId;
         })
         .then(userClanId => {
@@ -314,6 +315,7 @@ function addChild() {
     var email = $('#child_email').val();
     var birthDate = $('#child_birth_date').val();
     var birthPlace = $('#child_birth_place').val();
+    var parentSpouseKey = $(`input[name='availableParents']:checked`).val();
 
     var person = {
         gender: gender,
@@ -326,6 +328,16 @@ function addChild() {
         clanId: userClanId,
         merged: false
     };
+
+    if (parentSpouseKey === currentUser.uid && currentUserGender === 'male') {
+        person.parentKeys = { f: currentUser.uid };
+    } else if (parentSpouseKey === currentUser.uid && currentUserGender === 'female') {
+        person.parentKeys = { m: currentUser.uid };
+    } else if (parentSpouseKey !== currentUser.uid && currentUserGender === 'male') {
+        person.parentKeys = { f: currentUser.uid, m: parentSpouseKey };
+    } else if (parentSpouseKey !== currentUser.uid && currentUserGender === 'female') {
+        person.parentKeys.f = { m: currentUser.uid, f: parentSpouseKey };
+    }
 
     if (middleName.length > 0) {
         person.middleName = middleName;
@@ -349,7 +361,10 @@ function addChild() {
 }
 
 function resetForm() {
-    $('form').get(0).reset();
+    $('form#form_add_father').get(0).reset();
+    $('form#form_add_mother').get(0).reset();
+    $('form#form_add_spouse').get(0).reset();
+    $('form#form_add_child').get(0).reset();
 }
 
 $(document).ready(function() {

@@ -248,20 +248,26 @@ exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKe
     treeObj = {
         key: pushKey,
         n: userObj.displayName,
-        ms: userObj.maritalStatus,
         bd: userObj.birthDate,
         s: 'female',
         loc: "/user_family/" + uid + "/wives/",
-        vir: uid
     }
 
     if (userObj.photoUrl !== undefined) {
         treeObj.img = userObj.photoUrl
     }
 
-    const pr1 = root.child("user_tree_go").child(clanId).child(uid).update({ ux: pushKey })
-    const pr2 = root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj)
-    const pr3 = root.child("user_family").child(uid).child('spouse_keys').push(pushKey)
+    const pr1 = root.child("user_tree_go").child(clanId).child(uid).child('ux').push(pushKey)
+    const pr2 = root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj).then(snap => {
+        return root.child("user_tree_go").child(clanId).child(pushKey).child("vir").push(uid).then(() => {
+            return root.child("user_tree_go").child(clanId).child(pushKey).child("ms").child(uid).set(userObj.maritalStatus)
+        }).then(() => {
+            return root.child("user_tree_go").child(clanId).child(uid).child("ms").child(pushKey).set(userObj.maritalStatus)
+        })
+    }).then(() => {
+        createPotentialUser(event)
+    })
+    const pr3 = root.child("user_family").child(uid).child('spouse_keys').child('ux').child(pushKey).set(userObj.displayName)
 
     return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
@@ -281,20 +287,26 @@ exports.addHusbandToClan = functions.database.ref('/user_family/{uid}/husbands/{
     treeObj = {
         key: pushKey,
         n: userObj.displayName,
-        ms: userObj.maritalStatus,
         bd: userObj.birthDate,
         s: 'male',
         loc: "/user_family/" + uid + "/husbands/",
-        ux: uid
     }
 
     if (userObj.photoUrl !== undefined) {
         treeObj.img = userObj.photoUrl
     }
 
-    const pr1 = root.child("user_tree_go").child(clanId).child(uid).update({ vir: pushKey })
-    const pr2 = root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj)
-    const pr3 = root.child("user_family").child(uid).child('spouse_keys').push(pushKey)
+    const pr1 = root.child("user_tree_go").child(clanId).child(uid).child('vir').push(pushKey)
+    const pr2 = root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj).then(snap => {
+        return root.child("user_tree_go").child(clanId).child(pushKey).child("ux").push(uid).then(() => {
+            return root.child("user_tree_go").child(clanId).child(pushKey).child("ms").child(uid).set(userObj.maritalStatus)
+        }).then(() => {
+            return root.child("user_tree_go").child(clanId).child(uid).child("ms").child(pushKey).set(userObj.maritalStatus)
+        })
+    }).then(() => {
+        createPotentialUser(event)
+    })
+    const pr3 = root.child("user_family").child(uid).child('spouse_keys').child('vir').child(pushKey).set(userObj.displayName)
 
     return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)

@@ -29,11 +29,10 @@ const displayPicStorageRef = FIREBASE_STORAGE.ref().child("display_pics")
       Event Listeners
     ======================== */
 
-FIREBASE_AUTH.onAuthStateChanged(handleAuthStateChanged);
-
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user;
+        segregateFbData(fbResponse, currentUser.uid);
         checkPotentialUser();
         if (user.providerData[0].providerId === "facebook.com") {
             provider = user.providerData[0].providerId;
@@ -79,8 +78,7 @@ window.fbAsyncInit = function() {
                 },
                 function(response) {
                     fbResponse = response;
-                    // assignFbDataToForm();
-                    segregateFbData(response, currentUser.uid);
+                    FIREBASE_AUTH.onAuthStateChanged(handleAuthStateChanged);
                 }
             );
         } else if (response.status === "not_authorized") {
@@ -497,9 +495,6 @@ function handleWizardPic(eventData) {
 }
 
 function showAvailableMergeData(data) {
-    // $('#potential_data').modal('show')
-    // $('div#potential_data h4').empty()
-    // $('div#potential_data h4').append("Are you " + data.displayName + "?")
     console.log(data)
 
     $("#wizard_picture_preview").attr("src", data.photoUrl);

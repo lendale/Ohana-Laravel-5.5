@@ -313,18 +313,6 @@ exports.addHusbandToClan = functions.database.ref('/user_family/{uid}/husbands/{
     })
 })
 
-function updateCurrentUser(uid, clanId, pushKey, property, ref) {
-    let updateObj = new Object()
-
-    if (property === 'm') {
-        updateObj.m = pushKey
-    } else if (property === 'f') {
-        updateObj.f = pushKey
-    }
-
-    return ref.child(`user_tree_go/${clanId}/${uid}`).update(updateObj)
-}
-
 function connectCurrentUserParents(uid, clanId, key, parentType) {
     const userTreeRef = admin.database().ref().child('user_tree_go')
     const parent = userTreeRef.child(`${clanId}/${uid}`).once("value")
@@ -454,20 +442,6 @@ function createPotentialUser(event) {
     userObj.tempKeyInClan = tempKey
 
     return potentialUsersRef.child(tempKey).set(userObj)
-}
-
-function updateChildParentKey(uid, clanId, key, parentType) {
-    admin
-        .database()
-        .ref()
-        .child("user_tree_go")
-        .child(clanId)
-        .once("value")
-        .then(function(snapshot) {
-            snapshot.forEach(childSnapshot => {
-                if (childSnapshot.val().f === uid && parentType === "mother") {}
-            });
-        });
 }
 
 /* ========================

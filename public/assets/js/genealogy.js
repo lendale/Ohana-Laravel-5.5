@@ -10,6 +10,7 @@ const userTreeRef = rootRef.child('user_tree_go');
 var treeData = [];
 var userClanId;
 var currentUser;
+var currentUserGender;
 
 /* ========================
       Event Listeners
@@ -20,7 +21,8 @@ firebase.auth().onAuthStateChanged(handleAuthStateChanged);
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user
-        getUserClanId(user.uid);
+        getUserData(user.uid);
+        console.log('USER', user)
     } else {}
 }
 
@@ -28,13 +30,13 @@ function handleAuthStateChanged(user) {
       Functions
     ======================== */
 
-function getUserClanId(uid) {
+function getUserData(uid) {
     usersRef
         .child(uid)
-        .child("clanId")
         .once("value")
         .then(result => {
-            userClanId = result.val();
+            currentUserGender = result.val().gender;
+            userClanId = result.val().clanId;
             return userClanId;
         })
         .then(userClanId => {
@@ -48,13 +50,101 @@ function getTreeData(uid, clanId) {
         .once("value")
         .then(snapshot => {
             snapshot.forEach(childSnapshot => {
-                treeData.push(childSnapshot.val());
+                let obj = childSnapshot.val();
+                let virs = [];
+                let uxs = [];
+
+                if (!(obj.ux === undefined || obj.ux === null)) {
+                    let arrUx = Object.values(obj.ux);
+
+                    obj.ux = arrUx;
+                }
+
+                if (!(obj.vir === undefined || obj.vir === null)) {
+                    let arrVir = Object.values(obj.vir);
+
+                    obj.vir = arrVir;
+                }
+
+                if (!(obj.ms === undefined || obj.ms === null)) {
+                    let arrMs = Object.values(obj.ms);
+
+                    obj.ms = arrMs;
+                }
+
+                treeData.push(obj);
             });
+
+            console.log("TREE", treeData);
             return treeData;
         })
         .then(treeData => {
             initGenogram(treeData, uid);
         })
+        .then(() => {
+            getAvailableParents(uid);
+        });
+}
+
+function getAvailableParents(uid) {
+    var motherKeys = [];
+    var motherNames = [];
+    var fatherKeys = [];
+    var fatherNames = [];
+
+    let single = $(`
+            <div class="radio">
+                <label>
+                    <input type="radio" name="availableParents" value="${currentUser.uid}">
+                    ${currentUser.displayName}
+                </label>
+            </div>
+        `);
+    single.appendTo("#parents_container");
+
+    userFamilyRef.child(uid).child('spouse_keys').child('ux').once('value').then(snap => {
+
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            motherKeys = Object.keys(snap.val());
+            motherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                let div = $(`
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="availableParents" value="${childSnap.key}">
+                                ${currentUser.displayName} and ${childSnap.val()}
+                            </label>
+                        </div>
+                    `);
+                div.appendTo("#parents_container");
+            });
+        } else {
+            return;
+        }
+    });
+
+    userFamilyRef.child(uid).child('spouse_keys').child('vir').once('value').then(snap => {
+
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            fatherKeys = Object.keys(snap.val());
+            fatherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                let div = $(`
+                        <div class="radio">
+                            <label>
+                                <input type="radio" name="availableParents" value="${childSnap.key}">
+                                ${currentUser.displayName} and ${childSnap.val()}
+                            </label>
+                        </div>
+                    `);
+                div.appendTo("#parents_container");
+            });
+        } else {
+            return;
+        }
+    });
 }
 
 function addFamilyMember() {
@@ -226,6 +316,7 @@ function addChild() {
     var email = $('#child_email').val();
     var birthDate = $('#child_birth_date').val();
     var birthPlace = $('#child_birth_place').val();
+    var parentSpouseKey = $(`input[name='availableParents']:checked`).val();
 
     var person = {
         gender: gender,
@@ -238,6 +329,16 @@ function addChild() {
         clanId: userClanId,
         merged: false
     };
+
+    if (parentSpouseKey === currentUser.uid && currentUserGender === 'male') {
+        person.parentKeys = { f: currentUser.uid };
+    } else if (parentSpouseKey === currentUser.uid && currentUserGender === 'female') {
+        person.parentKeys = { m: currentUser.uid };
+    } else if (parentSpouseKey !== currentUser.uid && currentUserGender === 'male') {
+        person.parentKeys = { f: currentUser.uid, m: parentSpouseKey };
+    } else if (parentSpouseKey !== currentUser.uid && currentUserGender === 'female') {
+        person.parentKeys.f = { m: currentUser.uid, f: parentSpouseKey };
+    }
 
     if (middleName.length > 0) {
         person.middleName = middleName;
@@ -261,7 +362,10 @@ function addChild() {
 }
 
 function resetForm() {
-    $('form').get(0).reset();
+    $('form#form_add_father').get(0).reset();
+    $('form#form_add_mother').get(0).reset();
+    $('form#form_add_spouse').get(0).reset();
+    $('form#form_add_child').get(0).reset();
 }
 
 $(document).ready(function() {

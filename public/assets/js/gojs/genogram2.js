@@ -13,7 +13,7 @@ function initGenogram(data, user_id) {
         layout: $(GenogramLayout, {
             direction: 90, // direction the graph grows towards
             layerSpacing: 40, // space between parent and child node layers
-            columnSpacing: 10 // space between children
+            columnSpacing: 30 // space between children
         })
     });
 
@@ -256,161 +256,30 @@ function initGenogram(data, user_id) {
 }
 
 function showNodeData(data, uid) {
-    const rootRef = firebase.database().ref();
-    const usersRef = rootRef.child('users');
-    const userTreeRef = rootRef.child('user_tree_go');
-    const userWivesRef = rootRef.child("user_wives");
-    const userHusbandssRef = rootRef.child("user_husbands");
-    const userMothersRef = rootRef.child("user_mothers");
-    const userFathersRef = rootRef.child("user_fathers");
-    const userDaughtersRef = rootRef.child("user_daughters");
-    const userSonsRef = rootRef.child("user_sons");
-    const details = [];
+    const db = firebase.database();
     const key = data.key;
     const loc = data.loc;
 
     $("#modal_node_details")
         .modal('show');
 
-    $("#node_img")
-        .attr('src', data.img)
-        .css({
-            'max-height': 150,
-            'max-width': 150
-        });
+    if (!(data.img === null || data.img === undefined)) {
+        $("#node_img")
+            .attr("src", data.img)
+            .css({ "max-height": 150, "max-width": 150 });
+    } else {
+        $("#node_img")
+            .attr("src", "assets/img/default-avatar.png")
+            .css({ "max-height": 150, "max-width": 150 });
+    }
 
     $("#node_name")
         .empty()
         .append(data.n);
 
-    $("#code")
-        .empty();
-
-    if (loc === "users") {
-        usersRef
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
-
-    if (loc === "user_husbands") {
-        userHusbandssRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    } else if (loc === "user_wives") {
-        userWivesRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
-
-    if (loc === "user_mothers") {
-        userMothersRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    } else if (loc === "user_fathers") {
-        userFathersRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
-
-    if (loc === "user_daughters") {
-        userDaughtersRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    } else if (loc === "user_sons") {
-        userSonsRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
+    $('#node_birth_date')
+        .empty()
+        .append(data.bd);
 }
 
 // create and initialize the Diagram.model given an array of node data representing people
@@ -429,6 +298,8 @@ function setupDiagram(diagram, array, focusId) {
     setupMarriages(diagram);
     setupParents(diagram);
     setupChild(diagram);
+
+    console.log("LINK DATA", diagram.model.linkData)
 
     var node = diagram.findNodeForKey(focusId);
     if (node !== null) {
@@ -449,8 +320,8 @@ function setupChild(diagram) {
         var ct = data.ct;
 
         if (f !== undefined && m !== undefined) {
-            f = [f];
-            m = [m];
+            if (typeof f === "String") f = [f];
+            if (typeof m === "String") m = [m];
 
             for (var a = 0; a < f.length; a++) {
                 for (var b = 0; b < m.length; b++) {
@@ -461,7 +332,7 @@ function setupChild(diagram) {
                     }
 
                     var parentsA = [dad, mom];
-                    console.log(parentsA + 'parents');
+                    // console.log(parentsA + 'parents');
 
                     var connect = findMarriage(diagram, m, f);
                     if (connect === null) {
@@ -510,54 +381,78 @@ function setupMarriages(diagram) {
         var key = data.key;
         var uxs = data.ux;
         var virs = data.vir;
+        var ms = data.ms;
+
+        console.log("Key", key)
+
+
+        console.log("MS", ms)
 
         if (uxs !== undefined) {
-            uxs = [uxs];
+            if (typeof uxs === "String") uxs = [uxs];
+            if (typeof ms === "String") ms = [ms];
+            console.log("Ux", uxs);
             for (var a = 0; a < uxs.length; a++) {
-                var wife = uxs[a];
-                if (key === wife) {
-                    // or warn no reflexive marriages
-                    continue;
-                }
-                var linkMarriage = findMarriage(diagram, key, wife);
-                if (linkMarriage === null) {
-                    // add a label node for the marriage link
-                    var node = { s: "Married" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: wife,
-                        labelKeys: [node.key],
-                        category: "Marriage"
-                    };
-                    model.addLinkData(link);
+                for (let b = 0; b < ms.length; b++) {
+                    var wife = uxs[a];
+                    if (key === wife) {
+                        // or warn no reflexive marriages
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, wife);
+                    if (connect === null) {
+                        if (marstat === "married") {
+                            // add a label node for the marriage link
+                            var node = { s: "Married" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Marriage"
+                            };
+                            console.log("M Link Ux", link)
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }
 
         if (virs !== undefined) {
-            // if (typeof virs === "number")
-            virs = [virs];
+            if (typeof virs === "String") virs = [virs];
+            if (typeof ms === "String") ms = [ms];
+            console.log("Vir", virs);
             for (var j = 0; j < virs.length; j++) {
-                var husband = virs[j];
-                if (key === husband) {
-                    // or warn no reflexive marriages
-                    continue;
-                }
-                var link = findMarriage(diagram, key, husband);
-                if (link === null) {
-                    // add a label node for the marriage link
-                    var node = { s: "Married" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: husband,
-                        labelKeys: [node.key],
-                        category: "Marriage"
-                    };
-                    model.addLinkData(link);
+                for (let b = 0; b < ms.length; b++) {
+                    var husband = virs[j];
+
+                    if (key === husband) {
+                        // or warn no reflexive marriages
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, husband);
+                    if (connect === null) {
+                        if (marstat === "married") {
+                            // add a label node for the marriage link
+                            var node = { s: "Married" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: husband,
+                                labelKeys: [node.key],
+                                category: "Marriage"
+                            };
+                            console.log("M Link Vir", link);
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }
@@ -576,48 +471,66 @@ function setupDivorces(diagram) {
         var ms = data.ms;
 
         if (uxs !== undefined) {
-            uxs = [uxs];
+            if (typeof uxs === "String") uxs = [uxs];
+            if (typeof ms === "String") ms = [ms];
             for (var a = 0; a < uxs.length; a++) {
-                var wife = uxs[a];
-                if (key === wife) {
-                    continue;
-                }
-                if (ms === "divorced") {
-                    // add a label node for the marriage link
-                    var node = { s: "Divorced" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: wife,
-                        labelKeys: [node.key],
-                        category: "Divorced"
-                    };
-                    model.addLinkData(link);
+                for (var b = 0; b < ms.length; b++) {
+                    var wife = uxs[a];
+                    if (key === wife) {
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, wife)
+                    if (connect === null) {
+                        if (marstat === "divorced") {
+                            // add a label node for the marriage link
+                            var node = { s: "Divorced" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Divorced"
+                            };
+                            console.log("D Link Ux", link);
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }
 
         if (virs !== undefined) {
-            virs = [virs];
+            if (typeof virs === "String") virs = [virs];
+            if (typeof ms === "String") ms = [ms];
             for (var j = 0; j < virs.length; j++) {
-                var husband = virs[j];
-                if (key === husband) {
-                    // or warn no reflexive marriages
-                    continue;
-                }
-                if (ms === "divorced") {
-                    // add a label node for the marriage link
-                    var node = { s: "Divorced" };
-                    model.addNodeData(node);
-                    // add the marriage link itself, also referring to the label node
-                    var link = {
-                        from: key,
-                        to: husband,
-                        labelKeys: [node.key],
-                        category: "Divorced"
-                    };
-                    model.addLinkData(link);
+                for (var b = 0; b < ms.length; b++) {
+                    var husband = virs[j];
+
+                    if (key === husband) {
+                        continue;
+                    }
+
+                    var marstat = ms[b];
+                    var connect = findMarriage(diagram, key, husband);
+                    if (connect === null) {
+                        if (marstat === "divorced") {
+                            // add a label node for the marriage link
+                            var node = { s: "Divorced" };
+                            model.addNodeData(node);
+                            // add the marriage link itself, also referring to the label node
+                            var link = {
+                                from: key,
+                                to: husband,
+                                labelKeys: [node.key],
+                                category: "Divorced"
+                            };
+                            console.log("D Link Vir", link);
+                            model.addLinkData(link);
+                        }
+                    }
                 }
             }
         }

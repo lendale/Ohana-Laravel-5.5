@@ -23,16 +23,16 @@ exports.addWife = function(event) {
     }
 
     const pr1 = root.child(`user_tree_go/${clanId}/${uid}/ux`).push(pushKey)
-    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(snap => {
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(() => {
         return root.child(`user_tree_go/${clanId}/${pushKey}/vir`).push(uid).then(() => {
-            return root.child(`user_tree_go${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
+            return root.child(`user_tree_go/${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
         }).then(() => {
             return root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
         })
     }).then(() => {
-        index.createPotentialUser(event)
+        return index.createPotentialUser(event)
     })
-    const pr3 = root.child(`user_family${uid}/spouse_keys/ux/${pushKey}`).set(userObj.displayName)
+    const pr3 = root.child(`user_family/${uid}/spouse_keys/ux/${pushKey}`).set(userObj.displayName)
 
     return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
@@ -69,7 +69,7 @@ exports.addHusband = function(event) {
             return root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
         })
     }).then(() => {
-        index.createPotentialUser(event)
+        return index.createPotentialUser(event)
     })
     const pr3 = root.child(`user_family/${uid}/spouse_keys/vir/${pushKey}`).set(userObj.displayName)
 

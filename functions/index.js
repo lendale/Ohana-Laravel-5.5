@@ -98,15 +98,15 @@ exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pu
         treeObj.bd = userObj.birthDate
     }
 
-    return root.child(`user_tree_go/${clanId}/${uid}`).update({ m: pushKey })
+    return root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
         .then(() => {
-            return root.child('user_tree_go').child(clanId).child(pushKey).set(treeObj)
-        })
-        .then(() => {
-            createPotentialUser(event);
+            return root.child(`user_tree_go/${clanId}/${uid}`).update({ m: pushKey })
         })
         .then(() => {
             connectCurrentUserParents(uid, clanId, pushKey, "mother")
+        })
+        .then(() => {
+            createPotentialUser(event)
         })
         .catch(err => {
             console.log('Error code', err.code)
@@ -137,9 +137,9 @@ exports.addFatherToClan = functions.database.ref('/user_family/{uid}/fathers/{pu
         treeObj.bd = userObj.birthDate
     }
 
-    return root.child('user_tree_go').child(clanId).child(uid).update({ f: pushKey })
+    return root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
         .then(() => {
-            return root.child('user_tree_go').child(clanId).child(pushKey).set(treeObj)
+            return root.child(`user_tree_go/${clanId}/${uid}`).update({ f: pushKey })
         })
         .then(() => {
             createPotentialUser(event);
@@ -375,35 +375,35 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
         snapshot.forEach(childSnapshot => {
             let childSnap = childSnapshot.val()
 
-            if (!(childSnap.m === undefined || childSnap.m === null)) {
+            if (!(childSnap.m === null || childSnap.m === undefined)) {
                 if (childSnap.m === oldId) {
                     console.log("M", childSnap.m)
                     updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/m`] = newId
                 }
             }
 
-            if (!(childSnap.f === undefined || childSnap.f === null)) {
+            if (!(childSnap.f === null || childSnap.f === undefined)) {
                 if (childSnap.f === oldId) {
                     console.log("F", childSnap.f);
                     updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/f`] = newId;
                 }
             }
 
-            if (!(childSnap.ux === undefined || childSnap.ux === null)) {
+            if (!(childSnap.ux === null || childSnap.ux === undefined)) {
                 if (childSnap.ux === oldId) {
                     console.log("Ux", childSnap.ux)
                     updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/ux`] = newId
                 }
             }
 
-            if (!(childSnap.vir === undefined || childSnap.vir === null)) {
+            if (!(childSnap.vir === null || childSnap.vir === undefined)) {
                 if (childSnap.vir === oldId) {
                     console.log("Vir", childSnap.vir)
                     updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/vir`] = newId
                 }
             }
 
-            if (!(childSnap.ux === undefined || childSnap.ux === null)) {
+            if (!(childSnap.ux === null || childSnap.ux === undefined)) {
                 let ux = childSnap.ux
 
                 ux.forEach(item => {
@@ -413,7 +413,7 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
                 });
             }
 
-            if (!(childSnap.vir === undefined || childSnap.vir === null)) {
+            if (!(childSnap.vir === null || childSnap.vir === undefined)) {
                 let vir = childSnap.vir
 
                 vir.forEach(item => {

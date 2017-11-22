@@ -32,7 +32,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
     let prevVal = new Object()
 
     if (userObj.wasPotential) {
-        return root.child('user_tree_go').child(userObj.clanId).child(userObj.tempKeyInClan).once('value')
+        return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).once('value')
             .then(snap => {
                 return prevVal = snap.val()
             })
@@ -46,13 +46,13 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
                     treeObj.img = userObj.photoUrl
                 }
 
-                return root.child('user_tree_go').child(userObj.clanId).child(uid).set(treeObj)
+                return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
             })
             .then(() => {
                 updateConnectedNodes(root, userObj.clanId, userObj.tempKeyInClan, treeObj.key, uid)
             })
             .then(() => {
-                return root.child('user_tree_go').child(userObj.clanId).child(userObj.tempKeyInClan).remove()
+                return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).remove()
             })
             .catch(err => {
                 console.log('Error code', err.code)
@@ -71,7 +71,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
             treeObj.img = userObj.photoUrl
         }
 
-        return root.child('user_tree_go').child(userObj.clanId).child(uid).set(treeObj)
+        return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
     }
 })
 
@@ -161,13 +161,13 @@ exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}
     let treeObj = new Object()
 
     const root = event.data.ref.root
-    const currentUserGender = root.child('users').child(uid).child('gender').once('value')
+    const currentUserGender = root.child(`users/${uid}/gender`).once('value')
 
     treeObj = {
         key: pushKey,
         n: userObj.displayName,
         s: "male",
-        loc: "/user_family/" + uid + "/sons/"
+        loc: `/user_family/${uid}/sons/`
     }
 
     if (!(userObj.photoUrl === undefined)) {
@@ -202,13 +202,13 @@ exports.addDaughterToClan = functions.database.ref('/user_family/{uid}/daughters
     let treeObj = new Object()
 
     const root = event.data.ref.root
-    const currentUserGender = root.child('users').child(uid).child('gender').once('value')
+    const currentUserGender = root.child(`users/${uid}/gender`).once('value')
 
     treeObj = {
         key: pushKey,
         n: userObj.displayName,
         s: "female",
-        loc: "/user_family/" + uid + "/daughters/"
+        loc: `/user_family/${uid}/daughters/`
     }
 
     if (!(userObj.photoUrl === undefined)) {
@@ -249,24 +249,24 @@ exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKe
         n: userObj.displayName,
         bd: userObj.birthDate,
         s: 'female',
-        loc: "/user_family/" + uid + "/wives/",
+        loc: `/user_family/${uid}/wives/`
     }
 
     if (userObj.photoUrl !== undefined) {
         treeObj.img = userObj.photoUrl
     }
 
-    const pr1 = root.child("user_tree_go").child(clanId).child(uid).child('ux').push(pushKey)
-    const pr2 = root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj).then(snap => {
-        return root.child("user_tree_go").child(clanId).child(pushKey).child("vir").push(uid).then(() => {
-            return root.child("user_tree_go").child(clanId).child(pushKey).child("ms").child(uid).set(userObj.maritalStatus)
+    const pr1 = root.child(`user_tree_go/${clanId}/${uid}/ux`).push(pushKey)
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(snap => {
+        return root.child(`user_tree_go/${clanId}/${pushKey}/vir`).push(uid).then(() => {
+            return root.child(`user_tree_go${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
         }).then(() => {
-            return root.child("user_tree_go").child(clanId).child(uid).child("ms").child(pushKey).set(userObj.maritalStatus)
+            return root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
         })
     }).then(() => {
         createPotentialUser(event)
     })
-    const pr3 = root.child("user_family").child(uid).child('spouse_keys').child('ux').child(pushKey).set(userObj.displayName)
+    const pr3 = root.child(`user_family${uid}/spouse_keys/ux/${pushKey}`).set(userObj.displayName)
 
     return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
@@ -288,24 +288,24 @@ exports.addHusbandToClan = functions.database.ref('/user_family/{uid}/husbands/{
         n: userObj.displayName,
         bd: userObj.birthDate,
         s: 'male',
-        loc: "/user_family/" + uid + "/husbands/",
+        loc: `/user_family/${uid}/husbands/`
     }
 
     if (userObj.photoUrl !== undefined) {
         treeObj.img = userObj.photoUrl
     }
 
-    const pr1 = root.child("user_tree_go").child(clanId).child(uid).child('vir').push(pushKey)
-    const pr2 = root.child("user_tree_go").child(clanId).child(pushKey).set(treeObj).then(snap => {
-        return root.child("user_tree_go").child(clanId).child(pushKey).child("ux").push(uid).then(() => {
-            return root.child("user_tree_go").child(clanId).child(pushKey).child("ms").child(uid).set(userObj.maritalStatus)
+    const pr1 = root.child(`user_tree_go/${clanId}/${uid}/vir`).push(pushKey)
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(snap => {
+        return root.child(`user_tree_go/${clanId}/${pushKey}/ux`).push(uid).then(() => {
+            return root.child(`user_tree_go/${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
         }).then(() => {
-            return root.child("user_tree_go").child(clanId).child(uid).child("ms").child(pushKey).set(userObj.maritalStatus)
+            return root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
         })
     }).then(() => {
         createPotentialUser(event)
     })
-    const pr3 = root.child("user_family").child(uid).child('spouse_keys').child('vir').child(pushKey).set(userObj.displayName)
+    const pr3 = root.child(`user_family/${uid}/spouse_keys/vir/${pushKey}`).set(userObj.displayName)
 
     return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
@@ -322,7 +322,7 @@ function updateCurrentUser(uid, clanId, pushKey, property, ref) {
         updateObj.f = pushKey
     }
 
-    return ref.child('user_tree_go').child(clanId).child(uid).update(updateObj)
+    return ref.child(`user_tree_go/${clanId}/${uid}`).update(updateObj)
 }
 
 function connectCurrentUserParents(uid, clanId, key, parentType) {

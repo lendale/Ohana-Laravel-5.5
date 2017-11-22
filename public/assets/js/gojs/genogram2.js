@@ -13,7 +13,7 @@ function initGenogram(data, user_id) {
         layout: $(GenogramLayout, {
             direction: 90, // direction the graph grows towards
             layerSpacing: 40, // space between parent and child node layers
-            columnSpacing: 10 // space between children
+            columnSpacing: 30 // space between children
         })
     });
 
@@ -256,161 +256,30 @@ function initGenogram(data, user_id) {
 }
 
 function showNodeData(data, uid) {
-    const rootRef = firebase.database().ref();
-    const usersRef = rootRef.child('users');
-    const userTreeRef = rootRef.child('user_tree_go');
-    const userWivesRef = rootRef.child("user_wives");
-    const userHusbandssRef = rootRef.child("user_husbands");
-    const userMothersRef = rootRef.child("user_mothers");
-    const userFathersRef = rootRef.child("user_fathers");
-    const userDaughtersRef = rootRef.child("user_daughters");
-    const userSonsRef = rootRef.child("user_sons");
-    const details = [];
+    const db = firebase.database();
     const key = data.key;
     const loc = data.loc;
 
     $("#modal_node_details")
         .modal('show');
 
-    $("#node_img")
-        .attr('src', data.img)
-        .css({
-            'max-height': 150,
-            'max-width': 150
-        });
+    if (!(data.img === null || data.img === undefined)) {
+        $("#node_img")
+            .attr("src", data.img)
+            .css({ "max-height": 150, "max-width": 150 });
+    } else {
+        $("#node_img")
+            .attr("src", "assets/img/default-avatar.png")
+            .css({ "max-height": 150, "max-width": 150 });
+    }
 
     $("#node_name")
         .empty()
         .append(data.n);
 
-    $("#code")
-        .empty();
-
-    if (loc === "users") {
-        usersRef
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
-
-    if (loc === "user_husbands") {
-        userHusbandssRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    } else if (loc === "user_wives") {
-        userWivesRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
-
-    if (loc === "user_mothers") {
-        userMothersRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    } else if (loc === "user_fathers") {
-        userFathersRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
-
-    if (loc === "user_daughters") {
-        userDaughtersRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    } else if (loc === "user_sons") {
-        userSonsRef
-            .child(uid)
-            .child(key)
-            .once('value')
-            .then(function(snapshot) {
-                console.log(snapshot.val());
-                snapshot.forEach(function(childSnapshot) {
-                    var obj = childSnapshot.val();
-                    details.push(obj);
-                    console.log(obj);
-
-                    $("#code")
-                        .append(obj + '. <br>')
-                        .css('textTransform', 'capitalize');
-                })
-            })
-    }
+    $('#node_birth_date')
+        .empty()
+        .append(data.bd);
 }
 
 // create and initialize the Diagram.model given an array of node data representing people
@@ -463,7 +332,7 @@ function setupChild(diagram) {
                     }
 
                     var parentsA = [dad, mom];
-                    console.log(parentsA + 'parents');
+                    // console.log(parentsA + 'parents');
 
                     var connect = findMarriage(diagram, m, f);
                     if (connect === null) {

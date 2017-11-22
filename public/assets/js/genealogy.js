@@ -22,6 +22,7 @@ function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user
         getUserData(user.uid);
+        console.log('USER', user)
     } else {}
 }
 
@@ -53,19 +54,19 @@ function getTreeData(uid, clanId) {
                 let virs = [];
                 let uxs = [];
 
-                if (!(obj.ux === undefined)) {
+                if (!(obj.ux === undefined || obj.ux === null)) {
                     let arrUx = Object.values(obj.ux);
 
                     obj.ux = arrUx;
                 }
 
-                if (!(obj.vir === undefined)) {
+                if (!(obj.vir === undefined || obj.vir === null)) {
                     let arrVir = Object.values(obj.vir);
 
                     obj.vir = arrVir;
                 }
 
-                if (!(obj.ms === undefined)) {
+                if (!(obj.ms === undefined || obj.ms === null)) {
                     let arrMs = Object.values(obj.ms);
 
                     obj.ms = arrMs;

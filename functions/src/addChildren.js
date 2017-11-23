@@ -34,9 +34,10 @@ exports.addSon = function(event) {
         treeObj.m = userObj.parentKeys.m
     }
 
-    return root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(() => {
-        index.createPotentialUser(event)
-    }).catch(err => {
+    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr2 = index.createPotentialUser(event)
+
+    return Promise.all([pr1, pr2]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -75,9 +76,10 @@ exports.addDaughter = function(event) {
         treeObj.m = userObj.parentKeys.m
     }
 
-    return root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj).then(() => {
-        index.createPotentialUser(event)
-    }).catch(err => {
+    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr2 = index.createPotentialUser(event)
+
+    return Promise.all([pr1, pr2]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

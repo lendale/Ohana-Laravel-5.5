@@ -36,12 +36,14 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
     let prevVal = new Object()
 
     if (userObj.wasPotential) {
-        return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).once('value')
+        const pr1 = root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).once('value')
             .then(snap => {
                 return prevVal = snap.val()
             })
             .then(prevVal => {
                 treeObj = prevVal
+                console.log('PREV', treeObj)
+                console.log('UID', uid)
                 treeObj.key = uid
                 treeObj.loc = 'users'
                 treeObj.bd = userObj.birthDate
@@ -53,15 +55,15 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
                 return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
             })
             .then(() => {
-                updateConnectedNodes(root, userObj.clanId, userObj.tempKeyInClan, treeObj.key, uid)
-            })
-            .then(() => {
                 return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).remove()
             })
-            .catch(err => {
-                console.log('Error code', err.code)
-                console.log(err)
-            })
+
+        const pr2 = updateConnectedNodes(root, userObj.clanId, userObj.tempKeyInClan, treeObj.key, uid)
+
+        return Promise.all([pr1, pr2]).catch(err => {
+            console.log('Error code', err.code)
+            console.log(err)
+        })
     } else {
         treeObj = {
             key: uid,
@@ -165,17 +167,20 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
         return rootRef.update(updateObj)
     })
 
-    const pr2 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux`).once('value').then(snapshot => {
-        snapshot.forEach(childSnapshot => {
-            if (childSnapshot.key === oldId) {
-                return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${newId}`).set(childSnapshot.value)
-            }
+    const pr2 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux`).once('value')
+        .then(snapshot => {
+            snapshot.forEach(childSnapshot => {
+                if (childSnapshot.key === oldId) {
+                    return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${newId}`).set(childSnapshot.value)
+                }
+            })
         })
-    }).then(() => {
-        return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
-    })
+    const pr3 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
+        // .then(() => {
+        //     return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
+        // })
 
-    return Promise.all([pr1, pr2]).catch(err => {
+    return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

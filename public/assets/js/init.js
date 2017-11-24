@@ -1,11 +1,11 @@
 // Initialize Firebase
 var config = {
-    apiKey: "AIzaSyA4TMnc5_oaaRf_vcTZezabeFhF_qH-frk",
-    authDomain: "ohana-43e29.firebaseapp.com",
-    databaseURL: "https://ohana-43e29.firebaseio.com",
-    projectId: "ohana-43e29",
-    storageBucket: "ohana-43e29.appspot.com",
-    messagingSenderId: "481167153092"
+    apiKey: "AIzaSyBtIAqGkgjyMEdXH9to8XuVm6hpyMYxhVo",
+    authDomain: "my-ohana.firebaseapp.com",
+    databaseURL: "https://my-ohana.firebaseio.com",
+    projectId: "my-ohana",
+    storageBucket: "my-ohana.appspot.com",
+    messagingSenderId: "942155318755"
 };
 firebase.initializeApp(config);
 

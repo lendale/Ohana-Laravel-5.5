@@ -865,6 +865,7 @@
 <script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
 
 <!-- Go JS -->
+<!-- <script src="assets/js/gojs/familyData.js"></script> -->
 <script src="assets/js/gojs/go-debug.js"></script>
 <script src="assets/js/gojs/genogram2.js"></script>
 <script src="assets/js/genealogy.js"></script>

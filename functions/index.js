@@ -1,9 +1,11 @@
+require('babel-polyfill')
+
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp(functions.config().firebase)
 
-const parents = require('./src/addParents')
-const children = require('./src/addChildren')
+const parents = require('./src/addParent')
+const children = require('./src/addChild')
 const spouse = require('./src/addSpouse')
 
 // Deploy specific functions => firebase deploy --only functions:func1,func2,etc..
@@ -121,43 +123,39 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
 
             if (!(childSnap.f === null || childSnap.f === undefined)) {
                 if (childSnap.f === oldId) {
-                    console.log("F", childSnap.f);
-                    updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/f`] = newId;
+                    console.log("F", childSnap.f)
+                    updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/f`] = newId
                 }
             }
 
             if (!(childSnap.ux === null || childSnap.ux === undefined)) {
-                if (childSnap.ux === oldId) {
-                    console.log("Ux", childSnap.ux)
-                    updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/ux`] = newId
-                }
+                let ux = Object.entries(childSnap.ux)
+
+                ux.forEach(([key, value]) => {
+                    if (value === oldId) {
+                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/${key}`] = newId
+                    }
+                })
             }
 
             if (!(childSnap.vir === null || childSnap.vir === undefined)) {
-                if (childSnap.vir === oldId) {
-                    console.log("Vir", childSnap.vir)
-                    updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/vir`] = newId
-                }
+                let vir = Object.entries(childSnap.vir)
+
+                vir.forEach(([key, value]) => {
+                    if (value === oldId) {
+                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/${key}`] = newId
+                    }
+                })
             }
 
-            if (!(childSnap.ux === null || childSnap.ux === undefined)) {
-                let ux = childSnap.ux
+            if (!(childSnap.ms === null || childSnap.ms === undefined)) {
+                let ms = Object.entries(childSnap.ms)
 
-                ux.forEach(item => {
-                    if (item.value === oldId) {
-                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/${item.key}`] = newId
+                ms.forEach(([key, value]) => {
+                    if (key === oldId) {
+                        return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${newId}`).set(value)
                     }
-                });
-            }
-
-            if (!(childSnap.vir === null || childSnap.vir === undefined)) {
-                let vir = childSnap.vir
-
-                vir.forEach(item => {
-                    if (item.value === oldId) {
-                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/${item.key}`] = newId
-                    }
-                });
+                })
             }
         })
 
@@ -176,9 +174,6 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
             })
         })
     const pr3 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
-        // .then(() => {
-        //     return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
-        // })
 
     return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)

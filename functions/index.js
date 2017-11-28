@@ -38,14 +38,12 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
     let prevVal = new Object()
 
     if (userObj.wasPotential) {
-        const pr1 = root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).once('value')
+        return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).once('value')
             .then(snap => {
                 return prevVal = snap.val()
             })
             .then(prevVal => {
                 treeObj = prevVal
-                console.log('PREV', treeObj)
-                console.log('UID', uid)
                 treeObj.key = uid
                 treeObj.loc = 'users'
                 treeObj.bd = userObj.birthDate
@@ -59,13 +57,12 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
             .then(() => {
                 return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).remove()
             })
-
-        const pr2 = updateConnectedNodes(root, userObj.clanId, userObj.tempKeyInClan, treeObj.key, uid)
-
-        return Promise.all([pr1, pr2]).catch(err => {
-            console.log('Error code', err.code)
-            console.log(err)
-        })
+            .then(() => {
+                return updateConnectedNodes(root, userObj.clanId, userObj.tempKeyInClan, treeObj.key, uid)
+            }).catch(err => {
+                console.log('Error code', err.code)
+                console.log(err)
+            })
     } else {
         treeObj = {
             key: uid,
@@ -116,14 +113,12 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
 
             if (!(childSnap.m === null || childSnap.m === undefined)) {
                 if (childSnap.m === oldId) {
-                    console.log("M", childSnap.m)
                     updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/m`] = newId
                 }
             }
 
             if (!(childSnap.f === null || childSnap.f === undefined)) {
                 if (childSnap.f === oldId) {
-                    console.log("F", childSnap.f)
                     updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/f`] = newId
                 }
             }
@@ -133,7 +128,7 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
 
                 ux.forEach(([key, value]) => {
                     if (value === oldId) {
-                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/${key}`] = newId
+                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/ux/${key}`] = newId
                     }
                 })
             }
@@ -143,25 +138,28 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
 
                 vir.forEach(([key, value]) => {
                     if (value === oldId) {
-                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/${key}`] = newId
+                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/vir/${key}`] = newId
                     }
                 })
             }
 
-            if (!(childSnap.ms === null || childSnap.ms === undefined)) {
-                let ms = Object.entries(childSnap.ms)
+            // if (!(childSnap.ms === null || childSnap.ms === undefined)) {
+            //     let ms = Object.entries(childSnap.ms)
 
-                ms.forEach(([key, value]) => {
-                    if (key === oldId) {
-                        return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${newId}`).set(value)
-                    }
-                })
-            }
+            //     ms.forEach(([key, value]) => {
+            //         if (key === oldId) {
+            //             return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${oldId}`).set(value)
+            //                 // .then(() => {
+            //                 //     rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${oldId}`).remove()
+            //                 // })
+            //         }
+            //     })
+            // }
         })
 
         return updateObj
     }).then(updateObj => {
-        console.log(updateObj)
+        console.log('Update Object', updateObj)
         return rootRef.update(updateObj)
     })
 

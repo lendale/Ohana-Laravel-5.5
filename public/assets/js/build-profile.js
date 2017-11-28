@@ -385,7 +385,8 @@ function createAcctWithEmailAndPass() {
     var middle_name = $('#middle_name').val();
     var birth_place = $('#birth_place').val();
     var displayName = $("#first_name").val() + " " + $("#last_name").val();
-    currentUser.displayName = displayName;
+
+    currentUser.updateProfile({ displayName: displayName });
 
     person = {
         uid: currentUser.uid,

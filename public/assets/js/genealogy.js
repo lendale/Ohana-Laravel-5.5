@@ -22,7 +22,6 @@ function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user
         getUserData(user.uid);
-        console.log('USER', user)
     } else {}
 }
 
@@ -75,7 +74,6 @@ function getTreeData(uid, clanId) {
                 treeData.push(obj);
             });
 
-            console.log("TREE", treeData);
             return treeData;
         })
         .then(treeData => {
@@ -93,7 +91,7 @@ function getAvailableParents(uid) {
     var fatherNames = [];
 
     let single = $(`
-            <div class="radio">
+            <git class="radio">
                 <label>
                     <input type="radio" name="availableParents" value="${currentUser.uid}">
                     ${currentUser.displayName}

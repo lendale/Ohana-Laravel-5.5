@@ -13,7 +13,7 @@ exports.addMother = function(event) {
         key: pushKey,
         n: userObj.displayName,
         s: 'female',
-        loc: `/user_family/${uid}/mothers/`
+        loc: `/user_family/${uid}/mothers/${pushKey}/`
     }
 
     if (userObj.photoUrl !== undefined) {
@@ -48,7 +48,7 @@ exports.addFather = function(event) {
         key: pushKey,
         n: userObj.displayName,
         s: 'male',
-        loc: `/user_family/${uid}/fathers/`
+        loc: `/user_family/${uid}/fathers/${pushKey}/`
     }
 
     if (userObj.photoUrl !== undefined) {

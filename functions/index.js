@@ -45,7 +45,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
             .then(prevVal => {
                 treeObj = prevVal
                 treeObj.key = uid
-                treeObj.loc = 'users'
+                treeObj.loc = `/users/${uid}/`
                 treeObj.bd = userObj.birthDate
 
                 if ((userObj.photoUrl !== undefined)) {
@@ -69,7 +69,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
             n: userObj.displayName,
             s: userObj.gender,
             bd: userObj.birthDate,
-            loc: 'users'
+            loc: `/users/${uid}/`
         }
 
         if ((userObj.photoUrl !== undefined)) {

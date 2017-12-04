@@ -15,7 +15,7 @@ exports.addWife = function(event) {
         n: userObj.displayName,
         bd: userObj.birthDate,
         s: 'female',
-        loc: `/user_family/${uid}/wives/`
+        loc: `/user_family/${uid}/wives/${pushKey}/`
     }
 
     if (userObj.photoUrl !== undefined) {
@@ -57,7 +57,7 @@ exports.addHusband = function(event) {
         n: userObj.displayName,
         bd: userObj.birthDate,
         s: 'male',
-        loc: `/user_family/${uid}/husbands/`
+        loc: `/user_family/${uid}/husbands/${pushKey}/`
     }
 
     if (userObj.photoUrl !== undefined) {

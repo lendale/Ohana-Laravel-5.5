@@ -467,7 +467,7 @@ function setupDivorces(diagram) {
         var data = nodeDataArray[i];
         var key = data.key;
         var uxs = data.ux;
-        var virs = data.virs;
+        var virs = data.vir;
         var ms = data.ms;
 
         if (uxs !== undefined) {
@@ -545,7 +545,7 @@ function setupSeparation(diagram) {
         var data = nodeDataArray[i];
         var key = data.key;
         var uxs = data.ux;
-        var virs = data.virs;
+        var virs = data.vir;
         var ms = data.ms;
 
         if (uxs !== undefined) {

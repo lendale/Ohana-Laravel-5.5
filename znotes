@@ -1,0 +1,61 @@
+user
+member
+both
+
+functions returns null to avoid undefined
+
+consaguinity
+	parameter node (data of both)
+	uses loc to set a specific color of a node depending on the relationship with the user
+
+findChildType
+	parameters diagram, key (member)
+	finds key
+	checks if childNode is not null
+	if success, checks if data is not null then returns data
+
+initGenogram
+	parameters user_id and data (members connected to user_id)
+	initializes the layout of the diagram
+	consaguinity function sets a specific color of a node depending on the relationship with the user
+	template maps are created based on category "s"
+	calls showNodeData function in an event listener
+	calls setupDiagram function
+
+setupChild
+	parameter diagram
+	calls findChildType to check child type
+	calls setupParentsA to identify and connect to parents
+	node and link data is added when both statements are true
+
+setupDiagram
+	parameters diagram, array (members connected to user_id), focusId (user_id)
+	create model given the array parameter
+	sets a category (s) to be used for linking
+	calls setup functions
+	highlights node using focusId parameter
+
+setupMarriages
+	determine marriages
+	checks marital status
+	add label node for link
+	add link referring to label node
+
+setupParents
+	process parent-child relationships once all marriages are known
+
+setupParentsA
+
+showNodeData
+	parameters user_id and data (of user_id)
+	access data on firebase database using user_id
+	display data on modal
+
+Twinlink
+	set a customized link
+	Twinlink is a function which inherited the Link class
+	constructs a new route by modifying the location of the node
+	checks which nodes are child nodes (toNode)
+	checks which nodes have the same birthday
+	returns a boolean
+

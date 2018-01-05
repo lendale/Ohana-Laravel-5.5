@@ -11,7 +11,7 @@ var user_key = potential_users.push().key;
 var potential =
 [
 	{
-		birthDate: 		"09/29/2020",
+		birthDate: 		"03/14/2020",
 		birthPlace: 	"Cebu",
 		childType: 		"adopted",
 		clanId: 		"-Kzdom0HTgVfH3Zttv4p",
@@ -33,7 +33,7 @@ var potential =
 var family =
 [
 	{
-		birthDate: 		"09/29/2020",
+		birthDate: 		"03/14/2020",
 		birthPlace: 	"Cebu",
 		childType: 		"adopted",
 		clanId: 		"-Kzdom0HTgVfH3Zttv4p",
@@ -54,7 +54,7 @@ var family =
 var tree =
 [
 	{
-		bd: 	"09/29/2020",
+		bd: 	"03/14/2020",
 		ct: 	"adopted",
 		// f: 		"-KzdpKCuk_irfRKv8fZz",
 		// img: 	"something",

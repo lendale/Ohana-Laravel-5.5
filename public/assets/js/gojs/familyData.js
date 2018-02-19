@@ -4,27 +4,27 @@
 */
 
 var potential_users = firebase.database().ref('potential_users');
-var user_family = firebase.database().ref('user_family/64dOBUKtZqOBFWJmPCxEhUsBMFF3/sons');
+var user_family = firebase.database().ref('user_family/64dOBUKtZqOBFWJmPCxEhUsBMFF3/husbands');
 var user_tree_go = firebase.database().ref('user_tree_go/-Kzdom0HTgVfH3Zttv4p');
 var user_key = potential_users.push().key;
 
 var potential =
 [
 	{
-		birthDate: 		"03/14/2020",
+		birthDate: 		"09/17/1995",
 		birthPlace: 	"Cebu",
 		childType: 		"adopted",
 		clanId: 		"-Kzdom0HTgVfH3Zttv4p",
-		displayName: 	"Bill Juezan",
-		email: 			"billjuezan@gmail.com",
-		firstName: 		"Bill",
+		displayName: 	"Neville Longbottom",
+		email: 			"nevilleLongbottom@gmail.com",
+		firstName: 		"Neville",
 		gender: 		"male",
-		lastName: 		"Juezan",
+		lastName: 		"Longbottom",
 		livingStatus: 	"living",
-		// maritalStatus: 	"something",
+		maritalStatus: 	"separated",
 		merged: 		false,
 		middleName: 	"Lao Cubelo",
-		relationship: 	"son",
+		relationship: 	"husband",
 		role: 			"guest",
 		tempKeyInClan: 	user_key
 	}
@@ -33,20 +33,20 @@ var potential =
 var family =
 [
 	{
-		birthDate: 		"03/14/2020",
+		birthDate: 		"09/17/1995",
 		birthPlace: 	"Cebu",
 		childType: 		"adopted",
 		clanId: 		"-Kzdom0HTgVfH3Zttv4p",
-		displayName: 	"Bill Juezan",
-		email: 			"fredjuezan@gmail.com",
-		firstName: 		"Bill",
+		displayName: 	"Neville Longbottom",
+		email: 			"nevilleLongbottom@gmail.com",
+		firstName: 		"Neville",
 		gender: 		"male",
-		lastName: 		"Juezan",
+		lastName: 		"Longbottom",
 		livingStatus: 	"living",
-		// maritalStatus: 	"something",
+		maritalStatus: 	"separated",
 		merged: 		false,
 		middleName: 	"Lao Cubelo",
-		relationship: 	"son",
+		relationship: 	"husband",
 		role: 			"guest"
 	}
 ];
@@ -54,15 +54,15 @@ var family =
 var tree =
 [
 	{
-		bd: 	"03/14/2020",
+		bd: 	"09/17/1995",
 		ct: 	"adopted",
-		// f: 		"-KzdpKCuk_irfRKv8fZz",
-		// img: 	"something",
+		f: 		"-KzdpKCuk_irfRKv8fZz",
+		img: 	"something",
 		key: 	user_key,
 		loc: 	"/user_family/64dOBUKtZqOBFWJmPCxEhUsBMFF3/sons/",
 		m: 		"64dOBUKtZqOBFWJmPCxEhUsBMFF3",
-		// ms: 	"something",
-		n: 		"Bill Juezan",
+		ms: 	"something",
+		n: 		"Neville Longbottom",
 		s: 		"male"
 	}
 ];

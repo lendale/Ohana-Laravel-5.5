@@ -34,6 +34,8 @@ findNodesInto
 	- Node class; Returns an iterator over the Nodes that are connected with this node
 findNodesOutOf
 	- Node class; Returns an iterator over the Nodes that are connected with this node
+findVertex
+	- LayoutNetwork class; Returns the LayoutVertex that was constructed for the Node
 focus
 	- LayoutVertex class; Gets or sets the offset of the focusX and focusY from the bounds position
 fromEndSegmentLength
@@ -48,6 +50,10 @@ initializeOption
 	- LayeredDigraphLayout class; Gets or sets which indices initialization option is being used
 invalidateRoute
 	- Link class; Declare that the route (the points) of this Link need to be recomputed soon
+isLabeledLink
+	- Link class; when this Link has any label Nodes, Nodes that are owned by this Link
+isLinkLabel
+	- Node class;  when this Node is a label node for a Link
 labelNodes
 	- Link class; returns an iterator over the Nodes that act as labels on this Link
 LayeredDigraphLayout (class)
@@ -56,10 +62,12 @@ layerName
 	- Layer class; how named collections of Parts are drawn in front or behind other collections of Parts in a Diagram
 layerSpacing
 	- LayeredDigraphLayout class; space between parent and child nodes
+Layout (class)
+	- the base class for all of the predefined diagram layout implementations; only arrange Parts (primarily Nodes and Links) in a Diagram
 LayoutEdge (class)
 	- constructs an edge that does not know about any Link
 LayoutNetwork (class)
-	- constructs an empty network
+	- constructs an empty network; provides an abstract view of a diagram as a network (graph) of vertexes and directed edges; permits adding or removing vertexes or edges from the network
 LayoutVertex (class)
 	- constructs a vertex that does not know about any Node
 linkLabelKeysProperty
@@ -124,5 +132,7 @@ TextBlock (class)
 	- a GraphObject that displays a text string in a given font
 toSpot
 	- Link class; where the link ends
+vertex
+	- LayoutVertex class; represents a Node in a LayoutNetwork; This read-only property returns an iterator for all of the vertexes that are connected in either direction with this vertex
 vertexes
-	- LayoutVertex class; A vertex represents a Node in a LayoutNetwork; This read-only property returns an iterator for all of the vertexes that are connected in either direction with this vertex
+	- LayoutVertex class; returns an iterator for all of the vertexes that are connected in either direction with this vertex

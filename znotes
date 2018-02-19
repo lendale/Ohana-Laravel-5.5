@@ -14,6 +14,21 @@ findChildType
 	checks if childNode is not null
 	if success, checks if data is not null then returns data
 
+GenogramLayout
+	inherit LayeredDigraphLayout
+	makeNetwork
+		generate layout edges for parent-child link
+	add
+		create a vertex for marital status
+		connects nodes and links properly using label nodes
+		links multiple spouses to each other
+	extendCohort
+		finds people married to a person
+	assignLayers
+		sets the width and height of the node
+	commitNodes
+		
+
 initGenogram
 	parameters user_id and data (members connected to user_id)
 	initializes the layout of the diagram
@@ -36,15 +51,23 @@ setupDiagram
 	highlights node using focusId parameter
 
 setupMarriages
-	determine marriages
+	parameter diagram
+	determines marriages
 	checks marital status
-	add label node for link
-	add link referring to label node
+	adds label node for link
+	adds link referring to label node
 
 setupParents
+	parameter diagram
+	checks mother and father
+	adds link
 	process parent-child relationships once all marriages are known
 
 setupParentsA
+	parameters diagram, key (member_id)
+	checks mother and father
+	adds link
+	return link to setupChild
 
 showNodeData
 	parameters user_id and data (of user_id)

@@ -159,7 +159,7 @@ function addFamilyMember() {
 
     var person = {
         gender: gender,
-        relationship: "father",
+        // relationship: "father",
         livingStatus: livingStatus,
         role: role,
         firstName: firstName,
@@ -337,7 +337,7 @@ function addChild() {
     } else if (parentSpouseKey !== currentUser.uid && currentUserGender === 'male') {
         person.parentKeys = { f: currentUser.uid, m: parentSpouseKey };
     } else if (parentSpouseKey !== currentUser.uid && currentUserGender === 'female') {
-        person.parentKeys.f = { m: currentUser.uid, f: parentSpouseKey };
+        person.parentKeys = { m: currentUser.uid, f: parentSpouseKey };
     }
 
     if (middleName.length > 0) {

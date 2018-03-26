@@ -1,3 +1,5 @@
+// strokeDashArray: [<pixels number of dashes>, <pixels spaces between dashes>]
+
 function initGenogram(data, user_id) {
     var $ = go.GraphObject.make;
 
@@ -7,9 +9,9 @@ function initGenogram(data, user_id) {
         // The user won't be able to move the elements
         allowMove: true,
         "undoManager.isEnabled": true,
-        // Use a custom layout defined below
+        // Use a custom layout, defined below
         layout: $(GenogramLayout, {
-            direction: 90, // direction the graph grows toward
+            direction: 90, // direction the graph grows towards
             layerSpacing: 40, // space between parent and child node layers
             columnSpacing: 30 // space between children
         })
@@ -132,7 +134,7 @@ function initGenogram(data, user_id) {
         })
     );
 
-    /*  nothing shows on child status  */
+    /*  child status  */
 
     myDiagram.nodeTemplateMap.add("Adopted",
         $(go.Node, {
@@ -149,6 +151,20 @@ function initGenogram(data, user_id) {
 
     /*  child status  */
 
+    // parent-child
+    // myDiagram.linkTemplate = $(
+    //     go.Link, {
+    //         routing: go.Link.AvoidsNodes,
+    //         curve: go.Link.JumpOver,
+    //         layerName: "Background",
+    //         selectable: false,
+    //         fromSpot: go.Spot.Bottom,
+    //         toSpot: go.Spot.Top
+    //     },
+    //     $(go.Shape, { strokeWidth: 1 })
+    // );
+
+    // same birth child
     myDiagram.linkTemplate = $(
         TwinLink, {
             routing: go.Link.AvoidsNodes,
@@ -158,7 +174,7 @@ function initGenogram(data, user_id) {
             fromSpot: go.Spot.Bottom,
             toSpot: go.Spot.Top
         },
-        $(go.Shape, { strokeWidth: 1})
+        $(go.Shape, { strokeWidth: 1 })
     );
 
     myDiagram.linkTemplateMap.add("Adopted",
@@ -349,7 +365,7 @@ function setupChild(diagram) {
                         link.labelKeys = [node.key];
                         link.category = "Adopted";
                         model.addLinkData(link);
-                        // console.log(link);
+                        console.log(link);
                     }
                 }
             }
@@ -721,7 +737,7 @@ function GenogramLayout() {
 }
 go.Diagram.inherit(GenogramLayout, go.LayeredDigraphLayout);
 
-/*  override    */
+/** @override */
 GenogramLayout.prototype.makeNetwork = function(coll) {
     // generate LayoutEdges for each parent-child Link
     var net = this.createNetwork();
@@ -736,9 +752,11 @@ GenogramLayout.prototype.makeNetwork = function(coll) {
     return net;
 };
 
-//  creating LayeredDigraphNetwork where husband/wife pairs are represented by a single LayeredDigraphVertex corresponding to the label Node on the marriage Link
+// internal method for creating LayeredDigraphNetwork where husband/wife pairs are represented
+// by a single LayeredDigraphVertex corresponding to the label Node on the marriage Link
 GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
     var multiSpousePeople = new go.Set();
+    // consider all Nodes in the given collection
     var it = coll.iterator;
     while (it.next()) {
         var nodeAdd = it.value;
@@ -767,6 +785,7 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
                 vertexAdd.height / 2
             );
         } else {
+            // no vertex for any married person
             var nbMarriages = 0;
             nodeAdd.linksConnected.each(function(l) {
                 if (l.isLabeledLink) nbMarriages++;
@@ -779,6 +798,7 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
         }
     }
     
+    // now do all Links
     it.reset();
     while (it.next()) {
         var link = it.value;
@@ -798,7 +818,8 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
                     if (!l.isLabeledLink) return;
                     // found the Link, now get its label Node
                     var mlab = l.labelNodes.first();
-                    // parent-child link should connect with the label node so LayoutEdge should connect with LayoutVertex representing the label node
+                    // parent-child link should connect with the label node,
+                    // so the LayoutEdge should connect with the LayoutVertex representing the label node
                     var mlabvert = net.findVertex(mlab);
                     if (mlabvert !== null) {
                         net.linkVertexes(parent, mlabvert, link);
@@ -813,7 +834,7 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
         var node = multiSpousePeople.first();
         var cohort = new go.Set();
         this.extendCohort(cohort, node);
-        //  connecting them all with a common vertex
+        // then encourage them all to be the same generation by connecting them all with a common vertex
         var dummyvert = net.createVertex();
         net.addVertex(dummyvert);
         var marriages = new go.Set();
@@ -823,14 +844,14 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
             });
         });
         marriages.each(function(link) {
-            // find the vertex for the marriage link (for the label node)
+            // find the vertex for the marriage link (i.e. for the label node)
             var mlab = link.labelNodes.first();
             var v = net.findVertex(mlab);
             if (v !== null) {
                 net.linkVertexes(dummyvert, v, null);
             }
         });
-        //  check if there are any other multiple-married people
+        // done with these people, now see if there are any other multiple-married people
         multiSpousePeople.removeAll(cohort);
     }
 };
@@ -849,7 +870,7 @@ GenogramLayout.prototype.extendCohort = function(coll, node) {
     });
 };
 
-/*  override    */
+/** @override */
 GenogramLayout.prototype.assignLayers = function() {
     go.LayeredDigraphLayout.prototype.assignLayers.call(this);
     var horiz = this.direction == 0.0 || this.direction == 180.0;
@@ -862,7 +883,8 @@ GenogramLayout.prototype.assignLayers = function() {
         var sz = horiz ? v.width : v.height;
         if (sz > max) maxsizes[lay] = sz;
     });
-    //  every vertex has the maximum width or height according to which layer it is in and aligned on the left (if horizontal) or the top (if vertical)
+    // now make sure every vertex has the maximum width or height according to which layer it is in,
+    // and aligned on the left (if horizontal) or the top (if vertical)
     this.network.vertexes.each(function(v) {
         var lay = v.layer;
         var max = maxsizes[lay];
@@ -874,9 +896,11 @@ GenogramLayout.prototype.assignLayers = function() {
             v.height = max;
         }
     });
+    // from now on, the LayeredDigraphLayout will think that the Node is bigger than it really is
+    // (other than the ones that are the widest or tallest in their respective layer).
 };
 
-/*  override    */
+/** @override */
 GenogramLayout.prototype.commitNodes = function() {
     go.LayeredDigraphLayout.prototype.commitNodes.call(this);
     // position regular nodes
@@ -885,15 +909,16 @@ GenogramLayout.prototype.commitNodes = function() {
             v.node.position = new go.Point(v.x, v.y);
         }
     });
-    // position spouses of each marriage vertex
+    // position the spouses of each marriage vertex
     var layout = this;
     this.network.vertexes.each(function(v) {
         if (v.node === null) return;
         if (!v.node.isLinkLabel) return;
         var labnode = v.node;
         var lablink = labnode.labeledLink;
-        // if spouses are not moved, marriage link needed
-        // position the label node, because LayoutVertex.commit() was called above
+        // In case the spouses are not actually moved, we need to have the marriage link
+        // position the label node, because LayoutVertex.commit() was called above on these vertexes.
+        // Alternatively we could override LayoutVetex.commit to be a no-op for label node vertexes.
         lablink.invalidateRoute();
         var spouseA = lablink.fromNode;
         var spouseB = lablink.toNode;
@@ -904,7 +929,7 @@ GenogramLayout.prototype.commitNodes = function() {
             spouseA = spouseB;
             spouseB = tempSpouse;
         }
-        // check if parents are on the desired sides to avoid link crossing
+        // see if the parents are on the desired sides, to avoid a link crossing
         var aParentsNode = layout.findParentsMarriageLabelNode(spouseA);
         var bParentsNode = layout.findParentsMarriageLabelNode(spouseB);
         if (
@@ -935,7 +960,7 @@ GenogramLayout.prototype.commitNodes = function() {
             spouseB.position = pos;
         }
     });
-    // position only-child nodes under the marriage label node
+    // position only-child nodes to be under the marriage label node
     this.network.vertexes.each(function(v) {
         if (v.node === null || v.node.linksConnected.count > 1) return;
         var mnode = layout.findParentsMarriageLabelNode(v.node);
@@ -944,7 +969,7 @@ GenogramLayout.prototype.commitNodes = function() {
             var mvert = layout.network.findVertex(mnode);
             var newbnds = v.node.actualBounds.copy();
             newbnds.x = mvert.centerX - v.node.actualBounds.width / 2;
-            // check if any empty space at horizontal mid-point in that layer
+            // see if there's any empty space at the horizontal mid-point in that layer
             var overlaps = layout.diagram.findObjectsIn(
                 newbnds,
                 function(x) {
@@ -970,6 +995,7 @@ GenogramLayout.prototype.findParentsMarriageLabelNode = function(node) {
     }
     return null;
 };
+// end GenogramLayout class
 
 function TwinLink() {
     go.Link.call(this);
@@ -981,7 +1007,6 @@ TwinLink.prototype.computePoints = function() {
     var pts = this.points; // greek
     if (pts.length >= 4) { // greek
         var birthId = this.toNode.data["bd"];
-        var genderId = this.toNode.data["s"];
         if (birthId) {
             var parents = this.fromNode;
             var sameBirth = 0;
@@ -990,18 +1015,23 @@ TwinLink.prototype.computePoints = function() {
 
             while (it.next()) {
                 var child = it.value;
-                var childBd = child.data["bd"];
-                var childGender = child.data["s"];
-                var childSpliter = childBd.split("/");
-                var childBdDay = parseInt(childSpliter[1]);
+                var childdata1 = child.data["bd"];
+                var childSpliter = childdata1.split("/");
+                var childbd = parseInt(childSpliter[1]);
 
                 var birthIdSplit = birthId.split("/");
                 var birthIdDay = parseInt(birthIdSplit[1]);
 
-                if(childBdDay == birthIdDay ||
-                    childBdDay == (birthIdDay-1) ||
-                    birthIdDay == (childBdDay-1)) {
-
+                if(childbd == birthIdDay)
+                {
+                    sameBirth++;
+                    sumX += child.location.x;
+                }
+                else if(childbd == (birthIdDay-1)) {
+                    sameBirth++;
+                    sumX += child.location.x;
+                }
+                else if(birthIdDay == (childbd-1)) {
                     sameBirth++;
                     sumX += child.location.x;
                 }

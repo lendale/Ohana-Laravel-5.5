@@ -19,7 +19,7 @@ GenogramLayout
 	makeNetwork
 		generate layout edges for parent-child link
 	add
-		create a vertex for marital status
+		create a vertex for spouses
 		connects nodes and links properly using label nodes
 		links multiple spouses to each other
 	extendCohort

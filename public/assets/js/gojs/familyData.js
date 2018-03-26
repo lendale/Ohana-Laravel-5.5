@@ -4,27 +4,27 @@
 */
 
 var potential_users = firebase.database().ref('potential_users');
-var user_family = firebase.database().ref('user_family/64dOBUKtZqOBFWJmPCxEhUsBMFF3/husbands');
-var user_tree_go = firebase.database().ref('user_tree_go/-Kzdom0HTgVfH3Zttv4p');
+var user_family = firebase.database().ref('user_family/64dOBUKtZqOBFWJmPCxEhUsBMFF3/sons');
+var user_tree_go = firebase.database().ref('user_tree_go/-L41dY5Iw2j0Acp-4rLf');
 var user_key = potential_users.push().key;
 
 var potential =
 [
 	{
 		birthDate: 		"09/17/1995",
-		birthPlace: 	"Cebu",
+		birthPlace: 	"Great Britain",
 		childType: 		"adopted",
-		clanId: 		"-Kzdom0HTgVfH3Zttv4p",
-		displayName: 	"Neville Longbottom",
-		email: 			"nevilleLongbottom@gmail.com",
+		clanId: 		"-L41dY5Iw2j0Acp-4rLf",
+		displayName: 	"Neville Potter",
+		email: 			"nevillepotter@gmail.com",
 		firstName: 		"Neville",
 		gender: 		"male",
-		lastName: 		"Longbottom",
+		lastName: 		"Potter",
 		livingStatus: 	"living",
-		maritalStatus: 	"separated",
+		// maritalStatus: 	"separated",
 		merged: 		false,
-		middleName: 	"Lao Cubelo",
-		relationship: 	"husband",
+		// middleName: 	"Lao Cubelo",
+		relationship: 	"son",
 		role: 			"guest",
 		tempKeyInClan: 	user_key
 	}
@@ -34,19 +34,19 @@ var family =
 [
 	{
 		birthDate: 		"09/17/1995",
-		birthPlace: 	"Cebu",
+		birthPlace: 	"Great Britain",
 		childType: 		"adopted",
-		clanId: 		"-Kzdom0HTgVfH3Zttv4p",
-		displayName: 	"Neville Longbottom",
-		email: 			"nevilleLongbottom@gmail.com",
+		clanId: 		"-L41dY5Iw2j0Acp-4rLf",
+		displayName: 	"Neville Potter",
+		email: 			"nevillepotter@gmail.com",
 		firstName: 		"Neville",
 		gender: 		"male",
-		lastName: 		"Longbottom",
+		lastName: 		"Potter",
 		livingStatus: 	"living",
-		maritalStatus: 	"separated",
+		// maritalStatus: 	"separated",
 		merged: 		false,
-		middleName: 	"Lao Cubelo",
-		relationship: 	"husband",
+		// middleName: 	"Lao Cubelo",
+		relationship: 	"son",
 		role: 			"guest"
 	}
 ];
@@ -56,13 +56,13 @@ var tree =
 	{
 		bd: 	"09/17/1995",
 		ct: 	"adopted",
-		f: 		"-KzdpKCuk_irfRKv8fZz",
-		img: 	"something",
+		f: 		"-L41lWRX3sX-RYPQrTPV",
+		// img: 	"something",
 		key: 	user_key,
 		loc: 	"/user_family/64dOBUKtZqOBFWJmPCxEhUsBMFF3/sons/",
 		m: 		"64dOBUKtZqOBFWJmPCxEhUsBMFF3",
-		ms: 	"something",
-		n: 		"Neville Longbottom",
+		// ms: 	"something",
+		n: 		"Neville Potter",
 		s: 		"male"
 	}
 ];

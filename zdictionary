@@ -54,6 +54,8 @@ isLabeledLink
 	- Link class; when this Link has any label Nodes, Nodes that are owned by this Link
 isLinkLabel
 	- Node class;  when this Node is a label node for a Link
+itemArray
+	- Panel class; 
 labelNodes
 	- Link class; returns an iterator over the Nodes that act as labels on this Link
 LayeredDigraphLayout (class)

@@ -10,8 +10,8 @@
     },
     "dependencies": {
         "babel-polyfill": "^6.26.0",
-        "firebase-admin": "~5.5.0",
-        "firebase-functions": "^0.7.3"
+        "firebase-admin": "^5.11.0",
+        "firebase-functions": "^0.9.1"
     },
     "private": true
 }

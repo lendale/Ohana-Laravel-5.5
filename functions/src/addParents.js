@@ -84,8 +84,8 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
     const parent = userTreeRef.child(`${clanId}/${uid}`).once("value")
 
     if (parentType === "mother") {
-        parent.then(snapshot => {
-            if (!(snapshot.val().f === null || snapshot.val().f === undefined)) {
+        return parent.then(snapshot => {
+            if (!(snapshot.val().f === undefined || snapshot.val().f === null)) {
                 const pr1 = userTreeRef.child(`${clanId}/${key}/vir`).push(snapshot.val().f).then(() => {
                     userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().f}`).set('married')
                 })
@@ -102,8 +102,8 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
             }
         })
     } else if (parentType === "father") {
-        parent.then(snapshot => {
-            if (!(snapshot.val().m === null || snapshot.val().m === undefined)) {
+        return parent.then(snapshot => {
+            if (!(snapshot.val().m === undefined || snapshot.val().m === null)) {
                 const pr1 = userTreeRef.child(`${clanId}/${key}/ux`).push(snapshot.val().m).then(() => {
                     userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().m}`).set('married')
                 })

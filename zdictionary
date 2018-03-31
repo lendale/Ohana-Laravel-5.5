@@ -118,6 +118,8 @@ prototype
 	- do not modify; define new class to override methods
 Rect (class)
 	- describes a rectangular two-dimensional area as a top-left point (x and y values) and a size (width and height values)
+reset
+	- Iterator class; Start this iterator all over again
 routing
 	- Link class; how the link moves
 select

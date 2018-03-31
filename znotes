@@ -9,7 +9,7 @@ consaguinity
 	uses loc to set a specific color of a node depending on the relationship with the user
 
 findChildType
-	parameters diagram, key (member)
+	parameters diagram, key (both)
 	finds key
 	checks if childNode is not null
 	if success, checks if data is not null then returns data

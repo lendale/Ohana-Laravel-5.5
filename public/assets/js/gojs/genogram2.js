@@ -277,9 +277,7 @@ function setupDiagram(diagram, array, focusId) {
         nodeDataArray: array
     });
 
-    setupSeparation(diagram);
-    setupDivorces(diagram);
-    setupMarriages(diagram);
+    setupMaritalStatus(diagram);
     setupParents(diagram);
     setupChild(diagram);
 
@@ -301,24 +299,6 @@ function findChildType(diagram, key) {
             var childData = it.value;
 
             if(childData.data !== null && childData.data.category === "Adopted") return childData;
-        }
-    }
-    return null;
-}
-
-function findMarriage(diagram, a, b) {
-    var nodeA = diagram.findNodeForKey(a);
-    var nodeB = diagram.findNodeForKey(b);
-
-    if (nodeA !== null && nodeB !== null) {
-        var it = nodeA.findLinksBetween(nodeB); // in either direction
-        
-        while (it.next()) {
-            var link = it.value;
-
-            if (link.data !== null && link.data.category === "Marriage") return link;
-            else if (link.data !== null && link.data.category === "Divorced") return link;
-            else if (link.data !== null && link.data.category === "Separated") return link;
         }
     }
     return null;
@@ -427,7 +407,25 @@ function setupParentsA(diagram, key) {
     }
 }
 
-function setupMarriages(diagram) {
+function findMarriage(diagram, a, b) {
+    var nodeA = diagram.findNodeForKey(a);
+    var nodeB = diagram.findNodeForKey(b);
+
+    if (nodeA !== null && nodeB !== null) {
+        var it = nodeA.findLinksBetween(nodeB); // in either direction
+        
+        while (it.next()) {
+            var link = it.value;
+
+            if (link.data !== null && link.data.category === "Marriage") return link;
+            else if (link.data !== null && link.data.category === "Divorced") return link;
+            else if (link.data !== null && link.data.category === "Separated") return link;
+        }
+    }
+    return null;
+}
+
+function setupMaritalStatus(diagram) {
     var model = diagram.model;
     var nodeDataArray = model.nodeDataArray;
 
@@ -471,6 +469,32 @@ function setupMarriages(diagram) {
                             // console.log("M Link Ux", link)
                             model.addLinkData(link);
                         }
+                        else if (marstat === "divorced") {
+                            var node = { s: "Divorced" };
+                            model.addNodeData(node);
+
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Divorced"
+                            };
+                            // console.log("M Link Ux", link)
+                            model.addLinkData(link);
+                        }
+                        else if (marstat === "separated") {
+                            var node = { s: "Separated" };
+                            model.addNodeData(node);
+
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Separated"
+                            };
+                            // console.log("M Link Ux", link)
+                            model.addLinkData(link);
+                        }
                     }
                 }
             }
@@ -505,154 +529,20 @@ function setupMarriages(diagram) {
                             // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         }
-                    }
-                }
-            }
-        }
-    }
-}
-
-function setupDivorces(diagram) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var key = data.key;
-        var uxs = data.ux;
-        var virs = data.vir;
-        var ms = data.ms;
-
-        if (uxs !== undefined) {
-            if (typeof uxs === "String") uxs = [uxs];
-            if (typeof ms === "String") ms = [ms];
-
-            for (var a = 0; a < uxs.length; a++) {
-                for (var b = 0; b < ms.length; b++) {
-                    var wife = uxs[a];
-
-                    if (key === wife) {
-                        continue;
-                    }
-
-                    var marstat = ms[b];
-                    var connect = findMarriage(diagram, key, wife);
-
-                    if (connect === null) {
-                        if (marstat === "divorced") {
+                        else if (marstat === "divorced") {
                             var node = { s: "Divorced" };
                             model.addNodeData(node);
-
-                            var link = {
-                                from: key,
-                                to: wife,
-                                labelKeys: [node.key],
-                                category: "Divorced"
-                            };
-                            // console.log("D Link Ux", link);
-                            model.addLinkData(link);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (virs !== undefined) {
-            if (typeof virs === "String") virs = [virs];
-            if (typeof ms === "String") ms = [ms];
-
-            for (var j = 0; j < virs.length; j++) {
-                for (var b = 0; b < ms.length; b++) {
-                    var husband = virs[j];
-
-                    if (key === husband) {
-                        continue;
-                    }
-
-                    var marstat = ms[b];
-                    var connect = findMarriage(diagram, key, husband);
-
-                    if (connect === null) {
-                        if (marstat === "divorced") {
-                            var node = { s: "Divorced" };
-                            model.addNodeData(node);
+                            
                             var link = {
                                 from: key,
                                 to: husband,
                                 labelKeys: [node.key],
                                 category: "Divorced"
                             };
-                            // console.log("D Link Vir", link);
+                            // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         }
-                    }
-                }
-            }
-        }
-    }
-}
-
-function setupSeparation(diagram) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var key = data.key;
-        var uxs = data.ux;
-        var virs = data.vir;
-        var ms = data.ms;
-
-        if (uxs !== undefined) {
-            if (typeof uxs === "String") uxs = [uxs];
-            if (typeof ms === "String") ms = [ms];
-
-            for (var a = 0; a < uxs.length; a++) {
-                for (var b = 0; b < ms.length; b++) {
-                    var wife = uxs[a];
-
-                    if (key === wife) {
-                        continue;
-                    }
-
-                    var marstat = ms[b];
-                    var connect = findMarriage(diagram, key, wife);
-
-                    if (connect === null) {
-                        if (marstat === "separated") {
-                            var node = { s: "Separated" };
-                            model.addNodeData(node);
-
-                            var link = {
-                                from: key,
-                                to: wife,
-                                labelKeys: [node.key],
-                                category: "Separated"
-                            };
-                            model.addLinkData(link);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (virs !== undefined) {
-            if (typeof virs === "String") virs = [virs];
-            if (typeof ms === "String") ms = [ms];
-
-            for (var j = 0; j < virs.length; j++) {
-                for (var b = 0; b < ms.length; b++) {
-                    var husband = virs[j];
-
-                    if (key === husband) {
-                        continue;
-                    }
-
-                    var marstat = ms[b];
-                    var connect = findMarriage(diagram, key, husband);
-
-                    if (connect === null) {
-                        if (marstat === "separated") {
+                        else if (marstat === "separated") {
                             var node = { s: "Separated" };
                             model.addNodeData(node);
                             
@@ -662,7 +552,7 @@ function setupSeparation(diagram) {
                                 labelKeys: [node.key],
                                 category: "Separated"
                             };
-                            // console.log("D Link Vir", link);
+                            // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         }
                     }
@@ -994,14 +884,18 @@ TwinLink.prototype.computePoints = function() {
                 var childGender = child.data["s"];
                 var childSpliter = childBd.split("/");
                 var childBdDay = parseInt(childSpliter[1]);
+                var childBdMonth = parseInt(childSpliter[0]);
 
                 var birthIdSplit = birthId.split("/");
                 var birthIdDay = parseInt(birthIdSplit[1]);
+                var birthIdMonth = parseInt(birthIdSplit[0]);
 
                 if(childBdDay == birthIdDay ||
                     childBdDay == (birthIdDay-1) ||
-                    birthIdDay == (childBdDay-1)) {
-
+                    birthIdDay == (childBdDay-1) ||
+                    childBdMonth == birthIdMonth ||
+                    childBdMonth == (birthIdMonth-1) ||
+                    birthIdMonth == (childBdMonth-1)) {
                     sameBirth++;
                     sumX += child.location.x;
                 }

@@ -1,5 +1,6 @@
 inside function initGenogram
 
+// doesn't work
 myDiagram.linkTemplateMap.add("Adopted",
     $(Adopted, {
             routing: go.Link.AvoidsNodes,

@@ -18,6 +18,12 @@ function initGenogram(data, user_id) {
     // Gives specific color to shape for name
     function consanguinity(node) {
         var loc = node.loc;
+        var ct = node.ct;
+
+        switch (ct) {
+            case "adopted":
+                return "#5b9fff";
+        }
 
         switch (loc) {
             // a shade of red
@@ -134,14 +140,14 @@ function initGenogram(data, user_id) {
 
     /*  nothing shows on child status  */
 
-    myDiagram.nodeTemplateMap.add("Adopted",
-        $(go.Node, {
-            selectable: false,
-            width: 1,
-            height: 1,
-            fromEndSegmentLength: 20
-        })
-    );
+    // myDiagram.nodeTemplateMap.add("Adopted",
+    //     $(go.Node, {
+    //         selectable: false,
+    //         width: 1,
+    //         height: 1,
+    //         fromEndSegmentLength: 20
+    //     })
+    // );
 
     /*
         LINK TEMPLATES IN MARITAL STATUS, CHILD STATUS
@@ -161,21 +167,21 @@ function initGenogram(data, user_id) {
         $(go.Shape, { strokeWidth: 1})
     );
 
-    myDiagram.linkTemplateMap.add("Adopted",
-        $(go.Link, {
-                routing: go.Link.AvoidsNodes,
-                curve: go.Link.JumpOver,
-                layerName: "Background",
-                selectable: false,
-                fromSpot: go.Spot.Bottom,
-                toSpot: go.Spot.Top
-            },
-            $(go.Shape, {
-                strokeWidth: 2,
-                stroke: "blue",
-                strokeDashArray: [5, 2]
-            }))
-    );
+    // myDiagram.linkTemplateMap.add("Adopted",
+    //     $(go.Link, {
+    //             routing: go.Link.AvoidsNodes,
+    //             curve: go.Link.JumpOver,
+    //             layerName: "Background",
+    //             selectable: false,
+    //             fromSpot: go.Spot.Bottom,
+    //             toSpot: go.Spot.Top
+    //         },
+    //         $(go.Shape, {
+    //             strokeWidth: 2,
+    //             stroke: "blue",
+    //             strokeDashArray: [5, 2]
+    //         }))
+    // );
 
     /*  marital status  */
 
@@ -279,7 +285,7 @@ function setupDiagram(diagram, array, focusId) {
 
     setupMaritalStatus(diagram);
     setupParents(diagram);
-    setupChild(diagram);
+    // setupChild(diagram);
 
     // console.log("LINK DATA", diagram.model.linkData)
 

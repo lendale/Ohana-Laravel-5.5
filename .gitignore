@@ -1,5 +1,6 @@
 /node_modules
 /functions/node_modules
+/functions/package-lock.json
 /public/hot
 /public/storage
 /public/assets/js/init.js

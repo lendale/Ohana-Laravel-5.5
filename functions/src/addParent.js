@@ -25,8 +25,8 @@ exports.addMother = function(event) {
     }
 
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
-    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/m`).set(pushKey)
+    const pr1 = root.child(`user_tree_go/${clanId}/${uid}/m`).set(pushKey);
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
     const pr3 = connectCurrentUserParents(uid, clanId, pushKey, 'mother')
     const pr4 = index.createPotentialUser(event)
 
@@ -59,8 +59,8 @@ exports.addFather = function(event) {
         treeObj.bd = userObj.birthDate
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
-    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/f`).set(pushKey)
+    const pr1 = root.child(`user_tree_go/${clanId}/${uid}/f`).set(pushKey);
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
     const pr3 = index.createPotentialUser(event)
     const pr4 = connectCurrentUserParents(uid, clanId, pushKey, 'father')
 
@@ -72,16 +72,17 @@ exports.addFather = function(event) {
 
 function connectCurrentUserParents(uid, clanId, key, parentType) {
     const userTreeRef = admin.database().ref().child('user_tree_go')
-    const parent = userTreeRef.child(`${clanId}/${uid}`).once('value')
+    const father = userTreeRef.child(`${clanId}/${uid}/f`)
+    const mother = userTreeRef.child(`${clanId}/${uid}/m`)
 
     if (parentType === 'mother') {
-        parent.then(snapshot => {
-            if (!(snapshot.val().f === null || snapshot.val().f === undefined)) {
+        father.once('value').then(snapshot => {
+            if (snapshot.exists()) {
                 const pr1 = userTreeRef.child(`${clanId}/${key}/vir`).push(snapshot.val().f).then(() => {
                     return userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().f}`).set('married')
                 })
-                const pr2 = userTreeRef.child(`${clanId}/${snapshot.val().f}/ux`).push(key).then(() => {
-                    return userTreeRef.child(`${clanId}/${snapshot.val().f}/ms/${key}`).set('married')
+                const pr2 = userTreeRef.child(`${clanId}/${snapshot.val()}/ux`).push(key).then(() => {
+                    return userTreeRef.child(`${clanId}/${snapshot.val()}/ms/${key}`).set('married')
                 })
 
                 return Promise.all([pr1, pr2]).catch(err => {
@@ -93,13 +94,13 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
             }
         })
     } else if (parentType === 'father') {
-        parent.then(snapshot => {
-            if (!(snapshot.val().m === null || snapshot.val().m === undefined)) {
+        mother.once('value').then(snapshot => {
+            if (snapshot.exists()) {
                 const pr1 = userTreeRef.child(`${clanId}/${key}/ux`).push(snapshot.val().m).then(() => {
                     return userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().m}`).set('married')
                 })
-                const pr2 = userTreeRef.child(`${clanId}/${snapshot.val().m}/vir`).push(key).then(() => {
-                    return userTreeRef.child(`${clanId}/${snapshot.val().m}/ms/${key}`).set('married')
+                const pr2 = userTreeRef.child(`${clanId}/${snapshot.val()}/vir`).push(key).then(() => {
+                    return userTreeRef.child(`${clanId}/${snapshot.val()}/ms/${key}`).set('married')
                 })
 
                 return Promise.all([pr1, pr2]).catch(err => {

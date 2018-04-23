@@ -73,7 +73,7 @@ window.fbAsyncInit = function() {
             FB.api(
                 "/me",
                 "GET", {
-                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender,family{first_name,middle_name,last_name,name,relationship,picture.height(961)}",
+                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender",
                     access_token: fbAccessToken
                 },
                 function(response) {

@@ -356,11 +356,33 @@ function pushFbFamilyData(uid, data) {
 function createAcctWithFacebook() {
     var middle_name = $("#middle_name").val();
     var birth_place = $("#birth_place").val();
+    var street_address = $("#street_address").val();
+    var barangay = $("#barangay").val();
+    var city = $("#city").val();
+    var postal_code = $("#postal_code").val();
 
     if (middle_name !== "") {
         fbUser.middleName = middle_name;
-    } else if (birth_place !== "") {
+    }
+
+    if (birth_place !== "") {
         fbUser.birthPlace = birth_place;
+    }
+
+    if (street_address !== "") {
+        fbUser.street_address = street_address;
+    }
+
+    if (barangay !== "") {
+        fbUser.barangay = barangay;
+    }
+
+    if (city !== "") {
+        fbUser.city = city;
+    }
+
+    if (postal_code !== "") {
+        fbUser.postal_code = postal_code;
     }
 
     if (potentialFlag) {
@@ -385,6 +407,10 @@ function createAcctWithEmailAndPass() {
     var middle_name = $('#middle_name').val();
     var birth_place = $('#birth_place').val();
     var displayName = $("#first_name").val() + " " + $("#last_name").val();
+    var street_address = $("#street_address").val();
+    var barangay = $("#barangay").val();
+    var city = $("#city").val();
+    var postal_code = $("#postal_code").val();
 
     currentUser.updateProfile({ displayName: displayName });
 
@@ -412,6 +438,22 @@ function createAcctWithEmailAndPass() {
 
     if (birth_place !== "") {
         person.birth_place = birth_place;
+    }
+
+    if (street_address !== "") {
+        fbUser.street_address = street_address;
+    }
+
+    if (barangay !== "") {
+        fbUser.barangay = barangay;
+    }
+
+    if (city !== "") {
+        fbUser.city = city;
+    }
+
+    if (postal_code !== "") {
+        fbUser.postal_code = postal_code;
     }
 
     if (potentialFlag) {

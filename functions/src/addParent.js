@@ -76,10 +76,10 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
     const mother = userTreeRef.child(`${clanId}/${uid}/m`)
 
     if (parentType === 'mother') {
-        father.once('value').then(snapshot => {
+        return father.once('value').then(snapshot => {
             if (snapshot.exists()) {
-                const pr1 = userTreeRef.child(`${clanId}/${key}/vir`).push(snapshot.val().f).then(() => {
-                    return userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().f}`).set('married')
+                const pr1 = userTreeRef.child(`${clanId}/${key}/vir`).push(snapshot.val()).then(() => {
+                    return userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val()}`).set('married')
                 })
                 const pr2 = userTreeRef.child(`${clanId}/${snapshot.val()}/ux`).push(key).then(() => {
                     return userTreeRef.child(`${clanId}/${snapshot.val()}/ms/${key}`).set('married')
@@ -94,10 +94,10 @@ function connectCurrentUserParents(uid, clanId, key, parentType) {
             }
         })
     } else if (parentType === 'father') {
-        mother.once('value').then(snapshot => {
+        return mother.once('value').then(snapshot => {
             if (snapshot.exists()) {
-                const pr1 = userTreeRef.child(`${clanId}/${key}/ux`).push(snapshot.val().m).then(() => {
-                    return userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val().m}`).set('married')
+                const pr1 = userTreeRef.child(`${clanId}/${key}/ux`).push(snapshot.val()).then(() => {
+                    return userTreeRef.child(`${clanId}/${key}/ms/${snapshot.val()}`).set('married')
                 })
                 const pr2 = userTreeRef.child(`${clanId}/${snapshot.val()}/vir`).push(key).then(() => {
                     return userTreeRef.child(`${clanId}/${snapshot.val()}/ms/${key}`).set('married')

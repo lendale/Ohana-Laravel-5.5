@@ -864,6 +864,9 @@
 <!--    Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc    -->
 <script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
 
+<!--    Plugin for Google Places API    -->
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsnYLajLVHh7uvRdQCkbwnZepcCi1t0q4&libraries=places"></script>
+
 <!-- Go JS -->
 <script src="assets/js/gojs/go-debug.js"></script>
 <script src="assets/js/gojs/genogram2.js"></script>

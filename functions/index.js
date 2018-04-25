@@ -125,6 +125,7 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
 
             if (!(childSnap.ux === null || childSnap.ux === undefined)) {
                 let ux = Object.entries(childSnap.ux)
+                console.log('UX', ux)
 
                 ux.forEach(([key, value]) => {
                     if (value === oldId) {
@@ -135,6 +136,7 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
 
             if (!(childSnap.vir === null || childSnap.vir === undefined)) {
                 let vir = Object.entries(childSnap.vir)
+                console.log('VIR', vir)
 
                 vir.forEach(([key, value]) => {
                     if (value === oldId) {
@@ -143,37 +145,38 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
                 })
             }
 
-            // if (!(childSnap.ms === null || childSnap.ms === undefined)) {
-            //     let ms = Object.entries(childSnap.ms)
+            if (!(childSnap.ms === null || childSnap.ms === undefined)) {
+                let ms = Object.entries(childSnap.ms)
+                console.log('MS', ms)
 
-            //     ms.forEach(([key, value]) => {
-            //         if (key === oldId) {
-            //             return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${oldId}`).set(value)
-            //                 // .then(() => {
-            //                 //     rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${oldId}`).remove()
-            //                 // })
-            //         }
-            //     })
-            // }
+                ms.forEach(([key, value]) => {
+                    if (key === oldId) {
+                        return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${newId}`).set(value)
+                            .then(() => {
+                                rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${oldId}`).remove()
+                            })
+                    }
+                })
+            }
         })
 
         return updateObj
     }).then(updateObj => {
-        console.log('Update Object', updateObj)
+        // console.log('Update Object', updateObj)
         return rootRef.update(updateObj)
     })
 
-    const pr2 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux`).once('value')
-        .then(snapshot => {
-            snapshot.forEach(childSnapshot => {
-                if (childSnapshot.key === oldId) {
-                    return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${newId}`).set(childSnapshot.value)
-                }
-            })
-        })
-    const pr3 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
+    // const pr2 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux`).once('value')
+    //     .then(snapshot => {
+    //         snapshot.forEach(childSnapshot => {
+    //             if (childSnapshot.key === oldId) {
+    //                 return rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${newId}`).set(childSnapshot.value)
+    //             }
+    //         })
+    //     })
+    // const pr3 = rootRef.child(`user_family/${currentUserId}/spouse_keys/ux/${oldId}`).remove()
 
-    return Promise.all([pr1, pr2, pr3]).catch(err => {
+    return Promise.all([pr1]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

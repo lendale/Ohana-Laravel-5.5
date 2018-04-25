@@ -496,8 +496,6 @@ function handleWizardPic(eventData) {
 }
 
 function showAvailableMergeData(data) {
-    console.log(data)
-
     $("#wizard_picture_preview").attr("src", data.photoUrl);
     $("#group_first_name").addClass("is-focused");
     $("#first_name").val(data.firstName);

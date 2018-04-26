@@ -121,13 +121,13 @@
                                         <img src="assets/img/icons/gif.gif" id="photoUrl">
                                     </div>
                                     <div class="card-content"> 
-                                        <h5 class="card-subtitle mb-2 text-muted" id="caption">
-                                            <p>CAPTION</p>
-                                        </h5>
-                                        <p class="card-description">
-                                        <i class="material-icons">schedule</i> 
+                                    
+                                        <p class="card-description" id="caption">
+                                        <p>CAPTION</p>
+                                        
                                         </p>
                                         <div class="footer">
+                                        <i class="material-icons">schedule</i><br>
                                         <button class="btn btn-danger btn-round btn-sm" data-toggle="tooltip" data-placement="bottom" title="Delete Photo">delete</button>
                                         <button class="btn btn-danger btn-round btn-sm" data-toggle="tooltip" data-placement="bottom" title="Update Caption">update</button>
                                         </div>  
@@ -135,7 +135,7 @@
                                 </div>
                             </div>
                         </div>
-                    <!-- </div> -->
+                    
 
 
                 </div>

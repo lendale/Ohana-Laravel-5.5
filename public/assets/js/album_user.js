@@ -38,7 +38,7 @@ function retrieveUserImage(){
                 $.each(albumData, function(key, value) {
                     index = key;
                     
-                    html += '<div class="col-md-4"><div class="card card-blog"><div class="card-image"><img src="' + value.photoUrl + '" id="photoUrl"></div><div class="card-content"><h5 class="card-subtitle mb-2 text-muted" id="'+key+'"><p>'+  value.caption +'</p></h5><p class="card-description"><i class="material-icons">schedule</i>&nbsp;'+ value.timestamp +'</p><div class="footer"><button class="btn btn-danger btn-round btn-sm" id="'+key+'" onClick="deleteImage(this.id)">delete</button><button class="btn btn-danger btn-round btn-sm" data-toggle="modal" data-target="#updateModal" id="'+key+'" onClick="retrieveCaption(this.id)">update</button></div></div>';
+                    html += '<div class="col-md-4"><div class="card card-blog"><div class="card-image"><img src="' + value.photoUrl + '" id="photoUrl"></div><div class="card-content"><p class="card-description" id="'+key+'"><p>'+  value.caption +'</p><div class="footer"><i class="material-icons">schedule</i>&nbsp;'+ value.timestamp +'<br><button class="btn btn-danger btn-round btn-sm" id="'+key+'" onClick="deleteImage(this.id)">delete</button><button class="btn btn-danger btn-round btn-sm" data-toggle="modal" data-target="#updateModal" id="'+key+'" onClick="retrieveCaption(this.id)">update</button></div></div>';
                     
                     html += '</div></div>';
                     

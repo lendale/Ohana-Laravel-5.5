@@ -166,25 +166,25 @@
                 <h2 id="node_name" class="card-title"></h2>
                 <div class="modal-body">
                     <div class="row">
-                        {{--  <div class="col-md-12">
+                        <div class="col-md-12">
                             <button type="button" class="btn btn-default">Quick Edit</button>
-                        </div>  --}}
+                        </div> 
                         <div class="col-md-3">
                             <h4>Date of Birth:</h4>
                         </div>
                         <div class="col-md-9">
                             <h4 id="node_birth_date" class="text-left"></h4>
                         </div>
-                        
                     </div>
-                    {{--  <div class="row">
+                    
+                    <div class="row">
                         <div class="col-md-3">
                             <h4>Place of Birth:</h4>
                         </div>
                         <div class="col-md-9">
                             <h4 id="node_birth_place" class="text-left"></h4>
                         </div>
-                    </div>  --}}
+                    </div> 
                 </div>
             </div>
         </div>

@@ -78,8 +78,15 @@ exports.addHusband = function(event) {
     const pr3 = root.child(`user_family/${uid}/spouse_keys/vir/${pushKey}`).set(userObj.displayName)
     const pr4 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
     const pr5 = index.createPotentialUser(event)
+    const pr6 = root.child(`users/${uid}`).once('value').then(snap => {
+        if (snap.val().gender === 'male') {
+            return root.child(`user_family/${pushKey}/husbands/${uid}`).set(snap.val())
+        } else {
+            return root.child(`user_family/${pushKey}/wives/${uid}`).set(snap.val())
+        }
+    })
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

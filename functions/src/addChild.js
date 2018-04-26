@@ -36,8 +36,15 @@ exports.addSon = function(event) {
 
     const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
     const pr2 = index.createPotentialUser(event)
+    const pr3 = root.child(`users/${uid}`).once('value').then(snap => {
+        if (snap.val().gender === 'male') {
+            return root.child(`user_family/${pushKey}/fathers/${uid}`).set(snap.val())
+        } else {
+            return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
+        }
+    })
 
-    return Promise.all([pr1, pr2]).catch(err => {
+    return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -78,8 +85,15 @@ exports.addDaughter = function(event) {
 
     const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
     const pr2 = index.createPotentialUser(event)
+    const pr3 = root.child(`users/${uid}`).once('value').then(snap => {
+        if (snap.val().gender === 'male') {
+            return root.child(`user_family/${pushKey}/fathers/${uid}`).set(snap.val())
+        } else {
+            return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
+        }
+    })
 
-    return Promise.all([pr1, pr2]).catch(err => {
+    return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

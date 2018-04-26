@@ -1,5 +1,3 @@
-// strokeDashArray: [<pixels number of dashes>, <pixels spaces between dashes>]
-
 function initGenogram(data, user_id) {
     var $ = go.GraphObject.make;
 
@@ -7,18 +5,25 @@ function initGenogram(data, user_id) {
         // The diagram is initially displayed at the center
         initialContentAlignment: go.Spot.Center, // Centers diagram
         // The user won't be able to move the elements
-        allowMove: false,
+        allowMove: true,
         "undoManager.isEnabled": true,
-        // Use a custom layout, defined below
+        // Use a custom layout defined below
         layout: $(GenogramLayout, {
-            direction: 90, // direction the graph grows towards
+            direction: 90, // direction the graph grows toward
             layerSpacing: 40, // space between parent and child node layers
             columnSpacing: 30 // space between children
         })
     });
 
+    // Gives specific color to shape for name
     function consanguinity(node) {
         var loc = node.loc;
+        var ct = node.ct;
+
+        switch (ct) {
+            case "adopted":
+                return "#5b9fff";
+        }
 
         switch (loc) {
             // a shade of red
@@ -72,7 +77,8 @@ function initGenogram(data, user_id) {
                         width: 100,
                         height: 33
                     },
-                    new go.Binding("text", "n"))))
+                    new go.Binding("text", "n")
+                )))
     );
 
     myDiagram.nodeTemplateMap.add("female",
@@ -99,7 +105,8 @@ function initGenogram(data, user_id) {
                         width: 100,
                         height: 33
                     },
-                    new go.Binding("text", "n"))))
+                    new go.Binding("text", "n")
+                )))
     );
 
     /*  nothing shows on marital status  */
@@ -131,16 +138,16 @@ function initGenogram(data, user_id) {
         })
     );
 
-    /*  child status  */
+    /*  nothing shows on child status  */
 
-    myDiagram.nodeTemplateMap.add("Adopted",
-        $(go.Node, {
-            selectable: false,
-            width: 1,
-            height: 1,
-            fromEndSegmentLength: 20
-        })
-    );
+    // myDiagram.nodeTemplateMap.add("Adopted",
+    //     $(go.Node, {
+    //         selectable: false,
+    //         width: 1,
+    //         height: 1,
+    //         fromEndSegmentLength: 20
+    //     })
+    // );
 
     /*
         LINK TEMPLATES IN MARITAL STATUS, CHILD STATUS
@@ -148,46 +155,33 @@ function initGenogram(data, user_id) {
 
     /*  child status  */
 
-    // parent-child
-    myDiagram.linkTemplate = $(
-        go.Link, {
-            routing: go.Link.AvoidsNodes,
-            curve: go.Link.JumpOver,
-            curviness: 15,
-            layerName: "Background",
-            selectable: false,
-            fromSpot: go.Spot.Bottom,
-            toSpot: go.Spot.Top
-        },
-        $(go.Shape, { strokeWidth: 1 })
-    );
-
-    // same birth child
     myDiagram.linkTemplate = $(
         TwinLink, {
             routing: go.Link.AvoidsNodes,
             curve: go.Link.JumpOver,
-            curviness: 10,
             layerName: "Background",
             selectable: false,
             fromSpot: go.Spot.Bottom,
             toSpot: go.Spot.Top
         },
-        $(go.Shape, { strokeWidth: 1 })
+        $(go.Shape, { strokeWidth: 1})
     );
 
-    myDiagram.linkTemplateMap.add("Adopted",
-        $(go.Link, {
-                selectable: false,
-                routing: go.Link.AvoidsNodes,
-                curve: go.Link.JumpOver
-            },
-            $(go.Shape, {
-                strokeWidth: 1,
-                stroke: "blue",
-                strokeDashArray: [5, 2]
-            }))
-    );
+    // myDiagram.linkTemplateMap.add("Adopted",
+    //     $(go.Link, {
+    //             routing: go.Link.AvoidsNodes,
+    //             curve: go.Link.JumpOver,
+    //             layerName: "Background",
+    //             selectable: false,
+    //             fromSpot: go.Spot.Bottom,
+    //             toSpot: go.Spot.Top
+    //         },
+    //         $(go.Shape, {
+    //             strokeWidth: 2,
+    //             stroke: "blue",
+    //             strokeDashArray: [5, 2]
+    //         }))
+    // );
 
     /*  marital status  */
 
@@ -266,11 +260,11 @@ function showNodeData(data, uid) {
     if (!(data.img === null || data.img === undefined)) {
         $("#node_img")
             .attr("src", data.img)
-            .css({ "max-height": 150, "max-width": 150 });
+            .css({"max-height": 150, "max-width": 150 });
     } else {
         $("#node_img")
             .attr("src", "assets/img/default-avatar.png")
-            .css({ "max-height": 150, "max-width": 150 });
+            .css({"max-height": 150, "max-width": 150 });
     }
 
     $("#node_name")
@@ -282,24 +276,18 @@ function showNodeData(data, uid) {
         .append(data.bd);
 }
 
-// create and initialize the Diagram.model given an array of node data representing people
 function setupDiagram(diagram, array, focusId) {
     diagram.model = go.GraphObject.make(go.GraphLinksModel, {
-        // name of the data property that returns an array of keys of node data on that link data
         linkLabelKeysProperty: "labelKeys",
-        // this property determines which template is used (category)
         nodeCategoryProperty: "s",
-        // create all of the nodes for people
         nodeDataArray: array
     });
 
-    setupSeparation(diagram);
-    setupDivorces(diagram);
-    setupMarriages(diagram);
+    setupMaritalStatus(diagram);
     setupParents(diagram);
-    setupChild(diagram);
+    // setupChild(diagram);
 
-    console.log("LINK DATA", diagram.model.linkData)
+    // console.log("LINK DATA", diagram.model.linkData)
 
     var node = diagram.findNodeForKey(focusId);
     if (node !== null) {
@@ -307,7 +295,21 @@ function setupDiagram(diagram, array, focusId) {
     }
 }
 
-// still error
+function findChildType(diagram, key) {
+    var childNode = diagram.findNodeForKey(key);
+
+    if (childNode !== null) {
+        var it = diagram.nodes;
+
+        while(it.next()) {
+            var childData = it.value;
+
+            if(childData.data !== null && childData.data.category === "Adopted") return childData;
+        }
+    }
+    return null;
+}
+
 function setupChild(diagram) {
     var model = diagram.model;
     var nodeDataArray = model.nodeDataArray;
@@ -315,51 +317,109 @@ function setupChild(diagram) {
     for (var i = 0; i < nodeDataArray.length; i++) {
         var data = nodeDataArray[i];
         var key = data.key;
-        var f = data.f;
-        var m = data.m;
         var ct = data.ct;
+        var mom = data.m;
+        var dad = data.f;
+        var connect = findChildType(diagram, key);
 
-        if (f !== undefined && m !== undefined) {
-            if (typeof f === "String") f = [f];
-            if (typeof m === "String") m = [m];
+        if(ct !== undefined && ct === "adopted") {
+            if(mom !== undefined && dad !== undefined) {
+                var connectParents = setupParentsA(diagram, key);
 
-            for (var a = 0; a < f.length; a++) {
-                for (var b = 0; b < m.length; b++) {
-                    var dad = f[a];
-                    var mom = m[b];
-                    if (key === dad || key === mom) {
-                        continue;
+                if(connectParents !== null) {
+                    if(connect === null) {
+                        var node = { s: "Adopted" };
+                        model.addNodeData(node);
+
+                        var link = connectParents;
+                        link.labelKeys = [node.key];
+                        link.category = "Adopted";
+                        model.addLinkData(link);
+                        // console.log(link);
                     }
+                }
+            }
+            else if(mom !== undefined && dad === undefined) {
 
-                    var parentsA = [dad, mom];
-                    // console.log(parentsA + 'parents');
+                if(connect === null) {
+                    var node = { s: "Adopted" };
+                    model.addNodeData(node);
 
-                    var connect = findMarriage(diagram, m, f);
-                    if (connect === null) {
-                        if (ct === "adopted") {
-                            var node = { s: "Adopted" };
-                            model.addNodeData(node);
-                            var link = {
-                                from: parentsA,
-                                to: key,
-                                labelKeys: [node.key],
-                                category: "Adopted"
-                            };
-                            model.addLinkData(link);
-                        }
-                    }
+                    var link = {
+                        from: mom,
+                        to: key,
+                        labelKeys: [node.key],
+                        category: "Adopted"
+                    };
+                    model.addLinkData(link);
+                }
+            }
+            else if(mom === undefined && dad !== undefined) {
+
+                if(connect === null) {
+                    var node = { s: "Adopted" };
+                    model.addNodeData(node);
+
+                    var link = {
+                        from: dad,
+                        to: key,
+                        labelKeys: [node.key],
+                        category: "Adopted"
+                    };
+                    model.addLinkData(link);
                 }
             }
         }
     }
 }
 
+function setupParentsA(diagram, key) {
+    var model = diagram.model;
+    var nodeDataArray = model.nodeDataArray;
+
+    for (var i = 0; i < nodeDataArray.length; i++) {
+        var data = nodeDataArray[i];
+        var mom = data.m;
+        var dad = data.f;
+
+        if (mom !== undefined && dad !== undefined) {
+            var connect = findMarriage(diagram, mom, dad);
+            if (connect === null) {
+                continue;
+            }
+            
+            var parents = connect.data;
+            var parentKey = parents.labelKeys[0];
+            var link = {
+                from: parentKey,
+                to: key
+            };
+            return link;
+        }
+        else if (mom !== undefined && dad === undefined) {
+            var link = {
+                from: mom,
+                to: key
+            };
+            return link;
+        }
+        else if (mom === undefined && dad !== undefined) {
+            var link = {
+                from: dad,
+                to: key
+            };
+            return link;
+        }
+    }
+}
+
 function findMarriage(diagram, a, b) {
-    // A and B are node keys
     var nodeA = diagram.findNodeForKey(a);
     var nodeB = diagram.findNodeForKey(b);
+
     if (nodeA !== null && nodeB !== null) {
         var it = nodeA.findLinksBetween(nodeB); // in either direction
+        
         while (it.next()) {
             var link = it.value;
 
@@ -371,8 +431,7 @@ function findMarriage(diagram, a, b) {
     return null;
 }
 
-// determine marriages
-function setupMarriages(diagram) {
+function setupMaritalStatus(diagram) {
     var model = diagram.model;
     var nodeDataArray = model.nodeDataArray;
 
@@ -383,38 +442,63 @@ function setupMarriages(diagram) {
         var virs = data.vir;
         var ms = data.ms;
 
-        console.log("Key", key)
+        // console.log("Key", key)
 
-
-        console.log("MS", ms)
+        // console.log("MS", ms)
 
         if (uxs !== undefined) {
             if (typeof uxs === "String") uxs = [uxs];
             if (typeof ms === "String") ms = [ms];
-            console.log("Ux", uxs);
+            // console.log("Ux", uxs);
             for (var a = 0; a < uxs.length; a++) {
                 for (let b = 0; b < ms.length; b++) {
                     var wife = uxs[a];
+
                     if (key === wife) {
-                        // or warn no reflexive marriages
                         continue;
                     }
 
                     var marstat = ms[b];
                     var connect = findMarriage(diagram, key, wife);
+
                     if (connect === null) {
                         if (marstat === "married") {
-                            // add a label node for the marriage link
                             var node = { s: "Married" };
                             model.addNodeData(node);
-                            // add the marriage link itself, also referring to the label node
+
                             var link = {
                                 from: key,
                                 to: wife,
                                 labelKeys: [node.key],
                                 category: "Marriage"
                             };
-                            console.log("M Link Ux", link)
+                            // console.log("M Link Ux", link)
+                            model.addLinkData(link);
+                        }
+                        else if (marstat === "divorced") {
+                            var node = { s: "Divorced" };
+                            model.addNodeData(node);
+
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Divorced"
+                            };
+                            // console.log("M Link Ux", link)
+                            model.addLinkData(link);
+                        }
+                        else if (marstat === "separated") {
+                            var node = { s: "Separated" };
+                            model.addNodeData(node);
+
+                            var link = {
+                                from: key,
+                                to: wife,
+                                labelKeys: [node.key],
+                                category: "Separated"
+                            };
+                            // console.log("M Link Ux", link)
                             model.addLinkData(link);
                         }
                     }
@@ -425,109 +509,56 @@ function setupMarriages(diagram) {
         if (virs !== undefined) {
             if (typeof virs === "String") virs = [virs];
             if (typeof ms === "String") ms = [ms];
-            console.log("Vir", virs);
+            // console.log("Vir", virs);
             for (var j = 0; j < virs.length; j++) {
                 for (let b = 0; b < ms.length; b++) {
                     var husband = virs[j];
 
                     if (key === husband) {
-                        // or warn no reflexive marriages
                         continue;
                     }
 
                     var marstat = ms[b];
                     var connect = findMarriage(diagram, key, husband);
+                    
                     if (connect === null) {
                         if (marstat === "married") {
-                            // add a label node for the marriage link
                             var node = { s: "Married" };
                             model.addNodeData(node);
-                            // add the marriage link itself, also referring to the label node
+                            
                             var link = {
                                 from: key,
                                 to: husband,
                                 labelKeys: [node.key],
                                 category: "Marriage"
                             };
-                            console.log("M Link Vir", link);
+                            // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         }
-                    }
-                }
-            }
-        }
-    }
-}
-
-function setupDivorces(diagram) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var key = data.key;
-        var uxs = data.ux;
-        var virs = data.vir;
-        var ms = data.ms;
-
-        if (uxs !== undefined) {
-            if (typeof uxs === "String") uxs = [uxs];
-            if (typeof ms === "String") ms = [ms];
-            for (var a = 0; a < uxs.length; a++) {
-                for (var b = 0; b < ms.length; b++) {
-                    var wife = uxs[a];
-                    if (key === wife) {
-                        continue;
-                    }
-
-                    var marstat = ms[b];
-                    var connect = findMarriage(diagram, key, wife)
-                    if (connect === null) {
-                        if (marstat === "divorced") {
-                            // add a label node for the marriage link
+                        else if (marstat === "divorced") {
                             var node = { s: "Divorced" };
                             model.addNodeData(node);
-                            // add the marriage link itself, also referring to the label node
-                            var link = {
-                                from: key,
-                                to: wife,
-                                labelKeys: [node.key],
-                                category: "Divorced"
-                            };
-                            console.log("D Link Ux", link);
-                            model.addLinkData(link);
-                        }
-                    }
-                }
-            }
-        }
-
-        if (virs !== undefined) {
-            if (typeof virs === "String") virs = [virs];
-            if (typeof ms === "String") ms = [ms];
-            for (var j = 0; j < virs.length; j++) {
-                for (var b = 0; b < ms.length; b++) {
-                    var husband = virs[j];
-
-                    if (key === husband) {
-                        continue;
-                    }
-
-                    var marstat = ms[b];
-                    var connect = findMarriage(diagram, key, husband);
-                    if (connect === null) {
-                        if (marstat === "divorced") {
-                            // add a label node for the marriage link
-                            var node = { s: "Divorced" };
-                            model.addNodeData(node);
-                            // add the marriage link itself, also referring to the label node
+                            
                             var link = {
                                 from: key,
                                 to: husband,
                                 labelKeys: [node.key],
                                 category: "Divorced"
                             };
-                            console.log("D Link Vir", link);
+                            // console.log("M Link Vir", link);
+                            model.addLinkData(link);
+                        }
+                        else if (marstat === "separated") {
+                            var node = { s: "Separated" };
+                            model.addNodeData(node);
+                            
+                            var link = {
+                                from: key,
+                                to: husband,
+                                labelKeys: [node.key],
+                                category: "Separated"
+                            };
+                            // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         }
                     }
@@ -537,64 +568,6 @@ function setupDivorces(diagram) {
     }
 }
 
-function setupSeparation(diagram) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var key = data.key;
-        var uxs = data.ux;
-        var virs = data.vir;
-        var ms = data.ms;
-
-        if (uxs !== undefined) {
-            uxs = [uxs];
-            for (var a = 0; a < uxs.length; a++) {
-                var wife = uxs[a];
-                if (key === wife) {
-                    continue;
-                }
-                if (ms === "separated") {
-                    var node = { s: "Separated" };
-                    model.addNodeData(node);
-
-                    var link = {
-                        from: key,
-                        to: wife,
-                        labelKeys: [node.key],
-                        category: "Separated"
-                    };
-                    model.addLinkData(link);
-                }
-            }
-        }
-
-        if (virs !== undefined) {
-            virs = [virs];
-            for (var j = 0; j < virs.length; j++) {
-                var husband = virs[j];
-                if (key === husband) {
-                    continue;
-                }
-                if (ms === "separated") {
-                    var node = { s: "Separated" };
-                    model.addNodeData(node);
-
-                    var link = {
-                        from: key,
-                        to: husband,
-                        labelKeys: [node.key],
-                        category: "Separated"
-                    };
-                    model.addLinkData(link);
-                }
-            }
-        }
-    }
-}
-
-// process parent-child relationships once all marriages are known
 function setupParents(diagram) {
     var model = diagram.model;
     var nodeDataArray = model.nodeDataArray;
@@ -602,28 +575,36 @@ function setupParents(diagram) {
     for (var i = 0; i < nodeDataArray.length; i++) {
         var data = nodeDataArray[i];
         var key = data.key;
-        var mother = data.m;
-        var father = data.f;
+        var mom = data.m;
+        var dad = data.f;
 
-        if (mother !== undefined && father !== undefined) {
-            var link = findMarriage(diagram, mother, father);
-            if (link === null) {
-                // or warn no known mother or no known father or no known marriage between them
+        if (mom !== undefined && dad !== undefined) {
+            var connect = findMarriage(diagram, mom, dad);
+            if (connect === null) {
                 if (window.console)
-                    window.console.log("unknown marriage: " + mother + " & " + father);
+                    window.console.log("unknown marriage: " + mom + " & " + dad);
                 continue;
             }
 
-            var mdata = link.data;
-            var mlabkey = mdata.labelKeys[0];
-            var cdata = { from: mlabkey, to: key };
-            myDiagram.model.addLinkData(cdata);
-        } else if (mother !== undefined && father === undefined) {
-            var cdata = { from: mother, to: key };
-            myDiagram.model.addLinkData(cdata);
-        } else if (mother === undefined && father !== undefined) {
-            var cdata = { from: father, to: key };
-            myDiagram.model.addLinkData(cdata);
+            var parents = connect.data;
+            var parentKey = parents.labelKeys[0];
+            var link = {
+                from: parentKey,
+                to: key
+            };
+            model.addLinkData(link);
+        } else if (mom !== undefined && dad === undefined) {
+            var link = {
+                from: mom,
+                to: key
+            };
+            model.addLinkData(link);
+        } else if (mom === undefined && dad !== undefined) {
+            var link = {
+                from: dad,
+                to: key
+            };
+            model.addLinkData(link);
         }
     }
 }
@@ -636,7 +617,7 @@ function GenogramLayout() {
 }
 go.Diagram.inherit(GenogramLayout, go.LayeredDigraphLayout);
 
-/** @override */
+/*  override    */
 GenogramLayout.prototype.makeNetwork = function(coll) {
     // generate LayoutEdges for each parent-child Link
     var net = this.createNetwork();
@@ -651,18 +632,16 @@ GenogramLayout.prototype.makeNetwork = function(coll) {
     return net;
 };
 
-// internal method for creating LayeredDigraphNetwork where husband/wife pairs are represented
-// by a single LayeredDigraphVertex corresponding to the label Node on the marriage Link
+//  creating LayeredDigraphNetwork where husband/wife pairs are represented by a single LayeredDigraphVertex corresponding to the label Node on the marriage Link
 GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
     var multiSpousePeople = new go.Set();
-    // consider all Nodes in the given collection
     var it = coll.iterator;
     while (it.next()) {
         var nodeAdd = it.value;
         if (!(nodeAdd instanceof go.Node)) continue;
         if (!nodeAdd.isLayoutPositioned || !nodeAdd.isVisible()) continue;
         if (nonmemberonly && nodeAdd.containingGroup !== null) continue;
-        // if it's an unmarried Node, or if it's a Link Label Node, create a LayoutVertex for it
+        // if an unmarried Node or a Link Label Node, create LayoutVertex
         if (nodeAdd.isLinkLabel) {
             // get marriage Link
             var linkAdd = nodeAdd.labeledLink;
@@ -670,7 +649,7 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
             var spouseB = linkAdd.toNode;
             // create vertex representing both husband and wife
             var vertexAdd = net.addNode(nodeAdd);
-            // now define the vertex size to be big enough to hold both spouses
+
             vertexAdd.width =
                 spouseA.actualBounds.width +
                 this.spouseSpacing +
@@ -684,9 +663,6 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
                 vertexAdd.height / 2
             );
         } else {
-            // don't add a vertex for any married person!
-            // instead, code above adds label node for marriage link
-            // assume a marriage Link has a label Node
             var nbMarriages = 0;
             nodeAdd.linksConnected.each(function(l) {
                 if (l.isLabeledLink) nbMarriages++;
@@ -698,14 +674,14 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
             }
         }
     }
-    // now do all Links
+    
     it.reset();
     while (it.next()) {
         var link = it.value;
         if (!(link instanceof go.Link)) continue;
         if (!link.isLayoutPositioned || !link.isVisible()) continue;
         if (nonmemberonly && link.containingGroup !== null) continue;
-        // if it's a parent-child link, add a LayoutEdge for it
+        // if a parent-child link, add a LayoutEdge
         if (!link.isLabeledLink) {
             var parent = net.findVertex(link.fromNode); // should be a label node
             var child = net.findVertex(link.toNode);
@@ -713,13 +689,12 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
                 // an unmarried child
                 net.linkVertexes(parent, child, link);
             } else {
-                // a married child
                 link.toNode.linksConnected.each(function(l) {
-                    if (!l.isLabeledLink) return; // if it has no label node, it's a parent-child link
-                    // found the Marriage Link, now get its label Node
+                    // if no label node, it's a parent-child link
+                    if (!l.isLabeledLink) return;
+                    // found the Link, now get its label Node
                     var mlab = l.labelNodes.first();
-                    // parent-child link should connect with the label node,
-                    // so the LayoutEdge should connect with the LayoutVertex representing the label node
+                    // parent-child link should connect with the label node so LayoutEdge should connect with LayoutVertex representing the label node
                     var mlabvert = net.findVertex(mlab);
                     if (mlabvert !== null) {
                         net.linkVertexes(parent, mlabvert, link);
@@ -734,7 +709,7 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
         var node = multiSpousePeople.first();
         var cohort = new go.Set();
         this.extendCohort(cohort, node);
-        // then encourage them all to be the same generation by connecting them all with a common vertex
+        //  connecting them all with a common vertex
         var dummyvert = net.createVertex();
         net.addVertex(dummyvert);
         var marriages = new go.Set();
@@ -744,14 +719,14 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
             });
         });
         marriages.each(function(link) {
-            // find the vertex for the marriage link (i.e. for the label node)
+            // find the vertex for the marriage link (for the label node)
             var mlab = link.labelNodes.first();
             var v = net.findVertex(mlab);
             if (v !== null) {
                 net.linkVertexes(dummyvert, v, null);
             }
         });
-        // done with these people, now see if there are any other multiple-married people
+        //  check if there are any other multiple-married people
         multiSpousePeople.removeAll(cohort);
     }
 };
@@ -770,7 +745,7 @@ GenogramLayout.prototype.extendCohort = function(coll, node) {
     });
 };
 
-/** @override */
+/*  override    */
 GenogramLayout.prototype.assignLayers = function() {
     go.LayeredDigraphLayout.prototype.assignLayers.call(this);
     var horiz = this.direction == 0.0 || this.direction == 180.0;
@@ -783,8 +758,7 @@ GenogramLayout.prototype.assignLayers = function() {
         var sz = horiz ? v.width : v.height;
         if (sz > max) maxsizes[lay] = sz;
     });
-    // now make sure every vertex has the maximum width or height according to which layer it is in,
-    // and aligned on the left (if horizontal) or the top (if vertical)
+    //  every vertex has the maximum width or height according to which layer it is in and aligned on the left (if horizontal) or the top (if vertical)
     this.network.vertexes.each(function(v) {
         var lay = v.layer;
         var max = maxsizes[lay];
@@ -796,11 +770,9 @@ GenogramLayout.prototype.assignLayers = function() {
             v.height = max;
         }
     });
-    // from now on, the LayeredDigraphLayout will think that the Node is bigger than it really is
-    // (other than the ones that are the widest or tallest in their respective layer).
 };
 
-/** @override */
+/*  override    */
 GenogramLayout.prototype.commitNodes = function() {
     go.LayeredDigraphLayout.prototype.commitNodes.call(this);
     // position regular nodes
@@ -809,16 +781,15 @@ GenogramLayout.prototype.commitNodes = function() {
             v.node.position = new go.Point(v.x, v.y);
         }
     });
-    // position the spouses of each marriage vertex
+    // position spouses of each marriage vertex
     var layout = this;
     this.network.vertexes.each(function(v) {
         if (v.node === null) return;
         if (!v.node.isLinkLabel) return;
         var labnode = v.node;
         var lablink = labnode.labeledLink;
-        // In case the spouses are not actually moved, we need to have the marriage link
-        // position the label node, because LayoutVertex.commit() was called above on these vertexes.
-        // Alternatively we could override LayoutVetex.commit to be a no-op for label node vertexes.
+        // if spouses are not moved, marriage link needed
+        // position the label node, because LayoutVertex.commit() was called above
         lablink.invalidateRoute();
         var spouseA = lablink.fromNode;
         var spouseB = lablink.toNode;
@@ -829,7 +800,7 @@ GenogramLayout.prototype.commitNodes = function() {
             spouseA = spouseB;
             spouseB = tempSpouse;
         }
-        // see if the parents are on the desired sides, to avoid a link crossing
+        // check if parents are on the desired sides to avoid link crossing
         var aParentsNode = layout.findParentsMarriageLabelNode(spouseA);
         var bParentsNode = layout.findParentsMarriageLabelNode(spouseB);
         if (
@@ -860,7 +831,7 @@ GenogramLayout.prototype.commitNodes = function() {
             spouseB.position = pos;
         }
     });
-    // position only-child nodes to be under the marriage label node
+    // position only-child nodes under the marriage label node
     this.network.vertexes.each(function(v) {
         if (v.node === null || v.node.linksConnected.count > 1) return;
         var mnode = layout.findParentsMarriageLabelNode(v.node);
@@ -869,7 +840,7 @@ GenogramLayout.prototype.commitNodes = function() {
             var mvert = layout.network.findVertex(mnode);
             var newbnds = v.node.actualBounds.copy();
             newbnds.x = mvert.centerX - v.node.actualBounds.width / 2;
-            // see if there's any empty space at the horizontal mid-point in that layer
+            // check if any empty space at horizontal mid-point in that layer
             var overlaps = layout.diagram.findObjectsIn(
                 newbnds,
                 function(x) {
@@ -895,7 +866,6 @@ GenogramLayout.prototype.findParentsMarriageLabelNode = function(node) {
     }
     return null;
 };
-// end GenogramLayout class
 
 function TwinLink() {
     go.Link.call(this);
@@ -904,21 +874,39 @@ go.Diagram.inherit(TwinLink, go.Link);
 
 TwinLink.prototype.computePoints = function() {
     var result = go.Link.prototype.computePoints.call(this);
-    var pts = this.points;
-    if (pts.length >= 4) {
+    var pts = this.points; // greek
+    if (pts.length >= 4) { // greek
         var birthId = this.toNode.data["bd"];
+        var genderId = this.toNode.data["s"];
         if (birthId) {
             var parents = this.fromNode;
             var sameBirth = 0;
             var sumX = 0;
             var it = parents.findNodesOutOf();
+
             while (it.next()) {
                 var child = it.value;
-                if (child.data["bd"] === birthId) {
+                var childBd = child.data["bd"];
+                var childGender = child.data["s"];
+                var childSpliter = childBd.split("/");
+                var childBdDay = parseInt(childSpliter[1]);
+                var childBdMonth = parseInt(childSpliter[0]);
+
+                var birthIdSplit = birthId.split("/");
+                var birthIdDay = parseInt(birthIdSplit[1]);
+                var birthIdMonth = parseInt(birthIdSplit[0]);
+
+                if(childBdDay == birthIdDay ||
+                    childBdDay == (birthIdDay-1) ||
+                    birthIdDay == (childBdDay-1) ||
+                    childBdMonth == birthIdMonth ||
+                    childBdMonth == (birthIdMonth-1) ||
+                    birthIdMonth == (childBdMonth-1)) {
                     sameBirth++;
                     sumX += child.location.x;
                 }
             }
+
             if (sameBirth > 0) {
                 var midX = sumX / sameBirth;
                 var oldp = pts.elt(pts.length - 3);

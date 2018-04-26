@@ -14,6 +14,7 @@
 var big_image;
 
 $(document).ready(function() {
+    
     BrowserDetect.init();
 
     // Init Material scripts for buttons ripples, inputs animations etc, more info on the next link https://github.com/FezVrasta/bootstrap-material-design#materialjs
@@ -33,7 +34,6 @@ $(document).ready(function() {
     if ($(".selectpicker").length != 0) {
         $(".selectpicker").selectpicker();
     }
-
     // Activate Popovers
     $('[data-toggle="popover"]').popover();
 

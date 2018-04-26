@@ -1,0 +1,26 @@
+[debug] [2018-02-06T05:11:17.131Z] ----------------------------------------------------------------------
+[debug] [2018-02-06T05:11:17.136Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\DODGE RAM\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase init
+[debug] [2018-02-06T05:11:17.137Z] CLI Version:   3.17.4
+[debug] [2018-02-06T05:11:17.137Z] Platform:      win32
+[debug] [2018-02-06T05:11:17.137Z] Node Version:  v6.11.2
+[debug] [2018-02-06T05:11:17.140Z] Time:          Tue Feb 06 2018 13:11:17 GMT+0800 (China Standard Time)
+[debug] [2018-02-06T05:11:17.141Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-02-06T05:11:17.165Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase"]
+[debug] [2018-02-06T05:11:17.165Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  c:\xampp\htdocs\Ohana-Laravel-5.5
+
+Before we get started, keep in mind:
+
+  * You are currently outside your home directory
+  * You are initializing in an existing Firebase project directory
+

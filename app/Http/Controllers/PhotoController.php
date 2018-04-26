@@ -6,9 +6,9 @@ use Illuminate\Http\Request;
 
 class PhotoController extends Controller
 {
-    public function clanalbum()
+    public function album_clan()
     {
-        return view('clanalbum');
+        return view('album_clan');
     }
 
     public function clan_album()
@@ -16,8 +16,9 @@ class PhotoController extends Controller
         return view('clan-album');
     }
 
-    public function user_album()
+    public function album_user()
     {
-        return view('user_album');
+        return view('album_user');
     }
+
 }

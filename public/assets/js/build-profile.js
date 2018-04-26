@@ -15,6 +15,7 @@ var potentialUser;
 var potentialFlag = false;
 var currentUser;
 var provider;
+var downloadDisplayPicURL;
 
 const FIREBASE_AUTH = firebase.auth();
 const FIREBASE_DATABASE = firebase.database();
@@ -73,7 +74,7 @@ window.fbAsyncInit = function() {
             FB.api(
                 "/me",
                 "GET", {
-                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender,family{first_name,middle_name,last_name,name,relationship,picture.height(961)}",
+                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender",
                     access_token: fbAccessToken
                 },
                 function(response) {
@@ -386,6 +387,8 @@ function createAcctWithEmailAndPass() {
     var birth_place = $('#birth_place').val();
     var displayName = $("#first_name").val() + " " + $("#last_name").val();
 
+    handleWizardPic(eventData);
+
     currentUser.updateProfile({ displayName: displayName });
 
     person = {
@@ -395,7 +398,7 @@ function createAcctWithEmailAndPass() {
         displayName: displayName,
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
-        // photoUrl: response.picture.data.url,
+        photoUrl: downloadDisplayPicURL,
         clanId: clan_id,
         merged: false
     }
@@ -483,16 +486,18 @@ function assignSignUpDataToForm() {
 }
 
 function handleWizardPic(eventData) {
+
     var file = eventData.target.files[0];
     var fileName = file.name;
     var fileExtension = fileName.split(".").pop();
 
-    var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
-    var fileNameOnStorage = picKey + '.' + fileExtension;
+    var displayPicKey = usersRef.child(FIREBASE_AUTH.currentUser.uid).push().getKey();
+    // STORAGE REF
+    var displayPicStorageRef = FIREBASE_STORAGE.ref('profile_pic/'+ displayPicKey + '.'+ fileExtension);
+    // UPLOAD FILE
+    var uploadDisplayPic = displayPicStorageRef.put(file);
 
-    // displayPicStorageRef
-    //     .child(currentUser.uid)
-    //     .
+    downloadDisplayPicURL = uploadDisplayPic.snapshot.downloadURL;
 }
 
 function showAvailableMergeData(data) {

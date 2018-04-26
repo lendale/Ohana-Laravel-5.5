@@ -67,7 +67,7 @@ function signInWithEmailAndPass() {
 }
 
 function authWithFb() {
-    fbProvider.addScope("public_profile, user_birthday, user_hometown, user_relationships");
+    fbProvider.addScope("public_profile, user_birthday, user_hometown");
     FIREBASE_AUTH.signInWithPopup(fbProvider);
 }
 

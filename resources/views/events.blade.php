@@ -42,7 +42,7 @@
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>
-                        <a href="/clan-album">Clan Album</a>
+                        <a href="/album_clan">Clan Album</a>
                     </li>
                     <li class="active">
                         <a href="/events">Events</a>

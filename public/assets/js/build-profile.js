@@ -1,6 +1,6 @@
 /* ========================
-      Variables
-    ======================== */
+    Variables
+======================== */
 
 var gen_tree = firebase.database().ref().child('gen_tree_id');
 var clan_id = gen_tree.push().getKey();
@@ -26,19 +26,20 @@ const userFamilyRef = rootRef.child('user_family');
 const displayPicStorageRef = FIREBASE_STORAGE.ref().child("display_pics")
 
 /* ========================
-      Event Listeners
-    ======================== */
+    Event Listeners
+======================== */
 
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user;
         segregateFbData(fbResponse, currentUser.uid);
         checkPotentialUser();
+
         if (user.providerData[0].providerId === "facebook.com") {
             provider = user.providerData[0].providerId;
         } else if (user.providerData[0].providerId === "password") {
             provider = user.providerData[0].providerId;
-            // assignSignUpDataToForm();
+             // assignSignUpDataToForm();
         }
         console.log("user is signed in");
     } else {
@@ -57,8 +58,8 @@ $('#finish').click(function() {
 });
 
 /* ========================
-      Functions
-    ======================== */
+    Functions
+======================== */
 
 window.fbAsyncInit = function() {
     FB.init({
@@ -67,13 +68,14 @@ window.fbAsyncInit = function() {
         xfbml: false,
         version: "v2.10"
     });
+
     FB.getLoginStatus(function(response) {
         if (response.status === "connected") {
             fbAccessToken = response.authResponse.accessToken;
             FB.api(
                 "/me",
                 "GET", {
-                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender,family{first_name,middle_name,last_name,name,relationship,picture.height(961)}",
+                    fields: "name,first_name,middle_name,last_name,picture.height(961),email,birthday,hometown,gender",
                     access_token: fbAccessToken
                 },
                 function(response) {
@@ -84,8 +86,10 @@ window.fbAsyncInit = function() {
         } else if (response.status === "not_authorized") {
             // the user is logged in to Facebook,
             // but has not authenticated your app
+
         } else {
             // the user isn't logged in to Facebook.
+
         }
     });
     FB.AppEvents.logPageView();
@@ -94,9 +98,11 @@ window.fbAsyncInit = function() {
 (function(d, s, id) {
     var js,
         fjs = d.getElementsByTagName(s)[0];
+
     if (d.getElementById(id)) {
         return;
     }
+
     js = d.createElement(s);
     js.id = id;
     js.src = "//connect.facebook.net/en_US/sdk.js";
@@ -104,8 +110,8 @@ window.fbAsyncInit = function() {
 }(document, "script", "facebook-jssdk"));
 
 function segregateFbData(response, uid) {
-
     //Check for undefined fields
+
     if (response.middle_name === undefined) {
         if (response.hometown === undefined) {
             fbUser = {
@@ -185,17 +191,17 @@ function segregateFbData(response, uid) {
             merged: false
         };
     }
-
     getFbFamilyData(response);
 }
 
 function getFbFamilyData(graphResponse) {
-
     var person = new Object();
 
     //Get family data
+
     if (graphResponse.family !== undefined) {
         graphResponse.family.data.forEach(function(element) {
+
             //Get mother
             if (element.relationship === "mother") {
                 if (element.middle_name === undefined) {
@@ -222,11 +228,9 @@ function getFbFamilyData(graphResponse) {
                         photoUrl: element.picture.data.url
                     };
                 }
-
                 if (potentialFlag) {
                     person.clanId = potentialUser.clanId;
                 }
-
                 fbFamily.push(person);
             }
 
@@ -260,7 +264,6 @@ function getFbFamilyData(graphResponse) {
                 if (potentialFlag) {
                     person.clanId = potentialUser.clanId;
                 }
-
                 fbFamily.push(person);
             }
 
@@ -294,7 +297,6 @@ function getFbFamilyData(graphResponse) {
                 if (potentialFlag) {
                     person.clanId = potentialUser.clanId;
                 }
-
                 fbFamily.push(person);
             } else if (element.relationship === "daugther") {
                 if (element.middle_name === undefined) {
@@ -325,7 +327,6 @@ function getFbFamilyData(graphResponse) {
                 if (potentialFlag) {
                     person.clanId = potentialUser.clanId;
                 }
-
                 fbFamily.push(person);
             }
         });
@@ -349,7 +350,6 @@ function pushFbFamilyData(uid, data) {
             daughtersRef.push(element);
         }
     });
-
     showSuccess();
 }
 
@@ -385,7 +385,8 @@ function createAcctWithEmailAndPass() {
     var middle_name = $('#middle_name').val();
     var birth_place = $('#birth_place').val();
     var displayName = $("#first_name").val() + " " + $("#last_name").val();
-    currentUser.displayName = displayName;
+
+    currentUser.updateProfile({ displayName: displayName });
 
     person = {
         uid: currentUser.uid,
@@ -420,7 +421,6 @@ function createAcctWithEmailAndPass() {
     }
 
     usersRef.child(currentUser.uid).set(person);
-
     showSuccess();
 }
 
@@ -438,6 +438,7 @@ function createUserAccount() {
 
 function assignUserDataToForm() {
     console.log(potentialFlag)
+
     if (!potentialFlag) {
         if (provider === "facebook.com") {
             assignFbDataToForm();
@@ -459,14 +460,17 @@ function assignFbDataToForm() {
     $("#birth_date").val(fbResponse.birthday);
     $("#group_email").addClass("is-focused");
     $("#email").val(fbResponse.email);
+
     if (fbResponse.middle_name !== undefined) {
         $("#group_middle_name").addClass("is-focused");
         $("#middle_name").text(fbResponse.middle_name);
     }
+
     if (fbResponse.hometown !== undefined) {
         $("#group_birth_place").addClass("is-focused");
         $("#birth_place").val(fbResponse.hometown.name);
     }
+
     if (fbResponse.gender === "male") {
         $("#radio_group_male").addClass("active");
         $("#radio_male").attr("checked", true);
@@ -485,7 +489,6 @@ function handleWizardPic(eventData) {
     var file = eventData.target.files[0];
     var fileName = file.name;
     var fileExtension = fileName.split(".").pop();
-
     var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
     var fileNameOnStorage = picKey + '.' + fileExtension;
 
@@ -510,10 +513,12 @@ function showAvailableMergeData(data) {
         $("#group_middle_name").addClass("is-focused");
         $("#middle_name").val(data.middleName);
     }
+
     if (data.birthPlace !== undefined) {
         $("#group_birth_place").addClass("is-focused");
         $("#birth_place").val(data.birthPlace);
     }
+
     if (data.gender === "male") {
         $("#radio_group_male").addClass("active");
         $("#radio_male").attr("checked", true);
@@ -548,7 +553,6 @@ function showSuccess() {
         showConfirmButton: false,
         type: "success"
     }).then(function() {},
-
         function(dismiss) {
             if (dismiss === "timer") {
                 console.log("I was closed by the timer");

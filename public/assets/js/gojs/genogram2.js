@@ -2,20 +2,18 @@ function initGenogram(data, user_id) {
     var $ = go.GraphObject.make;
 
     myDiagram = $(go.Diagram, "genogram", {
-        // The diagram is initially displayed at the center
-        initialContentAlignment: go.Spot.Center, // Centers diagram
-        // The user won't be able to move the elements
-        allowMove: true,
-        "undoManager.isEnabled": true,
-        // Use a custom layout defined below
+        initialContentAlignment: go.Spot.Center, // diagram displayed at center
+        allowMove: true, // elements movable to user
+        "undoManager.isEnabled": true, // enabled Ctrl-Z to undo and Ctrl-Y to redo
+        // Custom layout
         layout: $(GenogramLayout, {
-            direction: 90, // direction the graph grows toward
+            direction: 90, // direction the diagram grows towards
             layerSpacing: 40, // space between parent and child node layers
             columnSpacing: 30 // space between children
         })
     });
 
-    // Gives specific color to shape for name
+    // Set textblock color on node depending on location
     function consanguinity(node) {
         var loc = node.loc;
         var ct = node.ct;
@@ -48,10 +46,8 @@ function initGenogram(data, user_id) {
     }
 
     /*
-        NODE TEMPLATES IN GENDER, MARITAL STATUS, CHILD STATUS NAMED BY CATEGORY VALUE (S)
+        NODE TEMPLATES FOR GENDER, MARITAL STATUS NAMED BY CATEGORY VALUE (S)
     */
-
-    /*  gender  */
 
     myDiagram.nodeTemplateMap.add("male",
         $(go.Node, "Vertical", {
@@ -70,7 +66,8 @@ function initGenogram(data, user_id) {
                         height: 33,
                         strokeWidth: 0
                     },
-                    new go.Binding("fill", "", consanguinity)),
+                    new go.Binding("fill", "", consanguinity)
+                ),
                 $(go.TextBlock, {
                         textAlign: "center",
                         margin: 2,
@@ -98,7 +95,8 @@ function initGenogram(data, user_id) {
                         height: 33,
                         strokeWidth: 0
                     },
-                    new go.Binding("fill", "", consanguinity)),
+                    new go.Binding("fill", "", consanguinity)
+                ),
                 $(go.TextBlock, {
                         textAlign: "center",
                         margin: 2,
@@ -138,19 +136,8 @@ function initGenogram(data, user_id) {
         })
     );
 
-    /*  nothing shows on child status  */
-
-    // myDiagram.nodeTemplateMap.add("Adopted",
-    //     $(go.Node, {
-    //         selectable: false,
-    //         width: 1,
-    //         height: 1,
-    //         fromEndSegmentLength: 20
-    //     })
-    // );
-
     /*
-        LINK TEMPLATES IN MARITAL STATUS, CHILD STATUS
+        LINK TEMPLATES FOR MARITAL STATUS
     */
 
     /*  child status  */
@@ -164,24 +151,8 @@ function initGenogram(data, user_id) {
             fromSpot: go.Spot.Bottom,
             toSpot: go.Spot.Top
         },
-        $(go.Shape, { strokeWidth: 1})
+        $(go.Shape, { strokeWidth: 1 })
     );
-
-    // myDiagram.linkTemplateMap.add("Adopted",
-    //     $(go.Link, {
-    //             routing: go.Link.AvoidsNodes,
-    //             curve: go.Link.JumpOver,
-    //             layerName: "Background",
-    //             selectable: false,
-    //             fromSpot: go.Spot.Bottom,
-    //             toSpot: go.Spot.Top
-    //         },
-    //         $(go.Shape, {
-    //             strokeWidth: 2,
-    //             stroke: "blue",
-    //             strokeDashArray: [5, 2]
-    //         }))
-    // );
 
     /*  marital status  */
 
@@ -204,12 +175,14 @@ function initGenogram(data, user_id) {
                 curve: go.Link.JumpOver
             },
             $(go.Shape, { stroke: "red" }),
-            $(go.Shape, { // the "from" end arrowhead
+            // the "from" end arrowhead
+            $(go.Shape, {
                 fromArrow: "DoubleForwardSlash",
                 strokeWidth: 1,
                 stroke: "red"
             }),
-            $(go.Shape, { // the "to" end arrowhead
+            // the "to" end arrowhead
+            $(go.Shape, {
                 toArrow: "DoubleForwardSlash",
                 strokeWidth: 1,
                 stroke: "red"
@@ -224,12 +197,14 @@ function initGenogram(data, user_id) {
                 curve: go.Link.JumpOver
             },
             $(go.Shape, { stroke: "red" }),
-            $(go.Shape, { // the "from" end arrowhead
+            // the "from" end arrowhead
+            $(go.Shape, {
                 fromArrow: "ForwardSlash",
                 strokeWidth: 1,
                 stroke: "red"
             }),
-            $(go.Shape, { // the "to" end arrowhead
+            // the "to" end arrowhead
+            $(go.Shape, {
                 toArrow: "ForwardSlash",
                 strokeWidth: 1,
                 stroke: "red"
@@ -238,7 +213,8 @@ function initGenogram(data, user_id) {
     );
 
     /*
-        Event listener 'on click' on person. Display the information the person.
+        Event listener 'on click' on node
+        Display information of person
     */
     myDiagram.addDiagramListener("ObjectSingleClicked", function(e) {
         var part = e.subject.part;
@@ -285,131 +261,12 @@ function setupDiagram(diagram, array, focusId) {
 
     setupMaritalStatus(diagram);
     setupParents(diagram);
-    // setupChild(diagram);
 
     // console.log("LINK DATA", diagram.model.linkData)
 
     var node = diagram.findNodeForKey(focusId);
     if (node !== null) {
         diagram.select(node);
-    }
-}
-
-function findChildType(diagram, key) {
-    var childNode = diagram.findNodeForKey(key);
-
-    if (childNode !== null) {
-        var it = diagram.nodes;
-
-        while(it.next()) {
-            var childData = it.value;
-
-            if(childData.data !== null && childData.data.category === "Adopted") return childData;
-        }
-    }
-    return null;
-}
-
-function setupChild(diagram) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var key = data.key;
-        var ct = data.ct;
-        var mom = data.m;
-        var dad = data.f;
-        var connect = findChildType(diagram, key);
-
-        if(ct !== undefined && ct === "adopted") {
-            if(mom !== undefined && dad !== undefined) {
-                var connectParents = setupParentsA(diagram, key);
-
-                if(connectParents !== null) {
-                    if(connect === null) {
-                        var node = { s: "Adopted" };
-                        model.addNodeData(node);
-
-                        var link = connectParents;
-                        link.labelKeys = [node.key];
-                        link.category = "Adopted";
-                        model.addLinkData(link);
-                        // console.log(link);
-                    }
-                }
-            }
-            else if(mom !== undefined && dad === undefined) {
-
-                if(connect === null) {
-                    var node = { s: "Adopted" };
-                    model.addNodeData(node);
-
-                    var link = {
-                        from: mom,
-                        to: key,
-                        labelKeys: [node.key],
-                        category: "Adopted"
-                    };
-                    model.addLinkData(link);
-                }
-            }
-            else if(mom === undefined && dad !== undefined) {
-
-                if(connect === null) {
-                    var node = { s: "Adopted" };
-                    model.addNodeData(node);
-
-                    var link = {
-                        from: dad,
-                        to: key,
-                        labelKeys: [node.key],
-                        category: "Adopted"
-                    };
-                    model.addLinkData(link);
-                }
-            }
-        }
-    }
-}
-
-function setupParentsA(diagram, key) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var mom = data.m;
-        var dad = data.f;
-
-        if (mom !== undefined && dad !== undefined) {
-            var connect = findMarriage(diagram, mom, dad);
-            if (connect === null) {
-                continue;
-            }
-            
-            var parents = connect.data;
-            var parentKey = parents.labelKeys[0];
-            var link = {
-                from: parentKey,
-                to: key
-            };
-            return link;
-        }
-        else if (mom !== undefined && dad === undefined) {
-            var link = {
-                from: mom,
-                to: key
-            };
-            return link;
-        }
-        else if (mom === undefined && dad !== undefined) {
-            var link = {
-                from: dad,
-                to: key
-            };
-            return link;
-        }
     }
 }
 
@@ -613,11 +470,13 @@ function setupParents(diagram) {
 function GenogramLayout() {
     go.LayeredDigraphLayout.call(this);
     this.initializeOption = go.LayeredDigraphLayout.InitDepthFirstIn;
-    this.spouseSpacing = 30; // minimum space between spouses
+    this.spouseSpacing = 30; // space between spouses
 }
 go.Diagram.inherit(GenogramLayout, go.LayeredDigraphLayout);
 
-/*  override    */
+/*
+    override
+*/
 GenogramLayout.prototype.makeNetwork = function(coll) {
     // generate LayoutEdges for each parent-child Link
     var net = this.createNetwork();
@@ -641,13 +500,12 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
         if (!(nodeAdd instanceof go.Node)) continue;
         if (!nodeAdd.isLayoutPositioned || !nodeAdd.isVisible()) continue;
         if (nonmemberonly && nodeAdd.containingGroup !== null) continue;
-        // if an unmarried Node or a Link Label Node, create LayoutVertex
+        
+        // if a Link Label Node, create LayoutVertex representing both husband and wife
         if (nodeAdd.isLinkLabel) {
-            // get marriage Link
             var linkAdd = nodeAdd.labeledLink;
             var spouseA = linkAdd.fromNode;
             var spouseB = linkAdd.toNode;
-            // create vertex representing both husband and wife
             var vertexAdd = net.addNode(nodeAdd);
 
             vertexAdd.width =
@@ -681,6 +539,7 @@ GenogramLayout.prototype.add = function(net, coll, nonmemberonly) {
         if (!(link instanceof go.Link)) continue;
         if (!link.isLayoutPositioned || !link.isVisible()) continue;
         if (nonmemberonly && link.containingGroup !== null) continue;
+        
         // if a parent-child link, add a LayoutEdge
         if (!link.isLabeledLink) {
             var parent = net.findVertex(link.fromNode); // should be a label node

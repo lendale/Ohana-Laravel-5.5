@@ -53,7 +53,7 @@ function signUpWithEmailAndPass() {
     console.log(email)
 
     FIREBASE_AUTH.createUserWithEmailAndPassword(email, password).catch(function(error) {
-        console.log(error);
+        console.log("error", error);
     });
 }
 
@@ -67,7 +67,7 @@ function signInWithEmailAndPass() {
 }
 
 function authWithFb() {
-    fbProvider.addScope("public_profile, user_birthday, user_hometown, user_relationships");
+    fbProvider.addScope("public_profile, user_birthday, user_hometown");
     FIREBASE_AUTH.signInWithPopup(fbProvider);
 }
 

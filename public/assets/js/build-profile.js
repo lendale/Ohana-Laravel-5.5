@@ -29,16 +29,18 @@ const displayPicStorageRef = FIREBASE_STORAGE.ref().child("display_pics")
       Event Listeners
     ======================== */
 
+FIREBASE_AUTH.onAuthStateChanged(handleAuthStateChanged);
+
 function handleAuthStateChanged(user) {
     if (user) {
         currentUser = user;
-        segregateFbData(fbResponse, currentUser.uid);
         checkPotentialUser();
         if (user.providerData[0].providerId === "facebook.com") {
             provider = user.providerData[0].providerId;
+            segregateFbData(fbResponse, currentUser.uid);
         } else if (user.providerData[0].providerId === "password") {
             provider = user.providerData[0].providerId;
-            // assignSignUpDataToForm();
+            assignSignUpDataToForm();
         }
         console.log("user is signed in");
     } else {
@@ -117,9 +119,10 @@ function segregateFbData(response, uid) {
                 email: response.email,
                 birthDate: response.birthday,
                 gender: response.gender,
-                photoUrl: response.picture.data.url,
+                photoURL: response.picture.data.url,
                 clanId: clan_id,
-                merged: false
+                merged: false,
+                livingStatus: "Living"
             };
         } else {
             fbUser = {
@@ -132,9 +135,10 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 birthPlace: response.hometown.name,
                 gender: response.gender,
-                photoUrl: response.picture.data.url,
+                photoURL: response.picture.data.url,
                 clanId: clan_id,
-                merged: false
+                merged: false,
+                livingStatus: "Living"
             };
         }
     } else if (response.hometown === undefined) {
@@ -148,9 +152,10 @@ function segregateFbData(response, uid) {
                 email: response.email,
                 birthDate: response.birthday,
                 gender: response.gender,
-                photoUrl: response.picture.data.url,
+                photoURL: response.picture.data.url,
                 clanId: clan_id,
-                merged: false
+                merged: false,
+                livingStatus: "Living"
             };
         } else {
             fbUser = {
@@ -163,9 +168,10 @@ function segregateFbData(response, uid) {
                 email: response.email,
                 birthDate: response.birthday,
                 gender: response.gender,
-                photoUrl: response.picture.data.url,
+                photoURL: response.picture.data.url,
                 clanId: clan_id,
-                merged: false
+                merged: false,
+                livingStatus: "Living"
             };
         }
     } else {
@@ -180,177 +186,12 @@ function segregateFbData(response, uid) {
             birthDate: response.birthday,
             birthPlace: response.hometown.name,
             gender: response.gender,
-            photoUrl: response.picture.data.url,
+            photoURL: response.picture.data.url,
             clanId: clan_id,
-            merged: false
+            merged: false,
+            livingStatus: "Living"
         };
     }
-
-    getFbFamilyData(response);
-}
-
-function getFbFamilyData(graphResponse) {
-
-    var person = new Object();
-
-    //Get family data
-    if (graphResponse.family !== undefined) {
-        graphResponse.family.data.forEach(function(element) {
-            //Get mother
-            if (element.relationship === "mother") {
-                if (element.middle_name === undefined) {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                } else {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        middleName: element.middle_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                }
-
-                if (potentialFlag) {
-                    person.clanId = potentialUser.clanId;
-                }
-
-                fbFamily.push(person);
-            }
-
-            //Get father
-            if (element.relationship === "father") {
-                if (element.middle_name === undefined) {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                } else {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        middleName: element.middle_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                }
-
-                if (potentialFlag) {
-                    person.clanId = potentialUser.clanId;
-                }
-
-                fbFamily.push(person);
-            }
-
-            //Get children
-            if (element.relationship === "son") {
-                if (element.middle_name === undefined) {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                } else {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        middleName: element.middle_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                }
-
-                if (potentialFlag) {
-                    person.clanId = potentialUser.clanId;
-                }
-
-                fbFamily.push(person);
-            } else if (element.relationship === "daugther") {
-                if (element.middle_name === undefined) {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                } else {
-                    person = {
-                        fbId: element.id,
-                        firstName: element.first_name,
-                        middleName: element.middle_name,
-                        lastName: element.last_name,
-                        displayName: element.name,
-                        relationship: element.relationship,
-                        clanId: clan_id,
-                        merged: false,
-                        photoUrl: element.picture.data.url
-                    };
-                }
-
-                if (potentialFlag) {
-                    person.clanId = potentialUser.clanId;
-                }
-
-                fbFamily.push(person);
-            }
-        });
-    }
-}
-
-function pushFbFamilyData(uid, data) {
-    const mothersRef = userFamilyRef.child(uid).child("mothers");
-    const fathersRef = userFamilyRef.child(uid).child("fathers");
-    const daughtersRef = userFamilyRef.child(uid).child("daughters");
-    const sonsRef = userFamilyRef.child(uid).child("sons");
-
-    data.forEach(function(element) {
-        if (element.relationship === "mother") {
-            mothersRef.push(element);
-        } else if (element.relationship === "father") {
-            fathersRef.push(element);
-        } else if (element.relationship === "son") {
-            sonsRef.push(element);
-        } else if (element.relationship === "daughter") {
-            daughtersRef.push(element);
-        }
-    });
-
-    showSuccess();
 }
 
 function createAcctWithFacebook() {
@@ -394,7 +235,6 @@ function createAcctWithFacebook() {
     if (fbResponse.family !== undefined) {
         console.log(fbUser)
         usersRef.child(currentUser.uid).set(fbUser);
-        pushFbFamilyData(currentUser.uid, fbFamily);
     } else {
         //Set user data to 'users' node in database
         usersRef.child(currentUser.uid).set(fbUser);
@@ -402,7 +242,7 @@ function createAcctWithFacebook() {
     }
 }
 
-function createAcctWithEmailAndPass() {
+function createAcctWithEmailAndPass(downloadURL) {
     var person = new Object();
     var middle_name = $('#middle_name').val();
     var birth_place = $('#birth_place').val();
@@ -421,9 +261,10 @@ function createAcctWithEmailAndPass() {
         displayName: displayName,
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
-        // photoUrl: response.picture.data.url,
+        photoURL: downloadURL,
         clanId: clan_id,
-        merged: false
+        merged: false,
+        livingStatus: "Living"
     }
 
     if ($("input:checked").val() === "male") {
@@ -437,23 +278,23 @@ function createAcctWithEmailAndPass() {
     }
 
     if (birth_place !== "") {
-        person.birth_place = birth_place;
+        person.birthPlace = birth_place;
     }
 
     if (street_address !== "") {
-        fbUser.street_address = street_address;
+        person.street_address = street_address;
     }
 
     if (barangay !== "") {
-        fbUser.barangay = barangay;
+        person.barangay = barangay;
     }
 
     if (city !== "") {
-        fbUser.city = city;
+        person.city = city;
     }
 
     if (postal_code !== "") {
-        fbUser.postal_code = postal_code;
+        person.postal_code = postal_code;
     }
 
     if (potentialFlag) {
@@ -462,12 +303,15 @@ function createAcctWithEmailAndPass() {
         person.wasPotential = true;
     }
 
-    usersRef.child(currentUser.uid).set(person);
-
-    showSuccess();
+    $('#finish').click(function(){
+        usersRef.child(currentUser.uid).set(person)
+        console.log(person)
+        showSuccess();
+    })
 }
 
 function createUserAccount() {
+    console.log('inside createUserAccount function');
     if (!potentialFlag) {
         if (provider === "facebook.com") {
             createAcctWithFacebook()
@@ -528,17 +372,26 @@ function handleWizardPic(eventData) {
     var file = eventData.target.files[0];
     var fileName = file.name;
     var fileExtension = fileName.split(".").pop();
-
     var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
     var fileNameOnStorage = picKey + '.' + fileExtension;
+    var storageRef = FIREBASE_STORAGE.ref('user_profile-pics/' + currentUser.uid + '/' + fileNameOnStorage);
 
-    // displayPicStorageRef
-    //     .child(currentUser.uid)
-    //     .
+    $('#next').on('click', function(){
+        var task = storageRef.put(file);
+        console.log('lahos sa next button')
+        task.on('state_changed',
+       
+        function complete() {
+            uid = firebase.auth().currentUser.uid;
+            var downloadURL = task.snapshot.downloadURL;
+            console.log(downloadURL)
+            createAcctWithEmailAndPass(downloadURL);
+            })
+    })  
 }
 
 function showAvailableMergeData(data) {
-    $("#wizard_picture_preview").attr("src", data.photoUrl);
+    $("#wizard_picture_preview").attr("src", data.photoURL);
     $("#group_first_name").addClass("is-focused");
     $("#first_name").val(data.firstName);
     $("#group_last_name").addClass("is-focused");

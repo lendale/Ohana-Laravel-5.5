@@ -36,7 +36,7 @@ function initFeaturesText() {
         },
         {
             "title": "Clan Album",
-            "sub": "They say, \"a picture paints a thousand words.\" We care about your moments and with the clan album you will be sure that you're prescious memories will forever be cherished and shared to everyone in your clan."
+            "sub": "They say, \"a picture paints a thousand words.\" We care about your moments. With the clan album, you will be sure that your precious memories will forever be cherished and shared to everyone in your clan."
         }
     ];
 
@@ -87,7 +87,7 @@ function initTeamText() {
             "pic": "assets/img/index/nami.jpg",
             "pos": "Web Developer",
             "fb": "https://www.facebook.com/RezanneLao",
-            "twitter": "",
+            // "twitter": "",
             "gplus": "https://goo.gl/RezanneLao",
             "insta": "https://www.instagram.com/rnlc_san",
             "sub": "I love you like Kanye loves Kanye. Don't be scared of the truth."

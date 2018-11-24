@@ -1,14 +1,13 @@
 const admin = require('firebase-admin')
 const index = require('../index')
 
-exports.addWife = function(event) {
-    let uid = event.params.uid
-    let pushKey = event.params.pushKey
-    let userObj = event.data.val()
+exports.addWife = function(data, context) {
+    const root = data.ref.root
+    let uid = context.params.uid
+    let pushKey = context.params.pushKey
+    let userObj = data.val()
     let clanId = userObj.clanId
     let treeObj = new Object()
-
-    const root = event.data.ref.root
 
     treeObj = {
         key: pushKey,
@@ -18,12 +17,11 @@ exports.addWife = function(event) {
         loc: `/user_family/${uid}/wives/${pushKey}/`
     }
 
-    if (userObj.photoUrl !== undefined) {
-        treeObj.img = userObj.photoUrl
+    if (userObj.photoURL !== undefined) {
+        treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${uid}/ux`).push(pushKey)
-    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
         .then(() => {
             const vir = root.child(`user_tree_go/${clanId}/${pushKey}/vir`).push(uid)
             const ms = root.child(`user_tree_go/${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
@@ -33,24 +31,32 @@ exports.addWife = function(event) {
                 console.log(err)
             })
         })
-    const pr3 = root.child(`user_family/${uid}/spouse_keys/ux/${pushKey}`).set(userObj.displayName)
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
-    const pr5 = index.createPotentialUser(event)
+    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/ux`).push(pushKey)
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
+    const pr4 = index.createPotentialUser(data, context)
+    // const pr5 = root.child(`user_family/${uid}/spouse_keys/ux/${pushKey}`).set(userObj.displayName)
+    // const pr6 = root.child(`users/${uid}`).once('value').then(snap => {
+    //     const pr7 = root.child(`user_family/${pushKey}/husbands/${uid}`).set(snap.val())
+    //     const pr8 = root.child(`user_family/${pushKey}/spouse_keys/vir/${uid}`).set(snap.val().displayName)
+    //     return Promise.all([pr7, pr8]).catch(err => {
+    //         console.log('Error code', err.code)
+    //         console.log(err)
+    //     })
+    // })
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
 }
 
-exports.addHusband = function(event) {
-    let uid = event.params.uid
-    let pushKey = event.params.pushKey
-    let userObj = event.data.val()
+exports.addHusband = function(data, context) {
+    const root = data.ref.root
+    let uid = context.params.uid
+    let pushKey = context.params.pushKey
+    let userObj = data.val()
     let clanId = userObj.clanId
     let treeObj = new Object()
-
-    const root = event.data.ref.root
 
     treeObj = {
         key: pushKey,
@@ -60,12 +66,11 @@ exports.addHusband = function(event) {
         loc: `/user_family/${uid}/husbands/${pushKey}/`
     }
 
-    if (userObj.photoUrl !== undefined) {
-        treeObj.img = userObj.photoUrl
+    if (userObj.photoURL !== undefined) {
+        treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${uid}/vir`).push(pushKey)
-    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
         .then(() => {
             const ux = root.child(`user_tree_go/${clanId}/${pushKey}/ux`).push(uid)
             const ms = root.child(`user_tree_go/${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
@@ -75,16 +80,18 @@ exports.addHusband = function(event) {
                 console.log(err)
             })
         })
-    const pr3 = root.child(`user_family/${uid}/spouse_keys/vir/${pushKey}`).set(userObj.displayName)
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
-    const pr5 = index.createPotentialUser(event)
-    const pr6 = root.child(`users/${uid}`).once('value').then(snap => {
-        if (snap.val().gender === 'male') {
-            return root.child(`user_family/${pushKey}/husbands/${uid}`).set(snap.val())
-        } else {
-            return root.child(`user_family/${pushKey}/wives/${uid}`).set(snap.val())
-        }
-    })
+    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/vir`).push(pushKey)
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
+    const pr4 = index.createPotentialUser(data, context)
+    // const pr5 = root.child(`user_family/${uid}/spouse_keys/vir/${pushKey}`).set(userObj.displayName)
+    // const pr6 = root.child(`users/${uid}`).once('value').then(snap => {
+    //     const pr7 = root.child(`user_family/${pushKey}/wives/${uid}`).set(snap.val())
+    //     const pr8 = root.child(`user_family/${pushKey}/spouse_keys/ux/${uid}`).set(snap.val().displayName)
+    //     return Promise.all([pr7, pr8]).catch(err => {
+    //         console.log('Error code', err.code)
+    //         console.log(err)
+    //     })
+    // })
 
     return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]).catch(err => {
         console.log('Error code', err.code)

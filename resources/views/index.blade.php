@@ -7,7 +7,7 @@
     <title>Ohana</title>
     <link rel="shortcut icon" href="assets/img/favicon.ico" />
 
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
 
@@ -117,7 +117,7 @@
 
             </div>
         </div>
-        <!-- Wrapper for slides end -->
+        <!-- End Wrapper for slides -->
         </div>
     </header>
 
@@ -356,7 +356,7 @@
                         </form>
                     </div>
                     <div class="modal-footer text-center">
-                        <a id="btn_signin" class="btn btn-danger btn-simple btn-wd btn-lg">Get Started</a>
+                        <a id="btn_signin" class="btn btn-danger btn-simple btn-wd btn-lg">Log In</a>
                     </div>
                 </div>
             </div>
@@ -480,6 +480,23 @@
         </div>
     </div>
     <!--  End Signup Modal -->
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="error_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="card card-profile card-hidden">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 id="error_details_node" class="text-left"></h4>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Error Modal -->
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js "></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js "></script>

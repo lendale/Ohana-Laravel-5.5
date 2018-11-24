@@ -19,11 +19,11 @@ Route::get('/build-profile', 'ProfileController@build_profile');
 
 Route::get('/me', 'ProfileController@me');
 
-Route::get('/clanalbum', 'PhotoController@clanalbum');
+Route::get('/album_clan', 'PhotoController@album_clan');
 
 Route::get('/clan-album', 'PhotoController@clan_album');
 
-Route::get('/user_album', 'PhotoController@user_album');
+Route::get('/album_user', 'PhotoController@album_user');
 
 Route::get('/events', 'OhanaController@events');
 

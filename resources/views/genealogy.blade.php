@@ -43,7 +43,7 @@
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>
-                        <a href="/clan-album">Clan Album</a>
+                        <a href="/album_clan">Clan Album</a>
                     </li>
                     <li>
                         <a href="/events">Events</a>
@@ -156,40 +156,6 @@
         </a>  --}}
     </main>
 
-    <!-- Node Details Modal -->
-    <div class="modal fade" id="modal_node_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="card card-profile card-hidden">
-                <div class="card-avatar">
-                    <a><img id="node_img" src="assets/img/default-avatar.png" alt=""></a>
-                </div>
-                <h2 id="node_name" class="card-title"></h2>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <button type="button" class="btn btn-default">Quick Edit</button>
-                        </div> 
-                        <div class="col-md-3">
-                            <h4>Date of Birth:</h4>
-                        </div>
-                        <div class="col-md-9">
-                            <h4 id="node_birth_date" class="text-left"></h4>
-                        </div>
-                    </div>
-                    
-                    <div class="row">
-                        <div class="col-md-3">
-                            <h4>Place of Birth:</h4>
-                        </div>
-                        <div class="col-md-9">
-                            <h4 id="node_birth_place" class="text-left"></h4>
-                        </div>
-                    </div> 
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Add Family Member Modal -->
     <div class="modal fade" id="modal_add_family_member" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -243,14 +209,14 @@
                                     <br>
                                     <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail img-circle img-raised">
-                                            <img class="fam-mem-pic" id="father_pic" src="assets/img/placeholder.jpg" alt="...">
+                                            <img class="fam-mem-pic" src="assets/img/placeholder.jpg" alt="...">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                                         <div>
                                             <span class="btn btn-raised btn-round btn-default btn-file">
                                             <span class="fileinput-new">Add Photo</span>
                                             <span class="fileinput-exists">Change</span>
-                                            <input type="file" name="..." /></span>
+                                            <input type="file" id="father_pic" name="..." value="upload"/></span>
                                             <br>
                                             <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i>Remove</a>
                                         </div>
@@ -264,7 +230,7 @@
 										</span>
                                         <div id="group_father_first_name" class="form-group label-floating">
                                             <label class="control-label">First Name <small>(required)</small></label>
-                                            <input id="father_first_name" name="firstname" type="text" class="form-control first-name">
+                                            <input id="father_first_name" name="firstname" type="text" class="form-control first-name" required>
                                         </div>
                                     </div>
 
@@ -284,7 +250,7 @@
 										</span>
                                         <div id="group_father_last_name" class="form-group label-floating">
                                             <label class="control-label">Last Name <small>(required)</small></label>
-                                            <input id="father_last_name" name="lastname" type="text" class="form-control last-name">
+                                            <input id="father_last_name" name="lastname" type="text" class="form-control last-name" required>
                                         </div>
                                     </div>
                                 </div>
@@ -294,7 +260,7 @@
                             <!-- Dropdowns start -->
                             <div class="row">
                                 <div class="col-md-4">
-                                    <select id="father_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
+                                    <select id="father_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7" required>
                                         <option disabled>Gender</option>
                                         <option value="male" selected>Male</option>
                                         <option value="female">Female</option>
@@ -302,15 +268,15 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <select id="father_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
+                                    <select id="father_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7" required>
                                         <option disabled selected>Status</option>
-                                        <option value="living">Living</option>
-                                        <option value="deceased">Deceased</option>
+                                        <option value="Living">Living</option>
+                                        <option value="Deceased">Deceased</option>
                                     </select>
                                 </div>
 
                                 <div class="col-md-4">
-                                    <select id="father_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Role Select" data-size="7">
+                                    <select id="father_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Role Select" data-size="7" required>
                                         <option disabled selected>Role in Tree</option>
                                         <option value="guest">Guest</option>
                                         <option value="contributor">Contributor</option>
@@ -341,7 +307,7 @@
 											<i class="material-icons">cake</i>
                                         </span>
                                         <!-- <label class="control-label">Date of birth <small>(required)</small></label> -->
-                                        <input id="father_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth">
+                                        <input id="father_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)" required>
                                     </div>
                                 </div>
 
@@ -388,14 +354,14 @@
                                     <br>
                                     <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail img-circle img-raised">
-                                            <img class="fam-mem-pic" id="mother_pic" src="assets/img/placeholder.jpg" alt="...">
+                                            <img class="fam-mem-pic" src="assets/img/placeholder.jpg" alt="...">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                                         <div>
                                             <span class="btn btn-raised btn-round btn-default btn-file">
                                             <span class="fileinput-new">Add Photo</span>
                                             <span class="fileinput-exists">Change</span>
-                                            <input type="file" name="..." /></span>
+                                            <input type="file" id="mother_pic" name="..." value="upload"/></span>
                                             <br>
                                             <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i>Remove</a>
                                         </div>
@@ -449,8 +415,8 @@
                                 <div class="col-md-4">
                                     <select id="mother_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                         <option disabled selected>Status</option>
-                                        <option value="living">Living</option>
-                                        <option value="deceased">Deceased</option>
+                                        <option value="Living">Living</option>
+                                        <option value="Deceased">Deceased</option>
                                     </select>
                                 </div>
 
@@ -486,7 +452,7 @@
 											<i class="material-icons">cake</i>
                                         </span>
                                         <!-- <label class="control-label">Date of birth <small>(required)</small></label> -->
-                                        <input id="mother_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth">
+                                        <input id="mother_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)">
                                     </div>
                                 </div>
 
@@ -533,14 +499,14 @@
                                     <br>
                                     <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                         <div class="fileinput-new thumbnail img-circle img-raised">
-                                            <img class="fam-mem-pic" id="spouse_pic" src="assets/img/placeholder.jpg" alt="...">
+                                            <img class="fam-mem-pic" src="assets/img/placeholder.jpg" alt="...">
                                         </div>
                                         <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                                         <div>
                                             <span class="btn btn-raised btn-round btn-default btn-file">
                                             <span class="fileinput-new">Add Photo</span>
                                             <span class="fileinput-exists">Change</span>
-                                            <input type="file" name="..." /></span>
+                                            <input type="file" id="spouse_pic" value="upload" name="..." /></span>
                                             <br>
                                             <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i>Remove</a>
                                         </div>
@@ -594,18 +560,17 @@
                                 <div class="col-md-6">
                                     <select id="spouse_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                         <option disabled selected>Status</option>
-                                        <option value="living">Living</option>
-                                        <option value="deceased">Deceased</option>
+                                        <option value="Living">Living</option>
+                                        <option value="Deceased">Deceased</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="row">
                                 <div class="col-md-6">
-                                    <select id="spouse_relationship" class="selectpicker select-relationship" data-style="btn btn-danger btn-round" title="Relationship Status Select" data-size="7">
+                                    <select required id="spouse_relationship" class="selectpicker select-relationship" data-style="btn btn-danger btn-round" title="Relationship Status Select" data-size="7">
                                         <option disabled selected>Relationship</option>
                                         <option value="married">Married</option>
-                                        <option value="divorced">Divorced</option>
                                         <option value="separated">Separated</option>
                                     </select>
                                 </div>
@@ -642,7 +607,7 @@
 											<i class="material-icons">cake</i>
                                         </span>
                                         <!-- <label class="control-label">Date of birth <small>(required)</small></label> -->
-                                        <input id="spouse_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth">
+                                        <input id="spouse_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)">
                                     </div>
                                 </div>
 
@@ -689,14 +654,14 @@
                                 <br>
                                 <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                     <div class="fileinput-new thumbnail img-circle img-raised">
-                                        <img class="fam-mem-pic" id="child_pic" src="assets/img/placeholder.jpg" alt="...">
+                                        <img class="fam-mem-pic" src="assets/img/placeholder.jpg" alt="...">
                                     </div>
                                     <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                                     <div>
                                         <span class="btn btn-raised btn-round btn-default btn-file">
                                             <span class="fileinput-new">Add Photo</span>
                                             <span class="fileinput-exists">Change</span>
-                                            <input type="file" name="..." />
+                                            <input type="file" id="child_pic" value="upload" name="..." />
                                         </span>
                                         <br>
                                         <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i>Remove</a>
@@ -740,7 +705,7 @@
 
                         <!-- Dropdowns start -->
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <select id="child_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7">
                                     <option disabled selected>Gender</option>
                                     <option value="male">Male</option>
@@ -748,15 +713,24 @@
                                 </select>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <select id="child_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                     <option disabled selected>Status</option>
-                                    <option value="living">Living</option>
-                                    <option value="deceased">Deceased</option>
+                                    <option value="Living">Living</option>
+                                    <option value="Deceased">Deceased</option>
                                 </select>
                             </div>
+                        </div>
 
-                            <div class="col-md-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select id="child_parenthood" class="selectpicker select-parenthood" data-style="btn btn-danger btn-round" title="Parenthood Select" data-size="7">
+                                    <option disabled selected>Parenthood</option>
+                                    <option value="guest">Biological</option>
+                                    <option value="contributor">Adopted</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
                                 <select id="child_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7">
                                     <option disabled selected>Role in Tree</option>
                                     <option value="guest">Guest</option>
@@ -788,7 +762,7 @@
 										<i class="material-icons">cake</i>
                                     </span>
                                     <!-- <label class="control-label">Date of birth <small>(required)</small></label> -->
-                                    <input id="child_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth">
+                                    <input id="child_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)">
                                 </div>
                             </div>
 
@@ -820,16 +794,399 @@
             </div>
         </div>
     </div>
+    <!-- End Add Child Modal -->
+
+    <!-- Show Details Modal -->
+        <div class="modal fade" id="modal_show_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="card card-profile card-hidden">
+                    <div class="card-avatar">
+                        <a><img id="node_img" src="assets/img/default-avatar.png" alt=""></a>
+                    </div>
+                    <h2 id="node_name" class="card-title"></h2>
+                    <button type="button" id="node_edit" class="btn btn-default" data-toggle="modal" data-dismiss="modal">Quick Edit</button>
+                    <div class="modal-body">
+                        <!-- <div class="row">
+                            <div class="col-md-3" style="text-align: right;">
+                                <h4>Key:</h4>
+                            </div>
+                            <div class="col-md-9">
+                                <h4 id="node_key" class="text-left"></h4>
+                            </div>
+                        </div>  -->
+                        <div class="row">
+                            <div class="col-md-3" style="text-align: right;">
+                                <h4>Date of Birth:</h4>
+                            </div>
+                            <div class="col-md-9">
+                                <h4 id="node_birth_date" class="text-left"></h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3" style="text-align: right;">
+                                <h4>Living Status:</h4>
+                            </div>
+                            <div class="col-md-9">
+                                <h4 id="node_living_status" class="text-left"></h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3" style="text-align: right;">
+                                <h4>Email:</h4>
+                            </div>
+                            <div class="col-md-9">
+                                <h4 id="node_email" class="text-left"></h4>
+                            </div>
+                        </div> 
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+
+    <!-- Update Users Modal -->
+    <div class="modal fade" id="modal_update_users" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="modal_update_title" class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form_update_users" class="form" action="">
+                            <!-- Input name start -->
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <br>
+                                    <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                        <div class="fileinput-new thumbnail img-circle img-raised">
+                                            <img class="users-pic" id="users_pic" src="assets/img/placeholder.jpg" alt="...">
+                                        </div>
+                                        <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
+                                        <div>
+                                            <span class="btn btn-raised btn-round btn-default btn-file">
+                                            <span class="fileinput-new">Add Photo</span>
+                                            <span class="fileinput-exists">Change</span>
+                                            <input type="file" name="..." /></span>
+                                            <br>
+                                            <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i>Remove</a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-8 row">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">face</i>
+                                        </span>
+                                        <div id="group_users_first_name" class="form-group label-floating">
+                                            <input id="users_first_name" name="firstname" type="text" class="form-control first-name" placeholder="First Name (required)" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons" style="color: white;">face</i>
+                                        </span>
+                                        <div id="group_users_middle_name" class="form-group label-floating">
+                                            <input id="users_middle_name" name="middlename" type="text" class="form-control middle-name" placeholder="Middle Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">record_voice_over</i>
+                                        </span>
+                                        <div id="group_users_last_name" class="form-group label-floating">
+                                            <input id="users_last_name" name="lastname" type="text" class="form-control last-name" placeholder="Last Name (required)" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Input name end -->
+
+                            <!-- Dropdowns start -->
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <select id="users_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7" required>
+                                        <option disabled selected>Gender</option>
+                                        <option value="male">Male</option>
+                                        <option value="female">Female</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <select id="users_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7" required>
+                                        <option disabled selected>Status</option>
+                                        <option value="Living">Living</option>
+                                        <option value="Deceased">Deceased</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <select id="users_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Role Select" data-size="7" required>
+                                        <option disabled selected>Role in Tree</option>
+                                        <option value="guest">Guest</option>
+                                        <option value="contributor">Contributor</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Dropdowns end -->
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                                <i class="material-icons">email</i>
+                                            </span>
+                                        <div id="group_users_email" class="form-group label-floating">
+                                            <input id="users_email" name="email" type="text" class="form-control email" placeholder="Email address (required for Contributor Role)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Birth row start -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">cake</i>
+                                        </span>
+                                        <input id="users_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)" required>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">place</i>
+                                        </span>
+                                        <div id="group_users_birth_place" class="form-group label-floating">
+                                            <input id="users_birth_place" name="birthplace" type="text" class="form-control birth-place" placeholder="Place of birth">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Birth row end -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">weekend</i>
+                                        </span>
+                                        <div id="group_users_street_address" class="form-group label-floating">
+                                            <input id="users_street_address" name="street_address" type="text" class="form-control street-address" placeholder="Street Address">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">home</i>
+                                        </span>
+                                        <div id="group_users_barangay" class="form-group label-floating">
+                                            <input id="users_barangay" name="barangay" type="text" class="form-control barangay" placeholder="Barangay">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">account_balance</i>
+                                        </span>
+                                        <div id="group_users_city" class="form-group label-floating">
+                                            <input id="users_city" name="city" type="text" class="form-control city" placeholder="City">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="material-icons">room</i>
+                                        </span>
+                                        <div id="group_users_postal_code" class="form-group label-floating">
+                                            <input id="users_postal_code" name="postal_code" type="text" class="form-control postal-code" placeholder="Postal Code">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                </div>
+
+                <div class="modal-footer">
+                    <button id="update_users" type="button" class="btn btn-success add" data-dismiss="modal">Update</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Parents Modal -->
+        <div class="modal fade" id="modal_update_parents" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="modal_update_title" class="modal-title"></h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="form_update_parents" class="form" action="">
+                                <!-- Input name start -->
+                                <div class="row">
+                                    <div class="col-md-4 text-center">
+                                        <br>
+                                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                            <div class="fileinput-new thumbnail img-circle img-raised">
+                                                <img class="parents-pic" id="parents_pic" src="assets/img/placeholder.jpg" alt="...">
+                                            </div>
+                                            <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
+                                            <div>
+                                                <span class="btn btn-raised btn-round btn-default btn-file">
+                                                <span class="fileinput-new">Add Photo</span>
+                                                <span class="fileinput-exists">Change</span>
+                                                <input type="file" name="..." /></span>
+                                                <br>
+                                                <a href="" class="btn btn-danger btn-round fileinput-exists" data-dismiss="fileinput"><i class="fa fa-times"></i>Remove</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-8 row">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">face</i>
+                                            </span>
+                                            <div id="group_parents_first_name" class="form-group label-floating">
+                                                <input id="parents_first_name" name="firstname" type="text" class="form-control first-name" placeholder="First Name (required)" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons" style="color: white;">face</i>
+                                            </span>
+                                            <div id="group_parents_middle_name" class="form-group label-floating">
+                                                <input id="parents_middle_name" name="middlename" type="text" class="form-control middle-name" placeholder="Middle Name">
+                                            </div>
+                                        </div>
+
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">record_voice_over</i>
+                                            </span>
+                                            <div id="group_parents_last_name" class="form-group label-floating">
+                                                <input id="parents_last_name" name="lastname" type="text" class="form-control last-name" placeholder="Last Name (required)" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Input name end -->
+
+                                <!-- Dropdowns start -->
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <select id="parents_gender" class="selectpicker select-gender" data-style="btn btn-danger btn-round" title="Gender Select" data-size="7" required>
+                                            <option disabled selected>Gender</option>
+                                            <option value="male">Male</option>
+                                            <option value="female">Female</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <select id="parents_living_status" class="selectpicker select-status" data-style="btn btn-danger btn-round" title="Living Status Select" data-size="7" required>
+                                            <option disabled selected>Status</option>
+                                            <option value="Living">Living</option>
+                                            <option value="Deceased">Deceased</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <select id="parents_role_in_tree" class="selectpicker select-role" data-style="btn btn-danger btn-round" title="Role Select" data-size="7" required>
+                                            <option disabled selected>Role in Tree</option>
+                                            <option value="guest">Guest</option>
+                                            <option value="contributor">Contributor</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <!-- Dropdowns end -->
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                    <i class="material-icons">email</i>
+                                                </span>
+                                            <div id="group_parents_email" class="form-group label-floating">
+                                                <input id="parents_email" name="email" type="text" class="form-control email" placeholder="Email address (required for Contributor Role)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Birth row start -->
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">cake</i>
+                                            </span>
+                                            <input id="parents_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="material-icons">place</i>
+                                            </span>
+                                            <div id="group_parents_birth_place" class="form-group label-floating">
+                                                <input id="parents_birth_place" name="birthplace" type="text" class="form-control birth-place" placeholder="Place of birth">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Birth row end -->
+                            </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="update_parents" type="button" class="btn btn-success add" data-dismiss="modal">Update</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <!-- Error Modal -->
+    <div class="modal fade" id="error_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="card card-profile card-hidden">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h4 id="error_details_node" class="text-left"></h4>
+                            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Error Modal -->
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js "></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js "></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-database.js "></script>
+<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-storage.js "></script>
 <script src="assets/js/init.js "></script>
 
 <!--   Core JS Files   -->
 <script src="assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="assets/js/material-kit/bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/js/material-kit/material.min.js" type="text/javascript"></script>
+<script src="assets/js/material-kit/jquery.bootstrap.js "></script>
+
 
 <!-- Authentication -->
 <script src="assets/js/auth.js"></script>
@@ -871,5 +1228,6 @@
 <script src="assets/js/gojs/go-debug.js"></script>
 <script src="assets/js/gojs/genogram2.js"></script>
 <script src="assets/js/genealogy.js"></script>
+<script src="assets/js/node_details.js"></script>
 
 </html>

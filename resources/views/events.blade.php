@@ -42,12 +42,29 @@
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>
-                        <a href="/clan-album">Clan Album</a>
+                        <a href="/album_clan">Clan Album</a>
                     </li>
                     <li class="active">
                         <a href="/events">Events</a>
                     </li>
-                    <li class="dropdown">
+                                        <li id="notification_li">
+                                            <a href="#" id="notificationLink">
+                                                 <span id="notification_count">5</span>
+                                            <i class="material-icons">notifications</i>
+
+                                            
+
+                                                <div id="notificationContainer">
+                                                <div id="notificationTitle" >Notifications</div>
+                                                <
+                                                <div id="notificationsBody" class="notifications">ada</div>
+                                                <div id="notificationFooter"><a href="#">See All</a></div>
+                                                </div>
+
+
+                    </a>
+                                         </li>
+                 <!--    <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="material-icons">notifications</i>
                             <span class="notification"></span>
@@ -57,13 +74,13 @@
                             </p>
                         </a>
                         <ul class="dropdown-menu">
-                            <!-- <li><a href="#">Mike John responded to your email</a></li>
+                            <li><a href="#">Mike John responded to your email</a></li>
                             <li><a href="#">You have 5 new tasks</a></li>
                             <li><a href="#">You're now friend with Andrew</a></li>
                             <li><a href="#">Another Notification</a></li>
-                            <li><a href="#">Another One</a></li> -->
+                            <li><a href="#">Another One</a></li>
                         </ul>
-                    </li>
+                    </li> -->
                     <li class="dropdown">
                         <a class="profile-photo dropdown-toggle" data-toggle="dropdown">
                             <div class="profile-photo-small">
@@ -95,21 +112,66 @@
         </div>
     </nav>
 
-    <main class="content">
-        <section class=section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1">
-                        <div class="card card-calendar">
-                            <div class="card-content" class="ps-child">
-                                <div id="fullCalendar"></div>
-                            </div>
-                        </div>
+        <main>
+            <div class="container section">
+              <div id="card-container" class="row">
+            
+            </div>
+    </div>
+            
+            <button class="btn btn-danger btn-defualt" data-toggle="modal" data-target="#myModal">+Create Event</button>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <i class="material-icons">clear</i>
+                    </button>
+                     <form id="send-notification-form">
+                    <h3 class="modal-title">Event</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                    <select id="eventSlct" class="selectpicker" data-style="btn btn-danger btn-defualt" title=" Choose Event" data-size="7" required>
+                      <option disabled> Choose Event</option>
+                      <option value="Obituary">Obituary</option>
+                      <option value="Wedding">Wedding</option>
+                      <option value="Baptism">Baptism</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <div class="input-group">
+                        <input id="Date" name="Date" type="text" class="datepicker form-control" placeholder="Date" required>
                     </div>
                 </div>
+                    <div class="input-group">
+                        <input id="time" type="text" placeholder="Time" class="timepicker form-control" >
+                    </div>
+                    <div class="col-md-4">
+                    <div class="input-group">
+                        <input type="text" id="notification-message" placeholder="Title" class="form-control" />
+                    </div>
+                </div>
+                    <div class="input-field col-md-8">
+                       <textarea class="form-control" id="desc" placeholder="Description" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-default btn-simple" onclick="addClick()" required>Post</button>
+                    <button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>
+                </form>
             </div>
-        </section>
-    </main>
+            
+            </div>
+        </div>
+    </div>
+
+    <!-- small alert modal -->
+
+
+        </main>
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js"></script>
@@ -152,10 +214,15 @@
 <!--    Plugin for 3D images animation effect, full documentation here: https://github.com/drewwilson/atvImg    -->
 <script src="assets/js/material-kit/atv-img-animation.js" type="text/javascript"></script>
 
+<!--    Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select   -->
+<script src="assets/js/material-kit/bootstrap-selectpicker.js" type="text/javascript"></script>
+
 <!--    Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc    -->
 <script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
 
 <script src="assets/js/events.js"></script>
 <script defer src="assets/js/messaging.js"></script>
+<script src="assets/js/material-kit/bootstrap-datetimepicker.js" type="text/javascript"></script>
+
 
 </html>

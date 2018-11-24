@@ -1,0 +1,13 @@
+.modal-title{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif
+}
+.card-image{
+    height: 100px;
+    background-size: 100px;
+    
+}
+#photoUrl{
+    height: 270px;
+    width: 100%;
+    overflow: hidden;
+}

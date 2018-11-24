@@ -25,9 +25,4 @@ class OhanaController extends Controller
     {
         return view('settings');
     }
-
-    public function timeline()
-    {
-        return view('timeline');
-    }
 }

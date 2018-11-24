@@ -52,9 +52,18 @@ function signUpWithEmailAndPass() {
 
     console.log(email)
 
-    FIREBASE_AUTH.createUserWithEmailAndPassword(email, password).catch(function(error) {
-        console.log(error);
-    });
+    FIREBASE_AUTH.createUserWithEmailAndPassword(email, password)
+        .then(function() {
+            console.log('sign up success'); })
+        .catch(function(error) {
+            $("#error_details")
+                .modal('show');
+
+            $("#error_details_node")
+                .empty()
+                .append(error.message);
+
+            console.log('error', error); })
 }
 
 function signInWithEmailAndPass() {
@@ -62,7 +71,14 @@ function signInWithEmailAndPass() {
     var password = $("#login_password").val();
 
     FIREBASE_AUTH.signInWithEmailAndPassword(email, password).catch(function(error) {
-        console.log(error);
+            $("#error_details")
+                .modal('show');
+
+            $("#error_details_node")
+                .empty()
+                .append(error.message);
+
+            console.log(error);
     });
 }
 
@@ -82,3 +98,8 @@ $(document).ready(function() {
         signUpWithEmailAndPass();
     });
 });
+
+// setTimeout(function() {
+//     $('#error_details').modal('hide');
+// }, 20000);
+// window.location.href = "/build-profile";

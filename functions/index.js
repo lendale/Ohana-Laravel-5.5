@@ -2,38 +2,19 @@ require('babel-polyfill')
 
 const functions = require('firebase-functions')
 const admin = require('firebase-admin')
-admin.initializeApp(functions.config().firebase)
+admin.initializeApp()
 
 const parents = require('./src/addParent')
-const children = require('./src/addChild')
 const spouse = require('./src/addSpouse')
+const children = require('./src/addChild')
+const notif = require('./src/notifications')
+const djob = require('./src/cronJob')
+const eReminder= require('./src/eventsReminder')
 
-// Deploy specific functions => firebase deploy --only functions:func1,func2,etc..
-
-/* ========================
-        Tree Functions
-    ======================== */
-
-exports.genealogy = functions.https.onRequest((req, res) => {
-    res.status(200).send(`<!doctype html>
-    <head>
-      <title>Time</title>
-    </head>
-    <body>
-      <h1>Hello!</h1>
-    </body>
-    <script type="text/javascript">
-        window.onload = () => {
-            alert("Hello! I am an alert box!!");
-        }
-    </script>
-  </html>`);
-})
-
-exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(event => {
-    const root = event.data.ref.root
-    let uid = event.params.uid
-    let userObj = event.data.val()
+exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((data, context) => {
+    const root = data.ref.root
+    let uid = context.params.uid
+    let userObj = data.val()
     let treeObj = new Object()
     let prevVal = new Object()
 
@@ -48,14 +29,17 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
                 treeObj.loc = `/users/${uid}/`
                 treeObj.bd = userObj.birthDate
 
-                if ((userObj.photoUrl !== undefined)) {
-                    treeObj.img = userObj.photoUrl
+                if ((userObj.photoURL !== undefined)) {
+                    treeObj.img = userObj.photoURL
                 }
 
                 return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
             })
             .then(() => {
                 return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).remove()
+            })
+            .then(() => {
+                return root.child(`potential_users/${userObj.tempKeyInClan}`).remove()
             })
             .then(() => {
                 return updateConnectedNodes(root, userObj.clanId, userObj.tempKeyInClan, treeObj.key, uid)
@@ -69,39 +53,40 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate(e
             n: userObj.displayName,
             s: userObj.gender,
             bd: userObj.birthDate,
-            loc: `/users/${uid}/`
+            loc: `/users/${uid}/`,
+            img: userObj.photoURL
         }
 
-        if ((userObj.photoUrl !== undefined)) {
-            treeObj.img = userObj.photoUrl
-        }
+        // if (userObj.photoURL !== undefined) {
+        //     treeObj.img = userObj.photoURL
+        // }
 
         return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
     }
 })
 
-exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pushKey}').onCreate(event => {
-    return parents.addMother(event)
+exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pushKey}').onCreate((data, context) => {
+    return parents.addMother(data, context)
 })
 
-exports.addFatherToClan = functions.database.ref('/user_family/{uid}/fathers/{pushKey}').onCreate(event => {
-    return parents.addFather(event)
+exports.addFatherToClan = functions.database.ref('/user_family/{uid}/fathers/{pushKey}').onCreate((data, context) => {
+    return parents.addFather(data, context)
 })
 
-exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}').onCreate(event => {
-    return children.addSon(event)
+exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKey}').onCreate((data, context) => {
+    return spouse.addWife(data, context)
 })
 
-exports.addDaughterToClan = functions.database.ref('/user_family/{uid}/daughters/{pushKey}').onCreate(event => {
-    return children.addDaughter(event)
+exports.addHusbandToClan = functions.database.ref('/user_family/{uid}/husbands/{pushKey}').onCreate((data, context) => {
+    return spouse.addHusband(data, context)
 })
 
-exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKey}').onCreate(event => {
-    return spouse.addWife(event)
+exports.addDaughterToClan = functions.database.ref('/user_family/{uid}/daughters/{pushKey}').onCreate((data, context) => {
+    return children.addDaughter(data, context)
 })
 
-exports.addHusbandToClan = functions.database.ref('/user_family/{uid}/husbands/{pushKey}').onCreate(event => {
-    return spouse.addHusband(event)
+exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}').onCreate((data, context) => {
+    return children.addSon(data, context)
 })
 
 function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
@@ -197,12 +182,29 @@ function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
     })
 }
 
-exports.createPotentialUser = function(event) {
+exports.createPotentialUser = function(data, context) {
     let potentialUsersRef = admin.database().ref().child('potential_users')
-    let userObj = event.data.val()
-    let tempKey = event.params.pushKey
+    let userObj = data.val()
+    let tempKey = context.params.pushKey
 
     userObj.tempKeyInClan = tempKey
 
     return potentialUsersRef.child(tempKey).set(userObj)
 }
+
+exports.notifications =  functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {
+
+    return notif.sendNotifications(event)
+
+})
+
+exports.cronJob = functions.https.onRequest((req, res) => {
+
+  return djob.dateJob(req, res)   
+
+}) 
+
+exports.eventsReminder = functions.database.ref('/eventsReminder/{uid}/{notificationId}').onWrite((event) =>{
+
+    return eReminder.eventsReminder(event)
+})

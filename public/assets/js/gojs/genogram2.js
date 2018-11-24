@@ -5,7 +5,7 @@ function initGenogram(data, user_id) {
         // The diagram is initially displayed at the center
         initialContentAlignment: go.Spot.Center, // Centers diagram
         // The user won't be able to move the elements
-        allowMove: false,
+        allowMove: true,
         "undoManager.isEnabled": true,
         // Use a custom layout defined below
         layout: $(GenogramLayout, {
@@ -18,33 +18,40 @@ function initGenogram(data, user_id) {
     // Gives specific color to shape for name
     function consanguinity(node) {
         var loc = node.loc;
-        var ct = node.ct;
-
-        switch (ct) {
-            case "adopted":
-                return "#5b9fff";
-        }
+        var key = node.key;
 
         switch (loc) {
             // a shade of red
-            case "users":
-                return "#ff5b6b";
-            case "/user_family/" + user_id + "/mothers/":
-                return "#ff5b6b";
-            case "/user_family/" + user_id + "/fathers/":
-                return "#ff5b6b";
-            case "/user_family/" + user_id + "/daughters/":
-                return "#ff5b6b";
-            case "/user_family/" + user_id + "/sons/":
-                return "#ff5b6b";
+            case "/users/" + user_id + "/":
+                return "#ff4d4d";
+            case "/user_family/" + user_id + "/mothers/" + key + "/":
+                return "#ff4d4d";
+            case "/user_family/" + user_id + "/fathers/" + key + "/":
+                return "#ff4d4d";
+            case "/user_family/" + user_id + "/daughters/" + key + "/":
+                return "#ff4d4d";
+            case "/user_family/" + user_id + "/sons/" + key + "/":
+                return "#ff4d4d";
+            case "/user_family/" + key + "/mothers/" + user_id + "/":
+                return "#ff4d4d";
+            case "/user_family/" + key + "/fathers/" + user_id + "/":
+                return "#ff4d4d";
+            case "/user_family/" + key + "/daughters/" + user_id + "/":
+                return "#ff4d4d";
+            case "/user_family/" + key + "/sons/" + user_id + "/":
+                return "#ff4d4d";
                 // a shade of blue
-            case "/user_family/" + user_id + "/wives/":
-                return "#5b9fff";
-            case "/user_family/" + user_id + "/husbands/":
-                return "#5b9fff";
+            case "/user_family/" + user_id + "/wives/" + key + "/":
+                return "#3366ff";
+            case "/user_family/" + user_id + "/husbands/" + key + "/":
+                return "#3366ff";
+            case "/user_family/" + key + "/wives/" + user_id + "/":
+                return "#3366ff";
+            case "/user_family/" + key + "/husbands/" + user_id + "/":
+                return "#3366ff";
             default:
-                return "#d9dde2"; // a shade of gray
-        }
+                return "#cccccc"; // a shade of gray
+        }        
     }
 
     /*
@@ -66,7 +73,7 @@ function initGenogram(data, user_id) {
                 new go.Binding("source", "img")),
             $(go.Panel,
                 $(go.Shape, "RoundedRectangle", {
-                        width: 100,
+                        width: 110,
                         height: 33,
                         strokeWidth: 0
                     },
@@ -94,7 +101,7 @@ function initGenogram(data, user_id) {
                 new go.Binding("source", "img")),
             $(go.Panel,
                 $(go.Shape, "RoundedRectangle", {
-                        width: 100,
+                        width: 110,
                         height: 33,
                         strokeWidth: 0
                     },
@@ -138,17 +145,6 @@ function initGenogram(data, user_id) {
         })
     );
 
-    /*  nothing shows on child status  */
-
-    // myDiagram.nodeTemplateMap.add("Adopted",
-    //     $(go.Node, {
-    //         selectable: false,
-    //         width: 1,
-    //         height: 1,
-    //         fromEndSegmentLength: 20
-    //     })
-    // );
-
     /*
         LINK TEMPLATES IN MARITAL STATUS, CHILD STATUS
     */
@@ -167,22 +163,6 @@ function initGenogram(data, user_id) {
         $(go.Shape, { strokeWidth: 1 })
     );
 
-    // myDiagram.linkTemplateMap.add("Adopted",
-    //     $(go.Link, {
-    //             routing: go.Link.AvoidsNodes,
-    //             curve: go.Link.JumpOver,
-    //             layerName: "Background",
-    //             selectable: false,
-    //             fromSpot: go.Spot.Bottom,
-    //             toSpot: go.Spot.Top
-    //         },
-    //         $(go.Shape, {
-    //             strokeWidth: 2,
-    //             stroke: "blue",
-    //             strokeDashArray: [5, 2]
-    //         }))
-    // );
-
     /*  marital status  */
 
     myDiagram.linkTemplateMap.add("Marriage",
@@ -195,26 +175,6 @@ function initGenogram(data, user_id) {
                 strokeWidth: 1,
                 stroke: "blue"
             }))
-    );
-
-    myDiagram.linkTemplateMap.add("Divorced",
-        $(go.Link, {
-                selectable: false,
-                routing: go.Link.AvoidsNodes,
-                curve: go.Link.JumpOver
-            },
-            $(go.Shape, { stroke: "red" }),
-            $(go.Shape, { // the "from" end arrowhead
-                fromArrow: "DoubleForwardSlash",
-                strokeWidth: 1,
-                stroke: "red"
-            }),
-            $(go.Shape, { // the "to" end arrowhead
-                toArrow: "DoubleForwardSlash",
-                strokeWidth: 1,
-                stroke: "red"
-            })
-        )
     );
 
     myDiagram.linkTemplateMap.add("Separated",
@@ -243,37 +203,12 @@ function initGenogram(data, user_id) {
     myDiagram.addDiagramListener("ObjectSingleClicked", function(e) {
         var part = e.subject.part;
 
-        if (!(part instanceof go.Link)) showNodeData(part.data, user_id);
+        // if (!(part instanceof go.Link)) showNodeData(part.data);
+
+        if (!(part instanceof go.Link)) getNodeData(part.data.key);
     });
 
     setupDiagram(myDiagram, data, user_id);
-}
-
-function showNodeData(data, uid) {
-    const db = firebase.database();
-    const key = data.key;
-    const loc = data.loc;
-
-    $("#modal_node_details")
-        .modal('show');
-
-    if (!(data.img === null || data.img === undefined)) {
-        $("#node_img")
-            .attr("src", data.img)
-            .css({ "max-height": 150, "max-width": 150 });
-    } else {
-        $("#node_img")
-            .attr("src", "assets/img/default-avatar.png")
-            .css({ "max-height": 150, "max-width": 150 });
-    }
-
-    $("#node_name")
-        .empty()
-        .append(data.n);
-
-    $('#node_birth_date')
-        .empty()
-        .append(data.bd);
 }
 
 function setupDiagram(diagram, array, focusId) {
@@ -285,127 +220,12 @@ function setupDiagram(diagram, array, focusId) {
 
     setupMaritalStatus(diagram);
     setupParents(diagram);
-    // setupChild(diagram);
 
     // console.log("LINK DATA", diagram.model.linkData)
 
     var node = diagram.findNodeForKey(focusId);
     if (node !== null) {
         diagram.select(node);
-    }
-}
-
-function findChildType(diagram, key) {
-    var childNode = diagram.findNodeForKey(key);
-
-    if (childNode !== null) {
-        var it = diagram.nodes;
-
-        while (it.next()) {
-            var childData = it.value;
-
-            if (childData.data !== null && childData.data.category === "Adopted") return childData;
-        }
-    }
-    return null;
-}
-
-function setupChild(diagram) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var key = data.key;
-        var ct = data.ct;
-        var mom = data.m;
-        var dad = data.f;
-        var connect = findChildType(diagram, key);
-
-        if (ct !== undefined && ct === "adopted") {
-            if (mom !== undefined && dad !== undefined) {
-                var connectParents = setupParentsA(diagram, key);
-
-                if (connectParents !== null) {
-                    if (connect === null) {
-                        var node = { s: "Adopted" };
-                        model.addNodeData(node);
-
-                        var link = connectParents;
-                        link.labelKeys = [node.key];
-                        link.category = "Adopted";
-                        model.addLinkData(link);
-                        // console.log(link);
-                    }
-                }
-            } else if (mom !== undefined && dad === undefined) {
-
-                if (connect === null) {
-                    var node = { s: "Adopted" };
-                    model.addNodeData(node);
-
-                    var link = {
-                        from: mom,
-                        to: key,
-                        labelKeys: [node.key],
-                        category: "Adopted"
-                    };
-                    model.addLinkData(link);
-                }
-            } else if (mom === undefined && dad !== undefined) {
-
-                if (connect === null) {
-                    var node = { s: "Adopted" };
-                    model.addNodeData(node);
-
-                    var link = {
-                        from: dad,
-                        to: key,
-                        labelKeys: [node.key],
-                        category: "Adopted"
-                    };
-                    model.addLinkData(link);
-                }
-            }
-        }
-    }
-}
-
-function setupParentsA(diagram, key) {
-    var model = diagram.model;
-    var nodeDataArray = model.nodeDataArray;
-
-    for (var i = 0; i < nodeDataArray.length; i++) {
-        var data = nodeDataArray[i];
-        var mom = data.m;
-        var dad = data.f;
-
-        if (mom !== undefined && dad !== undefined) {
-            var connect = findMarriage(diagram, mom, dad);
-            if (connect === null) {
-                continue;
-            }
-
-            var parents = connect.data;
-            var parentKey = parents.labelKeys[0];
-            var link = {
-                from: parentKey,
-                to: key
-            };
-            return link;
-        } else if (mom !== undefined && dad === undefined) {
-            var link = {
-                from: mom,
-                to: key
-            };
-            return link;
-        } else if (mom === undefined && dad !== undefined) {
-            var link = {
-                from: dad,
-                to: key
-            };
-            return link;
-        }
     }
 }
 

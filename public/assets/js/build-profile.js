@@ -48,7 +48,7 @@ function handleAuthStateChanged(user) {
     }
 }
 
-$('#wizard_picture').change(handleWizardPic);
+// $('#wizard_picture').change(handleWizardPic);
 
 $('#finish').click(function() {
     if (provider === "facebook.com") {
@@ -242,7 +242,8 @@ function createAcctWithFacebook() {
     }
 }
 
-function createAcctWithEmailAndPass(downloadURL) {
+// function createAcctWithEmailAndPass(downloadURL) {
+function createAcctWithEmailAndPass() {
     var person = new Object();
     var middle_name = $('#middle_name').val();
     var birth_place = $('#birth_place').val();
@@ -261,7 +262,7 @@ function createAcctWithEmailAndPass(downloadURL) {
         displayName: displayName,
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
-        photoURL: downloadURL,
+        // photoURL: downloadURL,
         clanId: clan_id,
         merged: false,
         livingStatus: "Living"

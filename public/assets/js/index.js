@@ -63,6 +63,23 @@ function signUpWithEmailAndPass() {
                 .empty()
                 .append(error.message);
 
+            if(error.message == "The email address is already in use by another account.") {
+                setTimeout(function() {
+                    $("#error_details")
+                        .modal('hide');
+                }, 1000);
+
+                setTimeout(function() {
+                    $("#modal_register")
+                        .modal('hide');
+                }, 1000);
+
+                setTimeout(function() {
+                    $("#modal_login")
+                        .modal('show');
+                }, 1500);
+            }
+
             console.log('error', error); })
 }
 

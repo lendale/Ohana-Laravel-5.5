@@ -161,12 +161,12 @@ function getAvailableParents(uid, clanId) {
             fatherNames = Object.values(snap.val());
 
             snap.forEach(childSnap => {
-                userTreeRef.child(clanId).child(childSnap.val()).once('value').then(snap => {
+                userTreeRef.child(clanId).child(childSnap.val()).once('value').then(snap2 => {
                     let div = $(`
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="availableParents" value="${snap.val().key}">
-                                    ${currentUser.displayName} and ${snap.val().n}
+                                    <input type="radio" name="availableParents" value="${snap2.val().key}">
+                                    ${currentUser.displayName} and ${snap2.val().n}
                                 </label>
                             </div>
                         `);
@@ -212,7 +212,25 @@ function addFamilyMember() {
     //   userFamilyRef.child(currentUser.uid).child("fathers").push(person);
 }
 
-function addFather(downloadURL) {
+function showSuccess() {
+    swal({
+        title: "Saving...",
+        text: "You will be redirected shortly.",
+        timer: 10000,
+        showConfirmButton: false,
+        type: "success"
+    }).then(function() {},
+
+        function(dismiss) {
+            if (dismiss === "timer") {
+                console.log("I was closed by the timer");
+                window.location.href = "/genealogy";
+            }
+        });
+}
+
+// function addFather(downloadURL) {
+function addFather() {
     var firstName = $("#father_first_name").val();
     var middleName = $("#father_middle_name").val();
     var lastName = $("#father_last_name").val();
@@ -234,7 +252,7 @@ function addFather(downloadURL) {
         relationship: "father",
         clanId: userClanId,
         merged: false,
-        photoURL: downloadURL
+        // photoURL: downloadURL
     };
 
     if (middleName.length > 0) {
@@ -266,7 +284,10 @@ function addFather(downloadURL) {
     }
     else {
         userFamilyRef.child(currentUser.uid).child('fathers').push(person);
-        return location.reload();
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
     }
 }
 
@@ -306,7 +327,8 @@ function handleFatherPic(eventData){
     })
 }
 
-function addMother(downloadURL) {
+// function addMother(downloadURL) {
+function addMother() {
     var firstName = $("#mother_first_name").val();
     var middleName = $("#mother_middle_name").val();
     var lastName = $("#mother_maiden_name").val();
@@ -328,7 +350,7 @@ function addMother(downloadURL) {
         relationship: "mother",
         clanId: userClanId,
         merged: false,
-        photoURL: downloadURL
+        // photoURL: downloadURL
     };
 
     if (middleName.length > 0) {
@@ -360,7 +382,10 @@ function addMother(downloadURL) {
     }
     else {
         userFamilyRef.child(currentUser.uid).child('mothers').push(person);
-        return location.reload();
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
     }
 }
 
@@ -401,7 +426,8 @@ function handleMotherPic(eventData){
 
 }
 
-function addSpouse(downloadURL) {
+// function addSpouse(downloadURL) {
+function addSpouse() {
     var firstName = $("#spouse_first_name").val();
     var middleName = $("#spouse_middle_name").val();
     var lastName = $("#spouse_last_name").val();
@@ -424,7 +450,7 @@ function addSpouse(downloadURL) {
         birthDate: birthDate,
         clanId: userClanId,
         merged: false,
-        photoURL: downloadURL
+        // photoURL: downloadURL
     };
 
     if (middleName.length > 0) {
@@ -459,11 +485,16 @@ function addSpouse(downloadURL) {
     else if (gender === "male") {
         person.relationship = "husband";
         userFamilyRef.child(currentUser.uid).child('husbands').push(person);
-        return location.reload();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
     } else {
         person.relationship = "wife";
         userFamilyRef.child(currentUser.uid).child('wives').push(person);
-        return location.reload();
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
     }
 }
 
@@ -503,7 +534,8 @@ function handleSpousePic(eventData){
     })
 }
 
-function addChild(downloadURL) {
+// function addChild(downloadURL) {
+function addChild() {
     var firstName = $("#child_first_name").val();
     var middleName = $("#child_middle_name").val();
     var lastName = $("#child_last_name").val();
@@ -527,7 +559,7 @@ function addChild(downloadURL) {
         clanId: userClanId,
         merged: false,
         parenthood: parenthood,
-        photoURL: downloadURL
+        // photoURL: downloadURL
     };
 
     if (parentSpouseKey === currentUser.uid && currentUserGender === 'male') {
@@ -573,11 +605,17 @@ function addChild(downloadURL) {
     else if (gender === "male") {
         person.relationship = "son";
         userFamilyRef.child(currentUser.uid).child('sons').push(person);
-        return location.reload();
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
     } else {
         person.relationship = "daughter";
         userFamilyRef.child(currentUser.uid).child('daughters').push(person);
-        return location.reload();
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
     }
 }
 
@@ -679,10 +717,10 @@ $(document).ready(function() {
         $('div#modal_add_child h4').append("Add a Child for " + currentUser.displayName)
     })
 
-    $('#father_pic').change(handleFatherPic);
-    $('#mother_pic').change(handleMotherPic);
-    $('#spouse_pic').change(handleSpousePic);
-    $('#child_pic').change(handleChildPic);
+    // $('#father_pic').change(handleFatherPic);
+    // $('#mother_pic').change(handleMotherPic);
+    // $('#spouse_pic').change(handleSpousePic);
+    // $('#child_pic').change(handleChildPic);
 
     $('#save_father').click(function() {
         addFather();
@@ -706,6 +744,16 @@ $(document).ready(function() {
 
     $('#update_users').click(function() {
         updateUsers();
+    })
+
+    $('#search_add_button').click(function() {
+        searchBar();
+    })
+
+    $('#search_delete_button').click(function() {
+        $("#search_data").css('display', 'none');
+        $("#search_data2").css('display', 'none');
+        $("#search_data3").css('display', 'none');
     })
 
     // userFamilyRef.child('-LAyiGdITnq2BBb_GwK4').once('value').then(snap => {

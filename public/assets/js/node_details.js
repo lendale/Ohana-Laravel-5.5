@@ -1,3 +1,66 @@
+function searchBar() {
+    var input = $("#search_add_existing").val();
+    console.log(input)
+
+    if(input !== "") {
+        usersRef
+            .once("value")
+            .then(snapshot => {
+                snapshot.forEach(childSnap => {
+                    if(childSnap.val().displayName.toLowerCase() == input) {
+                        $("#search_data").css('display', '');
+                        $("#search_data2").css('display', '');
+
+                        $("#search_add_first_name2")
+                            .empty()
+                            .attr("value", childSnap.val().firstName);
+                        $("#search_add_last_name2")
+                            .empty()
+                            .attr("value", childSnap.val().lastName);
+                        $("#search_add_email2")
+                            .empty()
+                            .attr("value", childSnap.val().email);
+                        $("#search_add_birth_date")
+                            .empty()
+                            .attr("value", childSnap.val().birthDate);
+                        $("#search_data3").css('display', 'none');
+                    }
+                    else if(childSnap.val().email == input) {
+                        $("#search_data").css('display', '');
+                        $("#search_data2").css('display', '');
+
+                        $("#search_add_first_name2")
+                            .empty()
+                            .attr("value", childSnap.val().firstName);
+                        $("#search_add_last_name2")
+                            .empty()
+                            .attr("value", childSnap.val().lastName);
+                        $("#search_add_email2")
+                            .empty()
+                            .attr("value", childSnap.val().email);
+                        $("#search_add_birth_date")
+                            .empty()
+                            .attr("value", childSnap.val().birthDate);
+                        $("#search_data3").css('display', 'none');
+                    }
+                    else {
+                        $("#search_data3").css('display', '');
+                        $("#search_none_result")
+                            .empty()
+                            .attr("value", 'This person is not a user.');
+                    }
+                });
+            });
+    }
+    else {
+        $("#search_data3").css('display', '');
+        $("#search_none_result")
+            .empty()
+            .attr("value", 'Nothing is inputted.');
+
+    }
+}
+
 function getNodeData(key) {
     usersRef
         .child(key)

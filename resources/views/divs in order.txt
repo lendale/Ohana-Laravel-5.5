@@ -1,0 +1,15 @@
+genealogy
+
+nav
+main (left side buttons)
+add existing or new modal
+add existing modal
+add family member modal
+add father modal
+add mother modal
+add spouse modal
+add child modal
+show details modal
+update users modal
+update parents modal
+error modal

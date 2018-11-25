@@ -54,12 +54,13 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
             s: userObj.gender,
             bd: userObj.birthDate,
             loc: `/users/${uid}/`,
-            img: userObj.photoURL
         }
 
-        // if (userObj.photoURL !== undefined) {
-        //     treeObj.img = userObj.photoURL
-        // }
+        console.log(userObj.photoURL)
+
+        if (userObj.photoURL !== undefined) {
+            treeObj.img = userObj.photoURL
+        }
 
         return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
     }

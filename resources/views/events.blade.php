@@ -36,9 +36,6 @@
             <div class="collapse navbar-collapse" id="navigation-example-2">
                 <ul class="nav navbar-nav navbar-right">
                     <li>
-                        <a href="/timeline">Timeline</a>
-                    </li>
-                    <li>
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>

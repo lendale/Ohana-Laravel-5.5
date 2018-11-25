@@ -172,8 +172,9 @@ function initGenogram(data, user_id) {
                 curve: go.Link.JumpOver
             },
             $(go.Shape, {
-                strokeWidth: 1,
-                stroke: "blue"
+                strokeWidth: 2,
+                stroke: "blue",
+                strokeDashArray: [5, 3]
             }))
     );
 

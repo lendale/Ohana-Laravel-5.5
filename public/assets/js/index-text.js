@@ -1,15 +1,15 @@
 function initHeaderText() {
     var data = [{
             title: "A Link To The Past.",
-            sub: "Subtitle"
+            // sub: "Subtitle"
         },
         {
             title: "A Key To Your Future.",
-            sub: "Subtitle"
+            // sub: "Subtitle"
         },
         {
             title: "Social.",
-            sub: "Subtitle"
+            // sub: "Subtitle"
         }
     ];
 
@@ -24,7 +24,8 @@ function initHeaderText() {
 function initFeaturesText() {
     var data = [{
             "title": "What is O H A N A ?",
-            "sub": "This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more."
+            "sub": "Ohana is a web-based genealogy application. The purpose of this application is to improve family communications and better understand relations.",
+            // This is the paragraph where you can write more details about your product. Keep you user engaged by providing meaningful information. Remember that by this time, the user is curious, otherwise he wouldn't scroll to get here. Add a button if you want the user to see more.
         },
         {
             "title": "Family Tree Organizer",
@@ -60,7 +61,7 @@ function initFeaturesText() {
 function initTeamText() {
     var data = [{
             "title": "The Executive Team",
-            "desc": "This is the paragraph where you can write more details about your team. Keep you user engaged by providing meaningful information.",
+            // "desc": "This is the paragraph where you can write more details about your team. Keep you user engaged by providing meaningful information.",
         },
         {
             "name": "Allen Dale Gabisan",
@@ -78,7 +79,7 @@ function initTeamText() {
             "pos": "Web Developer",
             "fb": "https://www.facebook.com/chuck.jhonii",
             "twitter": "https://www.twitter.com/ChuckJhon",
-            "gplus": "https://www.google.com/",
+            "gplus": "https://plus.google.com/105453956410743467759",
             "insta": "https://www.instagram.com/jhonpaulmedalle",
             "sub": "Don't be scared of the truth because we need to restart the human foundation in truth..."
         },
@@ -88,9 +89,9 @@ function initTeamText() {
             "pos": "Web Developer",
             "fb": "https://www.facebook.com/RezanneLao",
             // "twitter": "",
-            "gplus": "https://goo.gl/RezanneLao",
+            "gplus": "https://plus.google.com/u/0/+RezanneLao",
             "insta": "https://www.instagram.com/rnlc_san",
-            "sub": "I love you like Kanye loves Kanye. Don't be scared of the truth."
+            "sub": "Try to carpe diem."
         },
         {
             "name": "Niña Andrea Dakay",

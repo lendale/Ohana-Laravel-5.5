@@ -50,9 +50,11 @@
                                             <div class="picture-container">
                                                 <div class="picture">
                                                     <img src="assets/img/default-avatar.png" class="picture-src" id="wizard_picture_preview" title="" />
-                                                    <input type="file" id="wizard_picture" required>
+                                                    <input type="file" id="wizard_picture">
+                                                    <!-- <input type="file" id="wizard_picture" required> -->
                                                 </div>
-                                                <h6>Choose Picture <small>(required)</small></h6>
+                                                <h6>Choose Picture</h6>
+                                                <!-- <h6>Choose Picture <small>(required)</small></h6> -->
                                             </div>
                                         </div>
 

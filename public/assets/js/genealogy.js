@@ -104,61 +104,31 @@ function getAvailableParents(uid, clanId) {
         `);
     single.appendTo("#parents_container");
 
-    // userTreeRef.child(`${userClanId}/${currentUser.uid}/ux`).once('value').then(snap => {
-    //     if (snap.exists()) {
-    //         motherKeys = Object.keys(snap.val());
-    //         motherNames = Object.values(snap.val());
-    //     }
-    // })
-
-    // userFamilyRef.child(uid).child('spouse_keys').child('ux').once('value').then(snap => {
-
-    //     if (!(snap.val() === undefined || snap.val() === null)) {
-    //         motherKeys = Object.keys(snap.val());
-    //         motherNames = Object.values(snap.val());
-
-    //         snap.forEach(childSnap => {
-    //             let div = $(`
-    //                     <div class="radio">
-    //                         <label>
-    //                             <input type="radio" name="availableParents" value="${childSnap.key}">
-    //                             ${currentUser.displayName} and ${childSnap.val()}
-    //                         </label>
-    //                     </div>
-    //                 `);
-    //             div.appendTo("#parents_container");
-    //         });
-    //     } else {
-    //         return;
-    //     }
-    // });
-
-    // userFamilyRef.child(uid).child('spouse_keys').child('vir').once('value').then(snap => {
-
-    //     if (!(snap.val() === undefined || snap.val() === null)) {
-    //         fatherKeys = Object.keys(snap.val());
-    //         fatherNames = Object.values(snap.val());
-
-    //         snap.forEach(childSnap => {
-    //             let div = $(`
-    //                     <div class="radio">
-    //                         <label>
-    //                             <input type="radio" name="availableParents" value="${childSnap.key}">
-    //                             ${currentUser.displayName} and ${childSnap.val()}
-    //                         </label>
-    //                     </div>
-    //                 `);
-    //             div.appendTo("#parents_container");
-    //         });
-    //     } else {
-    //         return;
-    //     }
-    // });
-
     userTreeRef.child(clanId).child(uid).child('vir').once('value').then(snap => {
         if (!(snap.val() === undefined || snap.val() === null)) {
             fatherKeys = Object.keys(snap.val());
             fatherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                userTreeRef.child(clanId).child(childSnap.val()).once('value').then(snap2 => {
+                    let div = $(`
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="availableParents" value="${snap2.val().key}">
+                                    ${currentUser.displayName} and ${snap2.val().n}
+                                </label>
+                            </div>
+                        `);
+                    div.appendTo("#parents_container");
+                });
+            });
+        }
+    })
+
+    userTreeRef.child(clanId).child(uid).child('ux').once('value').then(snap => {
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            motherKeys = Object.keys(snap.val());
+            motherNames = Object.values(snap.val());
 
             snap.forEach(childSnap => {
                 userTreeRef.child(clanId).child(childSnap.val()).once('value').then(snap2 => {
@@ -683,105 +653,3 @@ function showSuccess() {
         type: "success"
     })
 }
-
-$(document).ready(function() {
-    materialKit.initFormExtendedDatetimepickers();
-
-    $('ul#ul_tabs li#li_tab_search').click(function() {
-        $('#btn_add').hide();
-        $('#btn_search').show();
-    })
-
-    $("ul#ul_tabs li#li_tab_tree").click(function() {
-        $("#btn_add").show();
-        $("#btn_search").hide();
-    })
-
-    $('#add_father').click(function() {
-        $('div#modal_add_father h4').empty()
-        $('div#modal_add_father h4').append("Add a Father for " + currentUser.displayName)
-    })
-
-    $('#add_mother').click(function() {
-        $('div#modal_add_mother h4').empty()
-        $('div#modal_add_mother h4').append("Add a Mother for " + currentUser.displayName)
-    })
-
-    $('#add_spouse').click(function() {
-        $('div#modal_add_spouse h4').empty()
-        $('div#modal_add_spouse h4').append("Add a Spouse for " + currentUser.displayName)
-    })
-
-    $('#add_child').click(function() {
-        $('div#modal_add_child h4').empty()
-        $('div#modal_add_child h4').append("Add a Child for " + currentUser.displayName)
-    })
-
-    // $('#father_pic').change(handleFatherPic);
-    // $('#mother_pic').change(handleMotherPic);
-    // $('#spouse_pic').change(handleSpousePic);
-    // $('#child_pic').change(handleChildPic);
-
-    $('#save_father').click(function() {
-        addFather();
-        resetForm();
-    })
-
-    $('#save_mother').click(function() {
-        addMother();
-        resetForm();
-    })
-
-    $('#save_spouse').click(function() {
-        addSpouse();
-        resetForm();
-    })
-
-    $('#save_child').click(function() {
-        addChild();
-        resetForm();
-    })
-
-    $('#update_users').click(function() {
-        updateUsers();
-    })
-
-    $('#search_add_button').click(function() {
-        searchBar();
-    })
-
-    $('#search_delete_button').click(function() {
-        $("#search_data").css('display', 'none');
-        $("#search_data2").css('display', 'none');
-        $("#search_data3").css('display', 'none');
-    })
-
-    // userFamilyRef.child('-LAyiGdITnq2BBb_GwK4').once('value').then(snap => {
-    //     console.log('SNAP', snap.val())
-    // })
-
-    // userFamilyRef.once('value').then(snap => {
-    //     // console.log('SNAP', snap.val())
-    //     snap.forEach(childSnap => {
-    //         let val = childSnap.val()
-
-    //         let mothers = val.mothers
-
-    //         if (!(val.fathers === null || val.fathers === undefined)) {
-    //             let fathers = Object.entries(val.fathers)
-
-
-    //             console.log('FA', fathers)
-    //         }
-
-    //         // console.log('VAL', val.fathers)
-    //     })
-    // })
-
-    userTreeRef.once('value').then(snap => {
-        console.log('SNAP', snap.val())
-            // snap.val().forEach(childSnap => {
-            //     console.log('childSNap', childSnap.val())
-            // })
-    })
-})

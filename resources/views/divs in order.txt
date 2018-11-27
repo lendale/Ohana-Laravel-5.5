@@ -1,15 +1,30 @@
 genealogy
 
-nav
+nav (top side buttons)
+	<nav class="navbar navbar-inverse navbar-fixed-top">
 main (left side buttons)
+	<main class="main section-full-screen section-white">
 add existing or new modal
-add existing modal
+	<!-- Add Existing or New Member -->
+add existing modal	
+	<!-- Add Existing -->
+add existing member modal
+	<!-- Add Existing Member Modal -->
 add family member modal
+	<!-- Add Family Member Modal -->
 add father modal
+	<!-- Add Father Modal -->
 add mother modal
+	<!-- Add Mother Modal -->
 add spouse modal
+	<!-- Add Spouse Modal -->
 add child modal
+	<!-- Add Child Modal -->
 show details modal
+	<!-- Show Details Modal -->
 update users modal
-update parents modal
+	<!-- Update Users Modal -->
+update parents Modal
+	<!-- Update Parents Modal -->
 error modal
+	<!-- Error Modal -->

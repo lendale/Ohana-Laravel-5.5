@@ -1,25 +1,28 @@
-<div class="col-md-12 col-sm-12">
-                            <div id="search_add_first_name" class="form-group label-floating">
-                                <label class="control-label">First Name</label>
-                                <input id="search_add_first_name2" name="firstname" type="text" class="form-control first-name">
-                            </div>
-                            <div id="search_add_last_name" class="form-group label-floating">
-                                <label class="control-label">Last Name</label>
-                                <input id="search_add_last_name2" name="lastname" type="text" class="form-control last-name">
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                        <i class="material-icons">email</i>
-                                    </span>
-                                <div id="search_add_email" class="form-group label-floating">
-                                    <label class="control-label">Email address <small>(required for Contributor Role)</small></label>
-                                    <input id="search_add_email2" name="email" type="text" class="form-control email">
-                                </div>
-                            </div>
-                            <div class="input-group">
-                                <span class="input-group-addon">
-                                    <i class="material-icons">cake</i>
-                                </span>
-                                <input id="search_add_birth_date" name="birthdate" type="text" class="datepicker form-control birth-date" placeholder="Date of birth (required)" required>
-                            </div>
-                        </div>
+function saveExistingFather() {
+    var firstName = $("#existing_father_first_name").val();
+    var middleName = $("#existing_father_middle_name").val();
+    var lastName = $("#existing_father_last_name").val();
+    var gender = $("#existing_father_gender").val();
+    var livingStatus = $("#existing_father_living_status").val();
+    var role = $("#existing_father_role_in_tree").val();
+    var email = $("#existing_father_email").val();
+    var birthDate = $('#existing_father_birth_date').val();
+    var birthPlace = $('#existing_father_birth_place').val();
+
+    var tree = {
+        n: firstName + " " + lastName,
+        s: gender,
+        bd: birthDate,
+    }
+
+    userTreeRef.child(userClanId).push(tree);
+    
+
+    else {
+        userFamilyRef.child(currentUser.uid).child('father').push(person);
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
+    }
+}

@@ -11,7 +11,7 @@ function initGenogram(data, user_id) {
         layout: $(GenogramLayout, {
             direction: 90, // direction the graph grows toward
             layerSpacing: 50, // space between parent and child node layers
-            columnSpacing: 40 // space between children
+            columnSpacing: 60 // space between children
         })
     });
 
@@ -119,15 +119,6 @@ function initGenogram(data, user_id) {
     /*  nothing shows on marital status  */
 
     myDiagram.nodeTemplateMap.add("Married",
-        $(go.Node, {
-            selectable: false,
-            width: 1,
-            height: 1,
-            fromEndSegmentLength: 20
-        })
-    );
-
-    myDiagram.nodeTemplateMap.add("Divorced",
         $(go.Node, {
             selectable: false,
             width: 1,

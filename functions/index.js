@@ -193,19 +193,14 @@ exports.createPotentialUser = function(data, context) {
     return potentialUsersRef.child(tempKey).set(userObj)
 }
 
-exports.notifications =  functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {
-
+exports.notifications = functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {
     return notif.sendNotifications(event)
-
 })
 
 exports.cronJob = functions.https.onRequest((req, res) => {
-
-  return djob.dateJob(req, res)   
-
+    return djob.dateJob(req, res)   
 }) 
 
 exports.eventsReminder = functions.database.ref('/eventsReminder/{uid}/{notificationId}').onWrite((event) =>{
-
     return eReminder.eventsReminder(event)
 })

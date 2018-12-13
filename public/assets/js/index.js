@@ -56,28 +56,28 @@ function signUpWithEmailAndPass() {
         .then(function() {
             console.log('sign up success'); })
         .catch(function(error) {
-            $("#error_details")
-                .modal('show');
-
-            $("#error_details_node")
-                .empty()
-                .append(error.message);
-
             if(error.message == "The email address is already in use by another account.") {
+                $("#error_details")
+                    .modal('show');
+
+                $("#error_details_node")
+                    .empty()
+                    .append(error.message + "You will be redirected shortly.");
+
                 setTimeout(function() {
                     $("#error_details")
                         .modal('hide');
-                }, 1000);
+                }, 2000);
 
                 setTimeout(function() {
                     $("#modal_register")
                         .modal('hide');
-                }, 1000);
+                }, 2000);
 
                 setTimeout(function() {
                     $("#modal_login")
                         .modal('show');
-                }, 1500);
+                }, 2500);
             }
 
             console.log('error', error); })

@@ -85,10 +85,72 @@ function getTreeData(uid, clanId) {
         })
         .then(() => {
             getAvailableParents(uid, clanId);
+        })
+        .then(() => {
+            getAvailableParentsNew(uid, clanId);
         });
 }
 
 function getAvailableParents(uid, clanId) {
+    var motherKeys = [];
+    var motherNames = [];
+    var fatherKeys = [];
+    var fatherNames = [];
+
+    let single = $(`
+            <git class="radio">
+                <label>
+                    <input type="radio" name="availableParents" value="${currentUser.uid}">
+                    ${currentUser.displayName}
+                </label>
+            </div>
+        `);
+    single.appendTo("#parents_container2");
+
+    userTreeRef.child(clanId).child(uid).child('vir').once('value').then(snap => {
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            fatherKeys = Object.keys(snap.val());
+            fatherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                userTreeRef.child(clanId).child(childSnap.val()).once('value').then(snap2 => {
+                    let div = $(`
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="availableParents" value="${snap2.val().key}">
+                                    ${currentUser.displayName} and ${snap2.val().n}
+                                </label>
+                            </div>
+                        `);
+                    div.appendTo("#parents_container2");
+                });
+            });
+        }
+    })
+
+    userTreeRef.child(clanId).child(uid).child('ux').once('value').then(snap => {
+        if (!(snap.val() === undefined || snap.val() === null)) {
+            motherKeys = Object.keys(snap.val());
+            motherNames = Object.values(snap.val());
+
+            snap.forEach(childSnap => {
+                userTreeRef.child(clanId).child(childSnap.val()).once('value').then(snap2 => {
+                    let div = $(`
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="availableParents" value="${snap2.val().key}">
+                                    ${currentUser.displayName} and ${snap2.val().n}
+                                </label>
+                            </div>
+                        `);
+                    div.appendTo("#parents_container2");
+                });
+            });
+        }
+    })
+}
+
+function getAvailableParentsNew(uid, clanId) {
     var motherKeys = [];
     var motherNames = [];
     var fatherKeys = [];
@@ -147,69 +209,17 @@ function getAvailableParents(uid, clanId) {
     })
 }
 
-function addFamilyMember() {
-    var gender = $("select.select-gender").val();
-    var livingStatus = $("select.select-status").val();
-    var role = $("select.select-role").val();
-    var firstName = $(".first-name").val();
-    var middleName = $(".middle-name").val();
-    var lastName = $(".last-name").val();
-    var birthDate = $(".birth-date").val();
-    var birthPlace = $(".birth-place").val();
-
-    var person = {
-        gender: gender,
-        relationship: "father",
-        livingStatus: livingStatus,
-        role: role,
-        firstName: firstName,
-        lastName: lastName,
-        displayName: firstName + " " + lastName,
-        birthDate: birthDate,
-        clanId: userClanId
-    };
-
-    if (middleName.length > 0) {
-        person.middleName = middleName;
-    }
-
-    if (birthPlace.length > 0) {
-        person.birthPlace = birthPlace;
-    }
-
-    console.log(person);
-
-    //   userFamilyRef.child(currentUser.uid).child("fathers").push(person);
-}
-
-function showSuccess() {
-    swal({
-        title: "Saving...",
-        text: "You will be redirected shortly.",
-        timer: 10000,
-        showConfirmButton: false,
-        type: "success"
-    }).then(function() {},
-
-        function(dismiss) {
-            if (dismiss === "timer") {
-                console.log("I was closed by the timer");
-                window.location.href = "/genealogy";
-            }
-        });
-}
-
-// function addFather(downloadURL) {
-function addFather() {
-    var firstName = $("#father_first_name").val();
-    var middleName = $("#father_middle_name").val();
-    var lastName = $("#father_last_name").val();
-    var gender = $("#father_gender").val();
-    var livingStatus = $("#father_living_status").val();
-    var role = $("#father_role_in_tree").val();
-    var email = $("#father_email").val();
-    var birthDate = $('#father_birth_date').val();
-    var birthPlace = $('#father_birth_place').val();
+// function addParent(downloadURL) {
+function addParent() {
+    var firstName = $("#parent_first_name").val();
+    var middleName = $("#parent_middle_name").val();
+    var lastName = $("#parent_last_name").val();
+    var gender = $("#parent_gender").val();
+    var livingStatus = $("#parent_living_status").val();
+    var role = $("#parent_role_in_tree").val();
+    var email = $("#parent_email").val();
+    var birthDate = $('#parent_birth_date').val();
+    var birthPlace = $('#parent_birth_place').val();
 
     var person = {
         firstName: firstName,
@@ -219,7 +229,6 @@ function addFather() {
         livingStatus: livingStatus,
         role: role,
         birthDate: birthDate,
-        relationship: "father",
         clanId: userClanId,
         merged: false,
         // photoURL: downloadURL
@@ -237,6 +246,22 @@ function addFather() {
         person.birthPlace = birthPlace;
     }
 
+    if (gender === "male") {
+        person.relationship = "father";
+        userFamilyRef.child(currentUser.uid).child('fathers').push(person);
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
+    } else {
+        person.relationship = "mother";
+        userFamilyRef.child(currentUser.uid).child('mothers').push(person);
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
+    }
+
     if (
         person.firstName == "" ||
         person.lastName == "" ||
@@ -250,18 +275,11 @@ function addFather() {
         $("#error_details_node")
             .empty()
             .append('Required fields are empty. Website will refresh shortly.');
-        return location.reload();
-    }
-    else {
-        userFamilyRef.child(currentUser.uid).child('fathers').push(person);
-        showSuccess();
-        setTimeout(function() {
-            return location.reload();
-        }, 5000);
+        // return location.reload();
     }
 }
 
-function handleFatherPic(eventData){
+function handleParentPic(eventData){
     // uid = firebase.auth().currentUser.uid;
     var file = eventData.target.files[0];
     var fileName = file.name;
@@ -291,23 +309,23 @@ function handleFatherPic(eventData){
     },
         function(){
         var downloadURL = task.snapshot.downloadURL;
-        addFather(downloadURL);
+        addParent(downloadURL);
         console.log(downloadURL)
         console.log('Addded to the Storage')
     })
 }
 
-// function addMother(downloadURL) {
-function addMother() {
-    var firstName = $("#mother_first_name").val();
-    var middleName = $("#mother_middle_name").val();
-    var lastName = $("#mother_maiden_name").val();
-    var gender = $("#mother_gender").val();
-    var livingStatus = $("#mother_living_status").val();
-    var role = $("#mother_role_in_tree").val();
-    var email = $("#mother_email").val();
-    var birthDate = $('#mother_birth_date').val();
-    var birthPlace = $('#mother_birth_place').val();
+// function addSibling(downloadURL) {
+function addSibling() {
+    var firstName = $("#sibling_first_name").val();
+    var middleName = $("#sibling_middle_name").val();
+    var lastName = $("#sibling_last_name").val();
+    var gender = $("#sibling_gender").val();
+    var livingStatus = $("#sibling_living_status").val();
+    var role = $("#sibling_role_in_tree").val();
+    var email = $("#sibling_email").val();
+    var birthDate = $('#sibling_birth_date').val();
+    var birthPlace = $('#sibling_birth_place').val();
 
     var person = {
         firstName: firstName,
@@ -317,7 +335,6 @@ function addMother() {
         livingStatus: livingStatus,
         role: role,
         birthDate: birthDate,
-        relationship: "mother",
         clanId: userClanId,
         merged: false,
         // photoURL: downloadURL
@@ -348,10 +365,39 @@ function addMother() {
         $("#error_details_node")
             .empty()
             .append('Required fields are empty. Website will refresh shortly.');
-        return location.reload();
+        // return location.reload();
     }
-    else {
-        userFamilyRef.child(currentUser.uid).child('mothers').push(person);
+    
+    if (gender === "male") {
+        person.relationship = "brother";
+        userFamilyRef.child(currentUser.uid).child('brothers').push(person);
+
+        // if(userMotherKey !== undefined || userMotherKey !== null) {
+        //     userFamilyRef.child(userMotherKey).child('sons').push(person);
+        // }
+        
+        // if(userFatherKey !== undefined || userFatherKey !== null) {
+        //     userFamilyRef.child(userFatherKey).child('sons').push(person);
+        // }
+
+        showSuccess();
+        setTimeout(function() {
+            return location.reload();
+        }, 5000);
+    }
+    else if (gender === "female") {
+        person.relationship = "sister";
+        userFamilyRef.child(currentUser.uid).child('sisters').push(person);
+
+        // if(userMotherKey !== undefined || userMotherKey !== null) {
+        //     userFamilyRef.child(userMotherKey).child('daughters').push(person);
+        // }
+        
+        // if(userFatherKey !== undefined || userFatherKey !== null) {
+        //     userFamilyRef.child(userFatherKey).child('daughters').push(person);
+        // }
+
+
         showSuccess();
         setTimeout(function() {
             return location.reload();
@@ -359,7 +405,7 @@ function addMother() {
     }
 }
 
-function handleMotherPic(eventData){
+function handleSiblingPic(eventData){
     // uid = firebase.auth().currentUser.uid;
     var file = eventData.target.files[0];
     var fileName = file.name;
@@ -389,7 +435,7 @@ function handleMotherPic(eventData){
     },
         function(){
         var downloadURL = task.snapshot.downloadURL;
-        addMother(downloadURL);
+        addSibling(downloadURL);
         console.log(downloadURL)
         console.log('Addded to the Storage')
     })
@@ -455,16 +501,17 @@ function addSpouse() {
     else if (gender === "male") {
         person.relationship = "husband";
         userFamilyRef.child(currentUser.uid).child('husbands').push(person);
+        showSuccess();
         setTimeout(function() {
             return location.reload();
-        }, 5000);
+        }, 8000);
     } else {
         person.relationship = "wife";
         userFamilyRef.child(currentUser.uid).child('wives').push(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();
-        }, 5000);
+        }, 8000);
     }
 }
 

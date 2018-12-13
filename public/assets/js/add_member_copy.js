@@ -1,11 +1,13 @@
 function searchBar() {
     var input = $("#search_input").val();
+    var searchedResult;
 
     if(input !== "") {
-        usersRef.once("value")
-            .then(snap => {
-                snap.forEach(snap2 => {
-                    if(snap2.val().displayName.toLowerCase() == input) {
+        usersRef
+            .once("value")
+            .then(snapshot => {
+                snapshot.forEach(childSnap => {
+                    if(childSnap.val().displayName.toLowerCase() == input) {
                         console.log('1st if')
                         $("#search_no_result").css('display', 'none');
                         $("#search_found").css('display', '');
@@ -14,22 +16,23 @@ function searchBar() {
 
                         $("#search_first_name")
                             .empty()
-                            .attr("value", snap2.val().firstName);
+                            .attr("value", childSnap.val().firstName);
                         $("#search_last_name")
                             .empty()
-                            .attr("value", snap2.val().lastName);
+                            .attr("value", childSnap.val().lastName);
                         $("#seach_email")
                             .empty()
-                            .attr("value", snap2.val().email);
+                            .attr("value", childSnap.val().email);
                         $("#search_birth_date")
                             .empty()
-                            .attr("value", snap2.val().birthDate);
+                            .attr("value", childSnap.val().birthDate);
 
                         $('#search_confirm').click(function() {
-                            searchedResultModal(snap2.val());
+                            searchedResult = childSnap.val();
+                            searchedResultModal(searchedResult);
                         })
                     }
-                    else if(snap2.val().email == input) {
+                    else if(childSnap.val().email == input) {
                         console.log('2 if')
                         $("#search_found").css('display', '');
                         $("#search_found2").css('display', '');
@@ -37,16 +40,16 @@ function searchBar() {
 
                         $("#search_first_name")
                             .empty()
-                            .attr("value", snap2.val().firstName);
+                            .attr("value", childSnap.val().firstName);
                         $("#search_last_name")
                             .empty()
-                            .attr("value", snap2.val().lastName);
+                            .attr("value", childSnap.val().lastName);
                         $("#seach_email")
                             .empty()
-                            .attr("value", snap2.val().email);
+                            .attr("value", childSnap.val().email);
                         $("#search_birth_date")
                             .empty()
-                            .attr("value", snap2.val().birthDate);
+                            .attr("value", childSnap.val().birthDate);
                         $("#search_no_result").css('display', 'none');
                     }
                     // else {
@@ -56,77 +59,8 @@ function searchBar() {
                     //         .empty()
                     //         .attr("value", 'This person is not an existing user.');
                     // }
-                    else searchBarPotential(input);
-                })
-            })
-    }
-    else {
-        $("#search_no_result").css('display', '');
-        $("#search_none_input")
-            .empty()
-            .attr("value", 'Nothing is inputted.');
-
-    }
-}
-
-function searchBarPotential(input) {
-    if(input !== "") {
-        userPotentialRef.once("value")
-        .then(snap => {
-            snap.forEach(snap2 => {
-                if(snap2.val().displayName.toLowerCase() == input) {
-                    console.log('1st if')
-                    $("#search_no_result").css('display', 'none');
-                    $("#search_found").css('display', '');
-                    $("#search_found2").css('display', '');
-                    $("#search_found3").css('display', '');
-
-                    $("#search_first_name")
-                        .empty()
-                        .attr("value", snap2.val().firstName);
-                    $("#search_last_name")
-                        .empty()
-                        .attr("value", snap2.val().lastName);
-                    $("#seach_email")
-                        .empty()
-                        .attr("value", snap2.val().email);
-                    $("#search_birth_date")
-                        .empty()
-                        .attr("value", snap2.val().birthDate);
-
-                    $('#search_confirm').click(function() {
-                        searchedResultModal(snap2.val());
-                    })
-                }
-                else if(snap2.val().email == input) {
-                    console.log('2 if')
-                    $("#search_found").css('display', '');
-                    $("#search_found2").css('display', '');
-                    $("#search_found3").css('display', '');
-
-                    $("#search_first_name")
-                        .empty()
-                        .attr("value", snap2.val().firstName);
-                    $("#search_last_name")
-                        .empty()
-                        .attr("value", snap2.val().lastName);
-                    $("#seach_email")
-                        .empty()
-                        .attr("value", snap2.val().email);
-                    $("#search_birth_date")
-                        .empty()
-                        .attr("value", snap2.val().birthDate);
-                    $("#search_no_result").css('display', 'none');
-                }
-                // else {
-                //     console.log('3 if')
-                //     $("#search_no_result").css('display', '');
-                //     $("#search_none_input")
-                //         .empty()
-                //         .attr("value", 'This person is not an existing user.');
-                // }
-            })
-        })
+                });
+            });
     }
     else {
         $("#search_no_result").css('display', '');
@@ -270,20 +204,22 @@ function displayExistingParent(data) {
     }
 
     $('#save_existing_parent').click(function() {
-        saveExistingParent(data);
+        saveExistingParent(data.uid);
     })
 }
 
-function saveExistingParent(data) {
+function saveExistingParent(userKey) {
     var firstName = $("#existing_parent_first_name").val();
     var middleName = $("#existing_parent_middle_name").val();
     var lastName = $("#existing_parent_last_name").val();
     var gender = $("#existing_parent_gender").val();
     var livingStatus = $("#existing_parent_living_status").val();
+    var maritalStatus = $("#existing_parent_relationship").val();
     var role = $("#existing_parent_role_in_tree").val();
     var email = $("#existing_parent_email").val();
     var birthDate = $('#existing_parent_birth_date').val();
     var birthPlace = $('#existing_parent_birth_place').val();
+    var currentUserId = currentUser.uid;
 
     var person = {
         firstName: firstName,
@@ -295,6 +231,7 @@ function saveExistingParent(data) {
         birthDate: birthDate,
         clanId: userClanId,
         merged: false,
+        addedBy: currentUserId,
         // photoURL: downloadURL
     };
 
@@ -312,25 +249,14 @@ function saveExistingParent(data) {
 
     if (gender === "male") {
         person.relationship = "father";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('fathers').child(data.tempKeyInClan).set(person);
-        }
-        else if(data.uid !== null || data.uid !== undefined) {
-            userFamilyRef.child(currentUser.uid).child('fathers').child(data.uid).set(person);
-        }
-        
+        userFamilyRef.child(currentUserId).child('fathers').child(userKey).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();
         }, 5000);
     } else {
         person.relationship = "mother";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('mothers').child(data.tempKeyInClan).set(person);
-        }
-        else if(data.uid !== null || data.uid !== undefined) {
-            userFamilyRef.child(currentUser.uid).child('mothers').child(data.uid).set(person);
-        }
+        userFamilyRef.child(currentUserId).child('mothers').child(userKey).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();
@@ -621,21 +547,22 @@ function displayExistingSpouse(data) {
     }
 
     $('#save_existing_spouse').click(function() {
-        saveExistingSpouse(data);
+        saveExistingSpouse(data.uid);
     })
 }
 
-function saveExistingSpouse(data) {
+function saveExistingSpouse(userKey) {
     var firstName = $("#existing_spouse_first_name").val();
     var middleName = $("#existing_spouse_middle_name").val();
     var lastName = $("#existing_spouse_last_name").val();
     var gender = $("#existing_spouse_gender").val();
-    var maritalStatus = $("#existing_spouse_relationship").val();
     var livingStatus = $("#existing_spouse_living_status").val();
+    var maritalStatus = $("#existing_spouse_relationship").val();
     var role = $("#existing_spouse_role_in_tree").val();
     var email = $("#existing_spouse_email").val();
     var birthDate = $('#existing_spouse_birth_date').val();
     var birthPlace = $('#existing_spouse_birth_place').val();
+    var currentUserId = currentUser.uid;
 
     var person = {
         firstName: firstName,
@@ -643,11 +570,12 @@ function saveExistingSpouse(data) {
         displayName: firstName + " " + lastName,
         gender: gender,
         livingStatus: livingStatus,
-        maritalStatus: maritalStatus,
         role: role,
         birthDate: birthDate,
         clanId: userClanId,
         merged: false,
+        addedBy: currentUserId,
+        maritalStatus: maritalStatus
         // photoURL: downloadURL
     };
 
@@ -665,25 +593,14 @@ function saveExistingSpouse(data) {
 
     if (gender === "male") {
         person.relationship = "husband";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('husbands').child(data.tempKeyInClan).set(person);
-        }
-        else {
-            userFamilyRef.child(currentUser.uid).child('husbands').child(data.uid).set(person);
-        }
-        
+        userFamilyRef.child(currentUserId).child('husbands').child(userKey).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();
         }, 5000);
     } else {
         person.relationship = "wife";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('wives').child(data.tempKeyInClan).set(person);
-        }
-        else {
-            userFamilyRef.child(currentUser.uid).child('wives').child(data.uid).set(person);
-        }
+        userFamilyRef.child(currentUserId).child('wives').child(userKey).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();

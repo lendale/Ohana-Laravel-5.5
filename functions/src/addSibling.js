@@ -1,32 +1,26 @@
 const admin = require('firebase-admin')
 const index = require('../index')
 
-exports.addDaughter = function(data, context) {
+exports.addSister = function(data, context) {
     const root = data.ref.root
     let uid = context.params.uid
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
     let treeObj = new Object()
+    var userMotherKey;
+    var userFatherKey;
 
     treeObj = {
         key: pushKey,
         n: userObj.displayName,
         s: 'female',
-        loc: `/user_family/${uid}/daughters/${pushKey}/`,
+        loc: `/user_family/${uid}/sisters/${pushKey}/`,
         bd: userObj.birthDate
     }
 
     if (userObj.photoURL !== undefined) {
         treeObj.img = userObj.photoURL
-    }
-
-    if (userObj.parentKeys.f !== undefined) {
-        treeObj.f = userObj.parentKeys.f
-    }
-
-    if (userObj.parentKeys.m !== undefined) {
-        treeObj.m = userObj.parentKeys.m
     }
 
     const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
@@ -38,7 +32,15 @@ exports.addDaughter = function(data, context) {
     //         return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
     //     }
     // })
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
+    const pr4 = root.child(`user_tree_go/${clanId}/${uid}`).once('value').then(snap => {
+        const mother = root.child(`user_tree_go/${clanId}/${pushKey}/m`).set(snap.val().m);
+        const father = root.child(`user_tree_go/${clanId}/${pushKey}/f`).set(snap.val().f);
+
+        return Promise.all([mother, father]).catch(err => {
+            console.log('Error code', err.code)
+            console.log(err)
+        })
+    })
 
     return Promise.all([pr1, pr2, pr3, pr4]).catch(err => {
         console.log('Error code', err.code)
@@ -46,32 +48,26 @@ exports.addDaughter = function(data, context) {
     })
 }
 
-exports.addSon = function(data, context) {
+exports.addBrother = function(data, context) {
     const root = data.ref.root
     let uid = context.params.uid
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
     let treeObj = new Object()
+    var userMotherKey;
+    var userFatherKey;
 
     treeObj = {
         key: pushKey,
         n: userObj.displayName,
         s: 'male',
-        loc: `/user_family/${uid}/sons/${pushKey}/`,
+        loc: `/user_family/${uid}/brothers/${pushKey}/`,
         bd: userObj.birthDate
     }
 
     if (userObj.photoURL !== undefined) {
         treeObj.img = userObj.photoURL
-    }
-
-    if (userObj.parentKeys.f !== undefined) {
-        treeObj.f = userObj.parentKeys.f
-    }
-
-    if (userObj.parentKeys.m !== undefined) {
-        treeObj.m = userObj.parentKeys.m
     }
 
     const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
@@ -83,7 +79,15 @@ exports.addSon = function(data, context) {
     //         return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
     //     }
     // })
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
+    const pr4 = root.child(`user_tree_go/${clanId}/${uid}`).once('value').then(snap => {
+        const mother = root.child(`user_tree_go/${clanId}/${pushKey}/m`).set(snap.val().m);
+        const father = root.child(`user_tree_go/${clanId}/${pushKey}/f`).set(snap.val().f);
+
+        return Promise.all([mother, father]).catch(err => {
+            console.log('Error code', err.code)
+            console.log(err)
+        })
+    })
 
     return Promise.all([pr1, pr2, pr3, pr4]).catch(err => {
         console.log('Error code', err.code)

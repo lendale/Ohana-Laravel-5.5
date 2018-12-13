@@ -38,9 +38,8 @@ exports.addDaughter = function(data, context) {
     //         return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
     //     }
     // })
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
 
-    return Promise.all([pr1, pr2, pr3, pr4]).catch(err => {
+    return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -83,9 +82,8 @@ exports.addSon = function(data, context) {
     //         return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
     //     }
     // })
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
 
-    return Promise.all([pr1, pr2, pr3, pr4]).catch(err => {
+    return Promise.all([pr1, pr2, pr3]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

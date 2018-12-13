@@ -25,13 +25,13 @@ exports.addMother = function(data, context) {
     const pr2 = root.child(`user_tree_go/${clanId}/${uid}/m`).set(pushKey)
     const pr3 = index.createPotentialUser(data, context)
     const pr4 = connectCurrentUserParents(uid, clanId, pushKey, "mother", userObj.displayName)
-    // const pr5 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     if (snap.val().gender === 'male') {
-    //         return root.child(`user_family/${pushKey}/sons/${uid}`).set(snap.val())
-    //     } else {
-    //         return root.child(`user_family/${pushKey}/daughters/${uid}`).set(snap.val())
-    //     }
-    // })
+    const pr5 = root.child(`users/${uid}`).once('value').then(snap => {
+        if (snap.val().gender === 'male') {
+            return root.child(`user_family/${pushKey}/sons/${uid}`).set(snap.val())
+        } else {
+            return root.child(`user_family/${pushKey}/daughters/${uid}`).set(snap.val())
+        }
+    })
 
     return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
         console.log('Error code', err.code)
@@ -63,13 +63,13 @@ exports.addFather = function(data, context) {
     const pr2 = root.child(`user_tree_go/${clanId}/${uid}/f`).set(pushKey)
     const pr3 = index.createPotentialUser(data, context)
     const pr4 = connectCurrentUserParents(uid, clanId, pushKey, "father", userObj.displayName)
-    // const pr5 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     if (snap.val().gender === 'male') {
-    //         return root.child(`user_family/${pushKey}/sons/${uid}`).set(snap.val())
-    //     } else {
-    //         return root.child(`user_family/${pushKey}/daughters/${uid}`).set(snap.val())
-    //     }
-    // })
+    const pr5 = root.child(`users/${uid}`).once('value').then(snap => {
+        if (snap.val().gender === 'male') {
+            return root.child(`user_family/${pushKey}/sons/${uid}`).set(snap.val())
+        } else {
+            return root.child(`user_family/${pushKey}/daughters/${uid}`).set(snap.val())
+        }
+    })
 
     return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
         console.log('Error code', err.code)

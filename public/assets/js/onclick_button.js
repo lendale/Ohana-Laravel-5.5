@@ -11,14 +11,44 @@ $(document).ready(function() {
         $("#btn_search").hide();
     })
 
-    $('#add_father').click(function() {
-        $('div#modal_add_father h4').empty()
-        $('div#modal_add_father h4').append("Add a Father for " + currentUser.displayName)
+    $('#button_add_new').click(function() {
+        $("#div_add_existing").hide();
+        $("#div_add_new").show();
+        $("#div_add_new2").show();
     })
 
-    $('#add_mother').click(function() {
-        $('div#modal_add_mother h4').empty()
-        $('div#modal_add_mother h4').append("Add a Mother for " + currentUser.displayName)
+    $('#button_add_existing').click(function() {
+        $("#div_add_new").hide();
+        $("#div_add_new2").hide();
+        $("#div_add_existing").show();
+    })
+
+    $('#search_button').click(function() {
+        searchBar();
+    })
+
+    $('#search_delete_button').click(function() {
+        $("#search_found").hide();
+        $("#search_found2").hide();
+        $("#search_found3").hide();
+        $("#search_no_result").hide();
+    })
+
+    $('#search_disconfirm').click(function() {
+        $("#search_found").hide();
+        $("#search_found2").hide();
+        $("#search_found3").hide();
+        $("#search_no_result").hide();
+    })
+
+    $('#add_parent').click(function() {
+        $('div#modal_add_parent h4').empty()
+        $('div#modal_add_parent h4').append("Add a Parent for " + currentUser.displayName)
+    })
+
+    $('#add_sibling').click(function() {
+        $('div#modal_add_sibling h4').empty()
+        $('div#modal_add_sibling h4').append("Add a Sibling for " + currentUser.displayName)
     })
 
     $('#add_spouse').click(function() {
@@ -31,14 +61,14 @@ $(document).ready(function() {
         $('div#modal_add_child h4').append("Add a Child for " + currentUser.displayName)
     })
 
-    $('#add_father2').click(function() {
-        $('div#modal_add_existing_father h4').empty()
-        $('div#modal_add_existing_father h4').append("Add a Father for " + currentUser.displayName)
+    $('#add_parent2').click(function() {
+        $('div#modal_add_existing_parent h4').empty()
+        $('div#modal_add_existing_parent h4').append("Add a Parent for " + currentUser.displayName)
     })
 
-    $('#add_mother2').click(function() {
-        $('div#modal_add_existing_mother h4').empty()
-        $('div#modal_add_existing_mother h4').append("Add a Mother for " + currentUser.displayName)
+    $('#add_sibling2').click(function() {
+        $('div#modal_add_existing_sibling h4').empty()
+        $('div#modal_add_existing_sibling h4').append("Add a Sibling for " + currentUser.displayName)
     })
 
     $('#add_spouse2').click(function() {
@@ -51,47 +81,29 @@ $(document).ready(function() {
         $('div#modal_add_existing_child h4').append("Add a Child for " + currentUser.displayName)
     })
 
-    // $('#father_pic').change(handleFatherPic);
-    // $('#mother_pic').change(handleMotherPic);
+    // $('#father_pic').change(handleParentPic);
+    // $('#mother_pic').change(handleSiblingPic);
     // $('#spouse_pic').change(handleSpousePic);
     // $('#child_pic').change(handleChildPic);
 
-    $('#save_father').click(function() {
-        addFather();
-        resetForm();
+    $('#save_parent').click(function() {
+        addParent();
+        // resetForm();
     })
 
-    $('#save_mother').click(function() {
-        addMother();
-        resetForm();
+    $('#save_sibling').click(function() {
+        addSibling();
+        // resetForm();
     })
 
     $('#save_spouse').click(function() {
         addSpouse();
-        resetForm();
+        // resetForm();
     })
 
     $('#save_child').click(function() {
         addChild();
-        resetForm();
-    })
-
-    $('#search_button').click(function() {
-        searchBar();
-    })
-
-    $('#search_delete_button').click(function() {
-        $("#search_found").css('display', 'none');
-        $("#search_found2").css('display', 'none');
-        $("#search_found3").css('display', 'none');
-        $("#search_no_result").css('display', 'none');
-    })
-
-    $('#search_disconfirm').click(function() {
-        $("#search_found").css('display', 'none');
-        $("#search_found2").css('display', 'none');
-        $("#search_found3").css('display', 'none');
-        $("#search_no_result").css('display', 'none');
+        // resetForm();
     })
 
     userTreeRef.once('value').then(snap => {

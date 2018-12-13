@@ -42,3 +42,8 @@
 //         return;
 //     }
 // });
+
+// onclick_button
+// $("#div_add_existing").css('display', 'none');
+// $("#div_add_new").css('display', '');
+// $("#div_add_new2").css('display', '');

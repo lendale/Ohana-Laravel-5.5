@@ -4,24 +4,21 @@ function getNodeData(key) {
         .once("value")
         .then(snapshot => {
             if(snapshot.exists()) {
-                currentUser = snapshot.val();
-                showNodeData(currentUser)
+                showNodeData(snapshot.val())
             }
             else potentialUsersTable(key);
         });
+}
 
-    function potentialUsersTable(key) {
-        userPotentialRef
-            .child(key)
-            .once("value")
-            .then(snapshot => {
-                potentialuser = snapshot.val();
-                return potentialuser;
-            })
-            .then(potentialuser => {
-                showNodeData(potentialuser)
-            });
-    }
+function potentialUsersTable(key) {
+    userPotentialRef
+        .child(key)
+        .once("value")
+        .then(snapshot => {
+            if(snapshot.exists()) {
+                showNodeData(snapshot.val())
+            }
+        });
 }
 
 function showNodeData(data) {
@@ -66,14 +63,18 @@ function showNodeData(data) {
             .attr("src", "assets/img/default-avatar.png");
     }
 
-    if(data.tempKeyInClan === null || data.tempKeyInClan === undefined) {
-        $('#node_edit').click(function() {
-            updateUsersModal(data);
-        })
-    }
-    else if(data.relationship === "father" || data.relationship === "mother") {
-        $('#node_edit').click(function() {
-            updateParentsModal(data);
-        })
-    }
+    $('#node_edit').click(function() {
+        updateUsersModal(data);
+    })
+
+    // if(data.tempKeyInClan === null || data.tempKeyInClan === undefined) {
+    //     $('#node_edit').click(function() {
+    //         updateUsersModal(data);
+    //     })
+    // }
+    // else if(data.relationship === "father" || data.relationship === "mother") {
+    //     $('#node_edit').click(function() {
+    //         updateParentsModal(data);
+    //     })
+    // }
 }

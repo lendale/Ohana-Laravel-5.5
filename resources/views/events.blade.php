@@ -221,5 +221,4 @@
 <script defer src="assets/js/messaging.js"></script>
 <script src="assets/js/material-kit/bootstrap-datetimepicker.js" type="text/javascript"></script>
 
-
 </html>

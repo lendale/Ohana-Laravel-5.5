@@ -7,6 +7,7 @@ exports.addWife = function(data, context) {
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
+    let familyId = userObj.familyId
     let treeObj = new Object()
 
     treeObj = {
@@ -21,7 +22,8 @@ exports.addWife = function(data, context) {
         treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr1 = index.createPotentialUser(data, context)
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
         .then(() => {
             const vir = root.child(`user_tree_go/${clanId}/${pushKey}/vir`).push(uid)
             const ms = root.child(`user_tree_go/${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
@@ -31,20 +33,22 @@ exports.addWife = function(data, context) {
                 console.log(err)
             })
         })
-    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/ux`).push(pushKey)
-    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
-    const pr4 = index.createPotentialUser(data, context)
-    // const pr5 = root.child(`user_family/${uid}/spouse_keys/ux/${pushKey}`).set(userObj.displayName)
-    // const pr6 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     const pr7 = root.child(`user_family/${pushKey}/husbands/${uid}`).set(snap.val())
-    //     const pr8 = root.child(`user_family/${pushKey}/spouse_keys/vir/${uid}`).set(snap.val().displayName)
-    //     return Promise.all([pr7, pr8]).catch(err => {
-    //         console.log('Error code', err.code)
-    //         console.log(err)
-    //     })
-    // })
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/ux`).push(pushKey)
+    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
+    const pr5 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+        .then(() => {
+            const vir = root.child(`user_immediate_family/${familyId}/${pushKey}/vir`).push(uid)
+            const ms = root.child(`user_immediate_family/${familyId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]).catch(err => {
+            return Promise.all([vir, ms]).catch(err => {
+                console.log('Error code', err.code)
+                console.log(err)
+            })
+        })
+    const pr6 = root.child(`user_immediate_family/${familyId}/${uid}/ux`).push(pushKey)
+    const pr7 = root.child(`user_immediate_family/${familyId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
+
+    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6, pr7]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -56,6 +60,7 @@ exports.addHusband = function(data, context) {
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
+    let familyId = userObj.familyId
     let treeObj = new Object()
 
     treeObj = {
@@ -70,7 +75,8 @@ exports.addHusband = function(data, context) {
         treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr1 = index.createPotentialUser(data, context)
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
         .then(() => {
             const ux = root.child(`user_tree_go/${clanId}/${pushKey}/ux`).push(uid)
             const ms = root.child(`user_tree_go/${clanId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
@@ -80,20 +86,22 @@ exports.addHusband = function(data, context) {
                 console.log(err)
             })
         })
-    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/vir`).push(pushKey)
-    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
-    const pr4 = index.createPotentialUser(data, context)
-    // const pr5 = root.child(`user_family/${uid}/spouse_keys/vir/${pushKey}`).set(userObj.displayName)
-    // const pr6 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     const pr7 = root.child(`user_family/${pushKey}/wives/${uid}`).set(snap.val())
-    //     const pr8 = root.child(`user_family/${pushKey}/spouse_keys/ux/${uid}`).set(snap.val().displayName)
-    //     return Promise.all([pr7, pr8]).catch(err => {
-    //         console.log('Error code', err.code)
-    //         console.log(err)
-    //     })
-    // })
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/vir`).push(pushKey)
+    const pr4 = root.child(`user_tree_go/${clanId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
+    const pr5 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+        .then(() => {
+            const ux = root.child(`user_immediate_family/${familyId}/${pushKey}/ux`).push(uid)
+            const ms = root.child(`user_immediate_family/${familyId}/${pushKey}/ms/${uid}`).set(userObj.maritalStatus)
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6]).catch(err => {
+            return Promise.all([ux, ms]).catch(err => {
+                console.log('Error code', err.code)
+                console.log(err)
+            })
+        })
+    const pr6 = root.child(`user_immediate_family/${familyId}/${uid}/vir`).push(pushKey)
+    const pr7 = root.child(`user_immediate_family/${familyId}/${uid}/ms/${pushKey}`).set(userObj.maritalStatus)
+
+    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6, pr7]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

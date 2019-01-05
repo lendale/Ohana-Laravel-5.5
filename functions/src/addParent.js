@@ -7,6 +7,7 @@ exports.addMother = function(data, context) {
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
+    let familyId = userObj.familyId
     let treeObj = new Object()
 
     treeObj = {
@@ -21,19 +22,16 @@ exports.addMother = function(data, context) {
         treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
-    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/m`).set(pushKey)
-    const pr3 = index.createPotentialUser(data, context)
-    const pr4 = connectCurrentUserParents(uid, clanId, pushKey, "mother", userObj.displayName)
-    // const pr5 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     if (snap.val().gender === 'male') {
-    //         return root.child(`user_family/${pushKey}/sons/${uid}`).set(snap.val())
-    //     } else {
-    //         return root.child(`user_family/${pushKey}/daughters/${uid}`).set(snap.val())
-    //     }
-    // })
+    const pr1 = index.createPotentialUser(data, context)
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/m`).set(pushKey)
+    const pr4 = root.child(`user_tree_go/${clanId}/${pushKey}/children`).push(uid)
+    const pr5 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+    const pr6 = root.child(`user_immediate_family/${familyId}/${uid}/m`).set(pushKey)
+    const pr7 = root.child(`user_immediate_family/${familyId}/${pushKey}/children`).push(uid)
+    const pr8 = connectCurrentUserParents(uid, clanId, familyId, pushKey, "mother", userObj.displayName)
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -45,6 +43,7 @@ exports.addFather = function(data, context) {
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
+    let familyId = userObj.familyId
     let treeObj = new Object()
 
     treeObj = {
@@ -59,28 +58,26 @@ exports.addFather = function(data, context) {
         treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
-    const pr2 = root.child(`user_tree_go/${clanId}/${uid}/f`).set(pushKey)
-    const pr3 = index.createPotentialUser(data, context)
-    const pr4 = connectCurrentUserParents(uid, clanId, pushKey, "father", userObj.displayName)
-    // const pr5 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     if (snap.val().gender === 'male') {
-    //         return root.child(`user_family/${pushKey}/sons/${uid}`).set(snap.val())
-    //     } else {
-    //         return root.child(`user_family/${pushKey}/daughters/${uid}`).set(snap.val())
-    //     }
-    // })
+    const pr1 = index.createPotentialUser(data, context)
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/f`).set(pushKey)
+    const pr4 = root.child(`user_tree_go/${clanId}/${pushKey}/children`).push(uid)
+    const pr5 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+    const pr6 = root.child(`user_immediate_family/${familyId}/${uid}/f`).set(pushKey)
+    const pr7 = root.child(`user_immediate_family/${familyId}/${pushKey}/children`).push(uid)
+    const pr8 = connectCurrentUserParents(uid, clanId, familyId, pushKey, "mother", userObj.displayName)
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+    return Promise.all([pr1, pr2, pr3, pr4, pr5, pr6, pr7, pr8]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
 }
 
-function connectCurrentUserParents(uid, clanId, key, parentType, name) {
+function connectCurrentUserParents(uid, clanId, familyId, key, parentType, name) {
     const db = admin.database()
     const userTreeRef = db.ref().child('user_tree_go')
     const userFamRef = db.ref().child('user_family')
+    const userImmRef = db.ref().child('user_immediate_family')
     const father = userTreeRef.child(`${clanId}/${uid}/f`)
     const mother = userTreeRef.child(`${clanId}/${uid}/m`)
 
@@ -95,15 +92,23 @@ function connectCurrentUserParents(uid, clanId, key, parentType, name) {
                     .then(() => {
                         return userTreeRef.child(`${clanId}/${snapshot.val()}/ms/${key}`).set('married')
                     })
-                const pr3 = userFamRef.child(`${snapshot.val()}/spouse_keys/ux/${key}`).set(name)
+                // const pr3 = userFamRef.child(`${snapshot.val()}/spouse_keys/ux/${key}`).set(name)
+                //     .then(() => {
+                //         return userTreeRef.child(`${clanId}/${snapshot.val()}/n`).once('value')
+                //             .then(n => {
+                //                 return userFamRef.child(`${key}/spouse_keys/vir/${snapshot.val()}`).set(n.val())
+                //             })
+                //     })
+                const pr4 = userImmRef.child(`${familyId}/${key}/vir`).push(snapshot.val())
                     .then(() => {
-                        return userTreeRef.child(`${clanId}/${snapshot.val()}/n`).once('value')
-                            .then(n => {
-                                return userFamRef.child(`${key}/spouse_keys/vir/${snapshot.val()}`).set(n.val())
-                            })
+                        return userImmRef.child(`${familyId}/${key}/ms/${snapshot.val()}`).set('married')
+                    })
+                const pr5 = userImmRef.child(`${familyId}/${snapshot.val()}/ux`).push(key)
+                    .then(() => {
+                        return userImmRef.child(`${familyId}/${snapshot.val()}/ms/${key}`).set('married')
                     })
 
-                return Promise.all([pr1, pr2, pr3]).catch(err => {
+                return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
                     console.log('Error code', err.code)
                     console.log(err)
                 })
@@ -122,15 +127,23 @@ function connectCurrentUserParents(uid, clanId, key, parentType, name) {
                     .then(() => {
                         return userTreeRef.child(`${clanId}/${snapshot.val()}/ms/${key}`).set('married')
                     })
-                const pr3 = userFamRef.child(`${snapshot.val()}/spouse_keys/vir/${key}`).set(name)
+                // const pr3 = userFamRef.child(`${snapshot.val()}/spouse_keys/vir/${key}`).set(name)
+                //     .then(() => {
+                //         return userTreeRef.child(`${clanId}/${snapshot.val()}/n`).once('value')
+                //             .then(n => {
+                //                 return userFamRef.child(`${key}/spouse_keys/ux/${snapshot.val()}`).set(n.val())
+                //             })
+                //     })
+                const pr4 = userImmRef.child(`${familyId}/${key}/ux`).push(snapshot.val())
                     .then(() => {
-                        return userTreeRef.child(`${clanId}/${snapshot.val()}/n`).once('value')
-                            .then(n => {
-                                return userFamRef.child(`${key}/spouse_keys/ux/${snapshot.val()}`).set(n.val())
-                            })
+                        return userImmRef.child(`${familyId}/${key}/ms/${snapshot.val()}`).set('married')
+                    })
+                const pr5 = userImmRef.child(`${familyId}/${snapshot.val()}/vir`).push(key)
+                    .then(() => {
+                        return userImmRef.child(`${familyId}/${snapshot.val()}/ms/${key}`).set('married')
                     })
 
-                return Promise.all([pr1, pr2, pr3]).catch(err => {
+                return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
                     console.log('Error code', err.code)
                     console.log(err)
                 })

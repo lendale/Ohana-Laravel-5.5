@@ -13,14 +13,17 @@ $(document).ready(function() {
 
     $('#button_add_new').click(function() {
         $("#div_add_existing").hide();
+        $("#search_found").hide();
+        $("#search_found2").hide();
+        $("#search_found3").hide();
         $("#div_add_new").show();
         $("#div_add_new2").show();
     })
 
     $('#button_add_existing').click(function() {
+        $("#div_add_existing").show();
         $("#div_add_new").hide();
         $("#div_add_new2").hide();
-        $("#div_add_existing").show();
     })
 
     $('#search_button').click(function() {
@@ -88,25 +91,17 @@ $(document).ready(function() {
 
     $('#save_parent').click(function() {
         addParent();
-        // resetForm();
     })
 
     $('#save_sibling').click(function() {
         addSibling();
-        // resetForm();
     })
 
     $('#save_spouse').click(function() {
         addSpouse();
-        // resetForm();
     })
 
     $('#save_child').click(function() {
         addChild();
-        // resetForm();
-    })
-
-    userTreeRef.once('value').then(snap => {
-        console.log('SNAP', snap.val())
     })
 })

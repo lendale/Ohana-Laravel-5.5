@@ -187,5 +187,4 @@
 <!-- USER ALBUM JS -->
 <script src="assets/js/album_clan.js"></script>
 
-
 </html>

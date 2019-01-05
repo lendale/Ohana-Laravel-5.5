@@ -4,6 +4,8 @@
 
 var gen_tree = firebase.database().ref().child('gen_tree_id');
 var clan_id = gen_tree.push().getKey();
+var family_id = gen_tree.push().getKey();
+var extended_id = gen_tree.push().getKey();
 
 var FB;
 var fbAccessToken;
@@ -121,6 +123,8 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoURL: response.picture.data.url,
                 clanId: clan_id,
+                familyId : family_id,
+                extendedId : extended_id,
                 merged: false,
                 livingStatus: "Living"
             };
@@ -137,6 +141,8 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoURL: response.picture.data.url,
                 clanId: clan_id,
+                familyId : family_id,
+                extendedId : extended_id,
                 merged: false,
                 livingStatus: "Living"
             };
@@ -154,6 +160,8 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoURL: response.picture.data.url,
                 clanId: clan_id,
+                familyId : family_id,
+                extendedId : extended_id,
                 merged: false,
                 livingStatus: "Living"
             };
@@ -170,6 +178,8 @@ function segregateFbData(response, uid) {
                 gender: response.gender,
                 photoURL: response.picture.data.url,
                 clanId: clan_id,
+                familyId : family_id,
+                extendedId : extended_id,
                 merged: false,
                 livingStatus: "Living"
             };
@@ -188,6 +198,8 @@ function segregateFbData(response, uid) {
             gender: response.gender,
             photoURL: response.picture.data.url,
             clanId: clan_id,
+            familyId : family_id,
+            extendedId : extended_id,
             merged: false,
             livingStatus: "Living"
         };
@@ -264,6 +276,8 @@ function createAcctWithEmailAndPass() {
         birthDate: $('#birth_date').val(),
         // photoURL: downloadURL,
         clanId: clan_id,
+        familyId : family_id,
+        extendedId : extended_id,
         merged: false,
         livingStatus: "Living"
     }

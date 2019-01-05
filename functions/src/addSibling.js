@@ -7,9 +7,8 @@ exports.addSister = function(data, context) {
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
+    let familyId = userObj.familyId
     let treeObj = new Object()
-    var userMotherKey;
-    var userFatherKey;
 
     treeObj = {
         key: pushKey,
@@ -23,26 +22,33 @@ exports.addSister = function(data, context) {
         treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
-    const pr2 = index.createPotentialUser(data, context);
-    // const pr3 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     if (snap.val().gender === 'male') {
-    //         return root.child(`user_family/${pushKey}/fathers/${uid}`).set(snap.val())
-    //     } else {
-    //         return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
-    //     }
-    // })
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}`).once('value').then(snap => {
+    const pr1 = index.createPotentialUser(data, context);
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}`).once('value').then(snap => {
         const mother = root.child(`user_tree_go/${clanId}/${pushKey}/m`).set(snap.val().m);
         const father = root.child(`user_tree_go/${clanId}/${pushKey}/f`).set(snap.val().f);
+        const motherChild = root.child(`user_tree_go/${clanId}/${snap.val().m}/children`).push(pushKey);
+        const fatherChild = root.child(`user_tree_go/${clanId}/${snap.val().f}/children`).push(pushKey);
 
-        return Promise.all([mother, father]).catch(err => {
+        return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
+            console.log('Error code', err.code)
+            console.log(err)
+        })
+    })
+    const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+    const pr5 = root.child(`user_immediate_family/${familyId}/${uid}`).once('value').then(snap => {
+        const mother = root.child(`user_immediate_family/${familyId}/${pushKey}/m`).set(snap.val().m);
+        const father = root.child(`user_immediate_family/${familyId}/${pushKey}/f`).set(snap.val().f);
+        const motherChild = root.child(`user_immediate_family/${familyId}/${snap.val().m}/children`).push(pushKey);
+        const fatherChild = root.child(`user_immediate_family/${familyId}/${snap.val().f}/children`).push(pushKey);
+
+        return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
             console.log('Error code', err.code)
             console.log(err)
         })
     })
 
-    return Promise.all([pr1, pr2, pr3, pr4]).catch(err => {
+    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -54,9 +60,8 @@ exports.addBrother = function(data, context) {
     let pushKey = context.params.pushKey
     let userObj = data.val()
     let clanId = userObj.clanId
+    let familyId = userObj.familyId
     let treeObj = new Object()
-    var userMotherKey;
-    var userFatherKey;
 
     treeObj = {
         key: pushKey,
@@ -70,26 +75,33 @@ exports.addBrother = function(data, context) {
         treeObj.img = userObj.photoURL
     }
 
-    const pr1 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
-    const pr2 = index.createPotentialUser(data, context);
-    // const pr3 = root.child(`users/${uid}`).once('value').then(snap => {
-    //     if (snap.val().gender === 'male') {
-    //         return root.child(`user_family/${pushKey}/fathers/${uid}`).set(snap.val())
-    //     } else {
-    //         return root.child(`user_family/${pushKey}/mothers/${uid}`).set(snap.val())
-    //     }
-    // })
-    const pr4 = root.child(`user_tree_go/${clanId}/${uid}`).once('value').then(snap => {
+    const pr1 = index.createPotentialUser(data, context);
+    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
+    const pr3 = root.child(`user_tree_go/${clanId}/${uid}`).once('value').then(snap => {
         const mother = root.child(`user_tree_go/${clanId}/${pushKey}/m`).set(snap.val().m);
         const father = root.child(`user_tree_go/${clanId}/${pushKey}/f`).set(snap.val().f);
+        const motherChild = root.child(`user_tree_go/${clanId}/${snap.val().m}/children`).push(pushKey);
+        const fatherChild = root.child(`user_tree_go/${clanId}/${snap.val().f}/children`).push(pushKey);
 
-        return Promise.all([mother, father]).catch(err => {
+        return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
+            console.log('Error code', err.code)
+            console.log(err)
+        })
+    })
+    const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+    const pr5 = root.child(`user_immediate_family/${familyId}/${uid}`).once('value').then(snap => {
+        const mother = root.child(`user_immediate_family/${familyId}/${pushKey}/m`).set(snap.val().m);
+        const father = root.child(`user_immediate_family/${familyId}/${pushKey}/f`).set(snap.val().f);
+        const motherChild = root.child(`user_immediate_family/${familyId}/${snap.val().m}/children`).push(pushKey);
+        const fatherChild = root.child(`user_immediate_family/${familyId}/${snap.val().f}/children`).push(pushKey);
+
+        return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
             console.log('Error code', err.code)
             console.log(err)
         })
     })
 
-    return Promise.all([pr1, pr2, pr3, pr4]).catch(err => {
+    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

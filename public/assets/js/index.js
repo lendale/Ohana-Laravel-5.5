@@ -115,8 +115,3 @@ $(document).ready(function() {
         signUpWithEmailAndPass();
     });
 });
-
-// setTimeout(function() {
-//     $('#error_details').modal('hide');
-// }, 20000);
-// window.location.href = "/build-profile";

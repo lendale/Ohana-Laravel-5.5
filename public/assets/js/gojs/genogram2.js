@@ -10,7 +10,7 @@ function initGenogram(data, user_id) {
         // Use a custom layout defined below
         layout: $(GenogramLayout, {
             direction: 90, // direction the graph grows toward
-            layerSpacing: 50, // space between parent and child node layers
+            layerSpacing: 70, // space between parent and child node layers
             columnSpacing: 60 // space between children
         })
     });
@@ -58,11 +58,9 @@ function initGenogram(data, user_id) {
         }        
     }
 
-    /*
-        NODE TEMPLATES IN GENDER, MARITAL STATUS, CHILD STATUS NAMED BY CATEGORY VALUE (S)
-    */
+    /* NODE TEMPLATES IN GENDER, MARITAL STATUS, CHILD STATUS NAMED BY CATEGORY VALUE (S) */
 
-    /*  gender  */
+    /* gender */
 
     myDiagram.nodeTemplateMap.add("male",
         $(go.Node, "Vertical", {
@@ -120,7 +118,7 @@ function initGenogram(data, user_id) {
                 )))
     );
 
-    /*  nothing shows on marital status  */
+    /* nothing shows on marital status */
 
     myDiagram.nodeTemplateMap.add("Married",
         $(go.Node, {
@@ -140,11 +138,9 @@ function initGenogram(data, user_id) {
         })
     );
 
-    /*
-        LINK TEMPLATES IN MARITAL STATUS, CHILD STATUS
-    */
+    /* LINK TEMPLATES IN MARITAL STATUS, CHILD STATUS */
 
-    /*  child status  */
+    /* child status */
 
     myDiagram.linkTemplate = $(
         TwinLink, {
@@ -158,7 +154,7 @@ function initGenogram(data, user_id) {
         $(go.Shape, { strokeWidth: 1 })
     );
 
-    /*  marital status  */
+    /* marital statu */
 
     myDiagram.linkTemplateMap.add("Marriage",
         $(go.Link, {
@@ -236,7 +232,6 @@ function findMarriage(diagram, a, b) {
             var link = it.value;
 
             if (link.data !== null && link.data.category === "Marriage") return link;
-            else if (link.data !== null && link.data.category === "Divorced") return link;
             else if (link.data !== null && link.data.category === "Separated") return link;
         }
     }
@@ -253,10 +248,6 @@ function setupMaritalStatus(diagram) {
         var uxs = data.ux;
         var virs = data.vir;
         var ms = data.ms;
-
-        // console.log("Key", key)
-
-        // console.log("MS", ms)
 
         if (uxs !== undefined) {
             if (typeof uxs === "String") uxs = [uxs];
@@ -284,19 +275,6 @@ function setupMaritalStatus(diagram) {
                                 labelKeys: [node.key],
                                 category: "Marriage"
                             };
-                            // console.log("M Link Ux", link)
-                            model.addLinkData(link);
-                        } else if (marstat === "divorced") {
-                            var node = { s: "Divorced" };
-                            model.addNodeData(node);
-
-                            var link = {
-                                from: key,
-                                to: wife,
-                                labelKeys: [node.key],
-                                category: "Divorced"
-                            };
-                            // console.log("M Link Ux", link)
                             model.addLinkData(link);
                         } else if (marstat === "separated") {
                             var node = { s: "Separated" };
@@ -308,7 +286,6 @@ function setupMaritalStatus(diagram) {
                                 labelKeys: [node.key],
                                 category: "Separated"
                             };
-                            // console.log("M Link Ux", link)
                             model.addLinkData(link);
                         }
                     }
@@ -342,19 +319,6 @@ function setupMaritalStatus(diagram) {
                                 labelKeys: [node.key],
                                 category: "Marriage"
                             };
-                            // console.log("M Link Vir", link);
-                            model.addLinkData(link);
-                        } else if (marstat === "divorced") {
-                            var node = { s: "Divorced" };
-                            model.addNodeData(node);
-
-                            var link = {
-                                from: key,
-                                to: husband,
-                                labelKeys: [node.key],
-                                category: "Divorced"
-                            };
-                            // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         } else if (marstat === "separated") {
                             var node = { s: "Separated" };
@@ -366,7 +330,6 @@ function setupMaritalStatus(diagram) {
                                 labelKeys: [node.key],
                                 category: "Separated"
                             };
-                            // console.log("M Link Vir", link);
                             model.addLinkData(link);
                         }
                     }
@@ -704,12 +667,22 @@ TwinLink.prototype.computePoints = function() {
                 var birthIdDay = parseInt(birthIdSplit[1]);
                 var birthIdMonth = parseInt(birthIdSplit[0]);
 
-                if (childBdDay == birthIdDay ||
+                // if (childBdDay == birthIdDay ||
+                //     childBdDay == (birthIdDay - 1) ||
+                //     birthIdDay == (childBdDay - 1) ||
+                //     childBdMonth == birthIdMonth ||
+                //     childBdMonth == (birthIdMonth - 1) ||
+                //     birthIdMonth == (childBdMonth - 1)) {
+                //     sameBirth++;
+                //     sumX += child.location.x;
+                // }
+                
+                if((childBdDay == birthIdDay ||
                     childBdDay == (birthIdDay - 1) ||
-                    birthIdDay == (childBdDay - 1) ||
-                    childBdMonth == birthIdMonth ||
+                    birthIdDay == (childBdDay - 1)) &&
+                    (childBdMonth == birthIdMonth ||
                     childBdMonth == (birthIdMonth - 1) ||
-                    birthIdMonth == (childBdMonth - 1)) {
+                    birthIdMonth == (childBdMonth - 1))) {
                     sameBirth++;
                     sumX += child.location.x;
                 }

@@ -8,7 +8,7 @@
     <title>Genealogy</title>
     <link rel="shortcut icon" href="assets/img/favicon.ico" />
 
-    <!--     Fonts and icons     -->
+    <!-- Fonts and icons -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
 
@@ -1701,7 +1701,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h4 id="error_details_node" class="text-left"></h4>
-                            <!-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> -->
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         </div>
                     </div>
                 </div>
@@ -1762,8 +1762,19 @@
 <script src="assets/js/gojs/go-debug.js"></script>
 <script src="assets/js/gojs/genogram2.js"></script>
 <script src="assets/js/genealogy.js"></script>
-<script src="assets/js/onclick_button.js"></script>
 <script src="assets/js/add_member.js"></script>
-<script src="assets/js/node_details.js"></script>
+<script src="assets/js/onclick_button.js"></script>
+
+<script src="assets/js/add_new/add_new_parent.js"></script>
+<script src="assets/js/add_new/add_new_sibling.js"></script>
+<script src="assets/js/add_new/add_new_spouse.js"></script>
+<script src="assets/js/add_new/add_new_child.js"></script>
+
+<script src="assets/js/add_existing/add_existing_parent.js"></script>
+<script src="assets/js/add_existing/add_existing_sibling.js"></script>
+<script src="assets/js/add_existing/add_existing_spouse.js"></script>
+<script src="assets/js/add_existing/add_existing_child.js"></script>
+
+<script src="assets/js/show_details.js"></script>
 <script src="assets/js/update_details.js"></script>
 </html>

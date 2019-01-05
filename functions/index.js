@@ -34,7 +34,13 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                     treeObj.img = userObj.photoURL
                 }
 
-                return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
+                const pr1 = root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
+                const pr2 = root.child(`user_immediate_fam/${userObj.familyId}/${uid}`).set(treeObj)
+
+                return Promise.all([pr1, pr2]).catch(err => {
+                    console.log('Error code', err.code)
+                    console.log(err)
+                })
             })
             .then(() => {
                 return root.child(`user_tree_go/${userObj.clanId}/${userObj.tempKeyInClan}`).remove()
@@ -57,13 +63,17 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
             loc: `/users/${uid}/`,
         }
 
-        console.log(userObj.photoURL)
-
         if (userObj.photoURL !== undefined) {
             treeObj.img = userObj.photoURL
         }
 
-        return root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
+        const pr1 = root.child(`user_tree_go/${userObj.clanId}/${uid}`).set(treeObj)
+        const pr2 = root.child(`user_immediate_family/${userObj.familyId}/${uid}`).set(treeObj)
+
+        return Promise.all([pr1, pr2]).catch(err => {
+            console.log('Error code', err.code)
+            console.log(err)
+        })
     }
 })
 

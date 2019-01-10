@@ -50,6 +50,23 @@ function handleAuthStateChanged(user) {
     }
 }
 
+function checkPotentialUser() {
+    rootRef
+        .child('potential_users')
+        .once('value')
+        .then(snapshot => {
+            snapshot.forEach(childSnapshot => {
+                if (currentUser.email === childSnapshot.val().email) {
+                    potentialUser = childSnapshot.val();
+                    potentialFlag = true;
+                }
+            })
+        })
+        .then(() => {
+            assignUserDataToForm();
+        })
+}
+
 // $('#wizard_picture').change(handleWizardPic);
 
 $('#finish').click(function() {
@@ -206,6 +223,11 @@ function segregateFbData(response, uid) {
     }
 }
 
+function assignSignUpDataToForm() {
+    $("#group_email").addClass("is-focused");
+    $("#email").val(currentUser.email);
+}
+
 function createAcctWithFacebook() {
     var middle_name = $("#middle_name").val();
     var birth_place = $("#birth_place").val();
@@ -341,6 +363,7 @@ function createUserAccount() {
 function assignUserDataToForm() {
     console.log(potentialFlag)
     if (!potentialFlag) {
+        console.log('!potentialFlag')
         if (provider === "facebook.com") {
             assignFbDataToForm();
         } else if (provider === "password") {
@@ -348,6 +371,7 @@ function assignUserDataToForm() {
             $("#email").val(currentUser.email);
         }
     } else {
+        console.log('potentialFlag')
         showAvailableMergeData(potentialUser);
     }
 }
@@ -376,11 +400,6 @@ function assignFbDataToForm() {
         $("#radio_group_female").addClass("active");
         $("#radio_female").attr("checked", true);
     }
-}
-
-function assignSignUpDataToForm() {
-    $("#group_email").addClass("is-focused");
-    $("#email").val(currentUser.email);
 }
 
 function handleWizardPic(eventData) {
@@ -430,23 +449,6 @@ function showAvailableMergeData(data) {
         $("#radio_group_female").addClass("active");
         $("#radio_female").attr("checked", true);
     }
-}
-
-function checkPotentialUser() {
-    rootRef
-        .child('potential_users')
-        .once('value')
-        .then(snapshot => {
-            snapshot.forEach(childSnapshot => {
-                if (currentUser.email === childSnapshot.val().email) {
-                    potentialUser = childSnapshot.val();
-                    potentialFlag = true;
-                }
-            })
-        })
-        .then(() => {
-            assignUserDataToForm();
-        })
 }
 
 function showSuccess() {

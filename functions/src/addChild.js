@@ -30,13 +30,38 @@ exports.addDaughter = function(data, context) {
         treeObj.m = userObj.parentKeys.m
     }
 
-    const pr1 = index.createPotentialUser(data, context);
-    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj)
-    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
-    const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
-    const pr5 = root.child(`user_immediate_family/${familyId}/${uid}/children`).push(pushKey)
+    const db = admin.database()
+    const usersRef = db.ref().child('users')
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+    const pro = usersRef.child(pushKey).once("value")
+        .then(snap => {
+            if(snap.exists()) {
+                const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
+                const pr3 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
+                const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+                const pr5 = root.child(`user_immediate_family/${familyId}/${uid}/children`).push(pushKey)
+
+                return Promise.all([pr2, pr3, pr4, pr5]).catch(err => {
+                    console.log('Error code', err.code)
+                    console.log(err)
+                })
+            }
+            else {
+                const pr1 = index.createPotentialUser(data, context);
+                const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
+                const pr3 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
+                const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+                const pr5 = root.child(`user_immediate_family/${familyId}/${uid}/children`).push(pushKey)
+
+                return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+                    console.log('Error code', err.code)
+                    console.log(err)
+                })
+            }
+
+        });
+
+    return Promise.all([pro]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })
@@ -71,13 +96,38 @@ exports.addSon = function(data, context) {
         treeObj.m = userObj.parentKeys.m
     }
 
-    const pr1 = index.createPotentialUser(data, context);
-    const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
-    const pr3 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
-    const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
-    const pr5 = root.child(`user_immediate_family/${familyId}/${uid}/children`).push(pushKey)
+    const db = admin.database()
+    const usersRef = db.ref().child('users')
 
-    return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+    const pro = usersRef.child(pushKey).once("value")
+        .then(snap => {
+            if(snap.exists()) {
+                const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
+                const pr3 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
+                const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+                const pr5 = root.child(`user_immediate_family/${familyId}/${uid}/children`).push(pushKey)
+
+                return Promise.all([pr2, pr3, pr4, pr5]).catch(err => {
+                    console.log('Error code', err.code)
+                    console.log(err)
+                })
+            }
+            else {
+                const pr1 = index.createPotentialUser(data, context);
+                const pr2 = root.child(`user_tree_go/${clanId}/${pushKey}`).set(treeObj);
+                const pr3 = root.child(`user_tree_go/${clanId}/${uid}/children`).push(pushKey)
+                const pr4 = root.child(`user_immediate_family/${familyId}/${pushKey}`).set(treeObj)
+                const pr5 = root.child(`user_immediate_family/${familyId}/${uid}/children`).push(pushKey)
+
+                return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
+                    console.log('Error code', err.code)
+                    console.log(err)
+                })
+            }
+
+        });
+
+    return Promise.all([pro]).catch(err => {
         console.log('Error code', err.code)
         console.log(err)
     })

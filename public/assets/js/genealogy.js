@@ -246,12 +246,12 @@ function extendedFamily(treeData, uid, clanId, extendedId) {
         if(snap.val().f) {
             userTreeRef.child(clanId).child(snap.val().f).once('value').then(snap2 => {
                 if(snap2.val().m) {
-                    searchPotential(snap2.val().m, uid, extendedId);
+                    searchUser(snap2.val().m, uid, extendedId);
                     searchChildren(clanId, extendedId, uid, snap.val().f, snap2.val().m)
                 }
 
                 if(snap2.val().f) {
-                    searchPotential(snap2.val().f, uid, extendedId);
+                    searchUser(snap2.val().f, uid, extendedId);
                     searchChildren(clanId, extendedId, uid, snap.val().f, snap2.val().f)
                 }
             });
@@ -260,17 +260,27 @@ function extendedFamily(treeData, uid, clanId, extendedId) {
         if(snap.val().m) {
             userTreeRef.child(clanId).child(snap.val().m).once('value').then(snap2 => {
                 if(snap2.val().m) {
-                    searchPotential(snap2.val().m, uid, extendedId);
+                    searchUser(snap2.val().m, uid, extendedId);
                     searchChildren(clanId, extendedId, uid, snap.val().m, snap2.val().m)
                 }
 
                 if(snap2.val().f) {
-                    searchPotential(snap2.val().f, uid, extendedId);
+                    searchUser(snap2.val().f, uid, extendedId);
                     searchChildren(clanId, extendedId, uid, snap.val().m, snap2.val().f)
                 }
             });
         }
     });
+}
+
+function searchUser(key, uid, extendedId) {
+    usersRef.child(key).once("value")
+        .then(snap => {
+            if(snap.exists()) {
+                userExtendedRef.child(extendedId).child(uid).child(key).set(snap.val());
+            }
+            else searchPotential(key, uid, extendedId);
+        });
 }
 
 function searchPotential(key, uid, extendedId) {
@@ -285,12 +295,12 @@ function searchChildren(clanId, extendedId, uid, childKey, parentKey) {
         snap.forEach(snap2 => {
             userTreeRef.child(clanId).child(snap2.val()).once('value').then(snap3 => {
                 if(snap3.val().key != childKey) {
-                    searchPotential(snap3.val().key, uid, extendedId)
+                    searchUser(snap3.val().key, uid, extendedId)
 
                     userTreeRef.child(clanId).child(snap3.val().key).child('children').once('value').then(snap4 => {
                         snap4.forEach(snap5 => {
                             userTreeRef.child(clanId).child(snap5.val()).once('value').then(snap6 => {
-                                searchPotential(snap6.val().key, uid, extendedId)
+                                searchUser(snap6.val().key, uid, extendedId)
                             })
                         })
                     })

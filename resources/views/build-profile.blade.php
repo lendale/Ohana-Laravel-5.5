@@ -260,7 +260,7 @@
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-storage.js "></script>
 <script src="assets/js/init.js "></script>
 
-<!--   Core JS Files   -->
+<!-- Core JS Files -->
 <script src="assets/js/jquery-3.2.1.min.js " type="text/javascript "></script>
 <script src="assets/js/material-kit/bootstrap.min.js " type="text/javascript "></script>
 <script src="assets/js/material-kit/jquery.bootstrap.js "></script>
@@ -268,13 +268,13 @@
 <!-- Sweet Alert 2 plugin -->
 <script src="assets/js/material-kit/sweetalert2.js"></script>
 
-<!--  Plugin for the Wizard -->
+<!-- Plugin for the Wizard -->
 <script src="assets/js/material-kit/material-bootstrap-wizard.js "></script>
 
-<!--  More information about jquery.validate here: http://jqueryvalidation.org/	 -->
+<!-- More information about jquery.validate here: http://jqueryvalidation.org/ -->
 <script src="assets/js/material-kit/jquery.validate.min.js "></script>
 
-<!--    Plugin for Date Picker   -->
+<!-- Plugin for Date Picker -->
 <script src="assets/js/material-kit/bootstrap-datepicker.js"></script>
 
 <script src="assets/js/build-profile.js"></script>

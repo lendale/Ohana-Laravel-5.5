@@ -122,7 +122,6 @@ function updateUsers(data) {
     var lastName = $("#users_last_name").val();
     var gender = $("#users_gender").val();
     var livingStatus = $("#users_living_status").val();
-    var role = $("#users_role_in_tree").val();
     var email = $("#users_email").val();
     var birthDate = $('#users_birth_date').val();
     var birthPlace = $('#users_birth_place').val();
@@ -131,6 +130,7 @@ function updateUsers(data) {
     var barangay = $('#users_barangay').val();
     var city = $('#users_city').val();
     var postalCode = $('#users_postal_code').val();
+    var registered = data.registered;
 
     var person = {
         firstName: firstName,
@@ -140,8 +140,7 @@ function updateUsers(data) {
         livingStatus: livingStatus,
         role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        merged: false
+        registered: registered,
     };
 
     var tree = {
@@ -189,8 +188,8 @@ function updateUsers(data) {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.livingStatus == null ||
-        person.role == null ||
         person.birthDate == ""
     ) {
         $("#error_details")
@@ -198,19 +197,17 @@ function updateUsers(data) {
 
         $("#error_details_node")
             .empty()
-            .append('Required fields are empty. Website will refresh shortly.');
+            .append('Required fields are empty.');
         // return location.reload();
+
+        setTimeout(function() {
+            $("#modal_update_users")
+                .modal('show');
+        }, 1000);
     }
     else {
-
-        if (data.uid === null || data.uid === undefined) {
-            userPotentialRef.child(data.tempKeyInClan).update(person);
-            userTreeRef.child(userClanId).child(data.tempKeyInClan).update(tree);
-        }
-        else {
-            usersRef.child(data.uid).update(person);
-            userTreeRef.child(userClanId).child(data.uid).update(tree);
-        }
+        usersRef.child(data.uid).update(person);
+        userImmediateRef.child(userFamilyId).child(data.uid).update(tree);
 
         $("#error_details")
             .modal('show');

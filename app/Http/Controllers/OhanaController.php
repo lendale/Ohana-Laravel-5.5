@@ -11,14 +11,24 @@ class OhanaController extends Controller
         return view('genealogy');
     }
 
-    public function sample()
-    {
-        return view('sample');
-    }
-
     public function events()
     {
         return view('events');
+    }
+    
+    public function createEvent()
+    {
+        return view('createEvent');
+    }
+
+    public function eventsExtended()
+    {
+        return view('eventsExtended');
+    }
+
+    public function eventsImmediate()
+    {
+        return view('eventsImmediate');
     }
 
     public function help()

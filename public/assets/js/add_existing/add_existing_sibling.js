@@ -2,6 +2,9 @@ function displayExistingSibling(data) {
     $("#modal_add_existing_sibling")
         .modal('show');
 
+    $('div#modal_add_existing_sibling h4').empty()
+    $('div#modal_add_existing_sibling h4').append("Add a Sibling for " + currentUser.displayName)
+
     $("#existing_sibling_first_name")
         .empty()
         .attr("value", data.firstName);
@@ -120,7 +123,6 @@ function saveExistingSibling(data) {
     var lastName = $("#existing_sibling_last_name").val();
     var gender = $("#existing_sibling_gender").val();
     var livingStatus = $("#existing_sibling_living_status").val();
-    var role = $("#existing_sibling_role_in_tree").val();
     var email = $("#existing_sibling_email").val();
     var birthDate = $('#existing_sibling_birth_date').val();
     var birthPlace = $('#existing_sibling_birth_place').val();
@@ -129,14 +131,11 @@ function saveExistingSibling(data) {
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
+        email: email,
         gender: gender,
         livingStatus: livingStatus,
-        role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        familyId: userFamilyId,
-        merged: false,
-        // photoURL: downloadURL
+        registered: true,
     };
 
     if (middleName.length > 0) {
@@ -154,9 +153,9 @@ function saveExistingSibling(data) {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.gender == null ||
         person.livingStatus == null ||
-        person.role == null ||
         person.birthDate == ""
     ) {
         $("#error_details")
@@ -174,24 +173,14 @@ function saveExistingSibling(data) {
     }
     else if (gender === "male") {
         person.relationship = "brother";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('brothers').child(data.tempKeyInClan).set(person);
-        }
-        else if(data.uid !== null || data.uid !== undefined) {
-            userFamilyRef.child(currentUser.uid).child('brothers').child(data.uid).set(person);
-        }
+        userFamilyRef.child(currentUser.uid).child('brothers').child(data.uid).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();
         }, 10000);
     } else {
         person.relationship = "sister";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('sisters').child(data.tempKeyInClan).set(person);
-        }
-        else if(data.uid !== null || data.uid !== undefined) {
-            userFamilyRef.child(currentUser.uid).child('sisters').child(data.uid).set(person);
-        }
+        userFamilyRef.child(currentUser.uid).child('sisters').child(data.uid).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();

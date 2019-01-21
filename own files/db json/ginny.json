@@ -1,0 +1,32 @@
+{
+  "user_immediate_family" : {
+    "-LWTqQMKka3CTiWzLR7k" : {
+      "EZylGwAi0VVObDRSaJb4Yl1rz4b2" : {
+        "bd" : "01/06/1997",
+        "key" : "EZylGwAi0VVObDRSaJb4Yl1rz4b2",
+        "loc" : "/users/EZylGwAi0VVObDRSaJb4Yl1rz4b2/",
+        "n" : "Ginevra Potter",
+        "s" : "female"
+      }
+    }
+  },
+  "users" : {
+    "EZylGwAi0VVObDRSaJb4Yl1rz4b2" : {
+      "birthDate" : "01/06/1997",
+      "birthPlace" : "Cebu",
+      "displayName" : "Ginevra Potter",
+      "email" : "ginnypotter@gmail.com",
+      "extendedId" : "-LWTqQMLZm6Dd7NZrUKG",
+      "familyId" : "-LWTqQMKka3CTiWzLR7k",
+      "firstName" : "Ginevra",
+      "gender" : "female",
+      "lastName" : "Potter",
+      "livingStatus" : "living",
+      "merged" : false,
+      "middleName" : "Weasley",
+      "registered" : true,
+      "street_address" : "Potter",
+      "uid" : "EZylGwAi0VVObDRSaJb4Yl1rz4b2"
+    }
+  }
+}

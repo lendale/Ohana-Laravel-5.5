@@ -1,11 +1,9 @@
-// function addSibling(downloadURL) {
-function addSibling() {
+function addSibling(downloadURL) {
     var firstName = $("#sibling_first_name").val();
     var middleName = $("#sibling_middle_name").val();
     var lastName = $("#sibling_last_name").val();
     var gender = $("#sibling_gender").val();
     var livingStatus = $("#sibling_living_status").val();
-    var role = $("#sibling_role_in_tree").val();
     var email = $("#sibling_email").val();
     var birthDate = $('#sibling_birth_date').val();
     var birthPlace = $('#sibling_birth_place').val();
@@ -14,22 +12,19 @@ function addSibling() {
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
+        email: email,
         gender: gender,
         livingStatus: livingStatus,
-        role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        familyId: userFamilyId,
-        merged: false,
-        // photoURL: downloadURL
+        registered: false,
     };
+
+    if (downloadURL !== undefined){
+        person.photoURL = downloadURL
+    }
 
     if (middleName.length > 0) {
         person.middleName = middleName;
-    }
-
-    if (email.length > 0) {
-        person.email = email;
     }
 
     if (birthPlace.length > 0) {
@@ -39,9 +34,9 @@ function addSibling() {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.gender == null ||
         person.livingStatus == null ||
-        person.role == null ||
         person.birthDate == ""
     ) {
         $("#error_details")
@@ -84,28 +79,35 @@ function handleSiblingPic(eventData){
     var PicStorageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
     var task = PicStorageRef.put(file);
 
-    task.on('state_changed', 
-    function progress(snapshot) {
-        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // uploader.value = percentage;
-        console.log('Upload is ' + percentage + '% done');
-        switch (snapshot.state) {
-            case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused');
-                break;
-            case firebase.storage.TaskState.RUNNING: // or 'running'
-                console.log('Upload is running');
-                showLoading();
-                break;
-        }
-    },
-    function error(err) {
-        window.alert('ERROR');
-    },
-        function(){
-        var downloadURL = task.snapshot.downloadURL;
-        addSibling(downloadURL);
-        console.log(downloadURL)
-        console.log('Addded to the Storage')
+    var submit_sibling = '<button id="save_siblingwithPhoto" type="button" class="btn btn-success add" data-dismiss="modal">Save With Photo</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+
+    $('#submit_sibling_btn').html(submit_sibling);
+
+    console.log('FILE:', file)
+    console.log('FILENAME:', fileName)
+    console.log('FILE EXTENSION:', fileExtension)
+
+    $('#save_siblingwithPhoto').click(function() {
+    var task = PicStorageRef.put(file);
+        task.on('state_changed', 
+            function complete(){
+            var downloadURL = task.snapshot.downloadURL;
+                 swal({
+                    imageUrl: "assets/img/icons/loader.gif",
+                    imageWidth: '90',
+                    imageHeight: '90',
+                    title: 'Processing Information',
+                    text: "This might take a while..",
+                    timer: 5000,
+                    showConfirmButton: false
+                    }).then(function(){},
+                        function(dismiss) {
+                            if (dismiss === "timer") {
+                            // addSibling(downloadURL);
+                            searchSibling(downloadURL);
+                            }
+                    })
+        })
+
     })
 }

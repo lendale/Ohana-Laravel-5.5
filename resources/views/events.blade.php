@@ -35,14 +35,28 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navigation-example-2">
                 <ul class="nav navbar-nav navbar-right">
+                    
                     <li>
                         <a href="/genealogy">Genealogy</a>
                     </li>
-                    <li>
-                        <a href="/album_clan">Clan Album</a>
+                    <<li>
+                         <!-- Album Dropdown -->
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Album</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/album_user">My Albums</a></li>
+                                <li><a href="/album_clan">Clan Album</a></li>
+                                <li><a href="/album_extended" disabled>Extended Album</a></li>
+                                <li><a href="/album_immediate" disabled>Immediate Album</a></li>
+                            </ul>
                     </li>
-                    <li class="active">
-                        <a href="/events">Events</a>
+                    <li>
+                         <!-- events Dropdown -->
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/events">Clan Events</a></li>
+                                <li><a href="/eventsImmediate">Immediate Events</a></li>
+                                <li><a href="/eventsExtended" disabled>Extended Events</a></li>
+                            </ul>
                     </li>
                                         <li id="notification_li">
                                             <a href="#" id="notificationLink">
@@ -58,26 +72,9 @@
                                                 <div id="notificationFooter"><a href="#">See All</a></div>
                                                 </div>
 
-
                     </a>
                                          </li>
-                 <!--    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="material-icons">notifications</i>
-                            <span class="notification"></span>
-                            <p class="hidden-lg hidden-md">
-                                Notifications
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="#">Mike John responded to your email</a></li>
-                            <li><a href="#">You have 5 new tasks</a></li>
-                            <li><a href="#">You're now friend with Andrew</a></li>
-                            <li><a href="#">Another Notification</a></li>
-                            <li><a href="#">Another One</a></li>
-                        </ul>
-                    </li> -->
+                 
                     <li class="dropdown">
                         <a class="profile-photo dropdown-toggle" data-toggle="dropdown">
                             <div class="profile-photo-small">
@@ -116,7 +113,7 @@
             </div>
     </div>
             
-            <button class="btn btn-danger btn-defualt" data-toggle="modal" data-target="#myModal">+Create Event</button>
+            <a class="btn btn-danger btn-defualt" href="/createEvent">+Create Event</a>
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -126,10 +123,12 @@
                         <i class="material-icons">clear</i>
                     </button>
                      <form id="send-notification-form">
-                    <h3 class="modal-title">Event</h3>
+                    <h3 class="modal-title">Events</h3> 
                 </div>
                 <div class="modal-body">
                     <div class="row">
+                        <h3>Basic Details</h3>
+                        <i style="font-size:10px"> Name your event and tell event-goers why they should come. Add details that highlight what makes it unique.</i>
 
                     <select id="eventSlct" class="selectpicker" data-style="btn btn-danger btn-defualt" title=" Choose Event" data-size="7" required>
                       <option disabled> Choose Event</option>
@@ -165,7 +164,7 @@
         </div>
     </div>
 
-    <!-- small alert modal -->
+<!--     small alert modal -->
 
 
         </main>
@@ -176,12 +175,12 @@
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-messaging.js"></script>
 <script src="assets/js/init.js "></script>
 
-<!--   Core JS Files   -->
+ <!--  Core JS Files   -->
 <script src="assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
 <script src="assets/js/material-kit/bootstrap.min.js" type="text/javascript"></script>
 <script src="assets/js/material-kit/material.min.js" type="text/javascript"></script>
 
-<!-- Authentication -->
+<!-- Authentication-->
 <script src="assets/js/auth.js"></script>
 
 <!--    Plugin for Date Time Picker and Full Calendar Plugin   -->
@@ -214,11 +213,14 @@
 <!--    Plugin for Select, full documentation here: http://silviomoreto.github.io/bootstrap-select   -->
 <script src="assets/js/material-kit/bootstrap-selectpicker.js" type="text/javascript"></script>
 
-<!--    Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc    -->
+<!--    Control C<script src="assets/js/events.js"></script>enter for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc    -->
 <script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
 
-<script src="assets/js/events.js"></script>
+<script src="assets/js/events_clan.js"></script>
+
+
 <script defer src="assets/js/messaging.js"></script>
 <script src="assets/js/material-kit/bootstrap-datetimepicker.js" type="text/javascript"></script>
+
 
 </html>

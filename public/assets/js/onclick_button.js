@@ -1,6 +1,11 @@
 $(document).ready(function() {
     materialKit.initFormExtendedDatetimepickers();
 
+    $('#parent_pic').change(handleParentPic);
+    $('#sibling_pic').change(handleSiblingPic);
+    $('#spouse_pic').change(handleSpousePic);
+    $('#child_pic').change(handleChildPic);
+
     $('ul#ul_tabs li#li_tab_search').click(function() {
         $('#btn_add').hide();
         $('#btn_search').show();
@@ -11,30 +16,24 @@ $(document).ready(function() {
         $("#btn_search").hide();
     })
 
-    $('#button_add_new').click(function() {
-        $("#div_add_existing").hide();
-        $("#search_found").hide();
-        $("#search_found2").hide();
-        $("#search_found3").hide();
-        $("#div_add_new").show();
-        $("#div_add_new2").show();
-    })
-
-    $('#button_add_existing').click(function() {
-        $("#div_add_existing").show();
+    $('#modal_add_choice').on('hidden.bs.modal', function() {
         $("#div_add_new").hide();
         $("#div_add_new2").hide();
-    })
+        $("#search_bar").show();
+    });
 
     $('#search_button').click(function() {
         searchBar();
     })
 
-    $('#search_delete_button').click(function() {
+    $('#proceed_button').click(function() {
+        $("#search_bar").hide();
         $("#search_found").hide();
         $("#search_found2").hide();
         $("#search_found3").hide();
         $("#search_no_result").hide();
+        $("#div_add_new").show();
+        $("#div_add_new2").show();
     })
 
     $('#search_disconfirm').click(function() {
@@ -76,7 +75,7 @@ $(document).ready(function() {
 
     $('#add_spouse2').click(function() {
         $('div#modal_add_existing_spouse h4').empty()
-        $('div#modal_add_existing_spouse h4').append("Add Existing Spouse for " + currentUser.displayName)
+        $('div#modal_add_existing_spouse h4').append("Add a Spouse for " + currentUser.displayName)
     })
 
     $('#add_child2').click(function() {
@@ -84,24 +83,37 @@ $(document).ready(function() {
         $('div#modal_add_existing_child h4').append("Add a Child for " + currentUser.displayName)
     })
 
-    // $('#father_pic').change(handleParentPic);
-    // $('#mother_pic').change(handleSiblingPic);
-    // $('#spouse_pic').change(handleSpousePic);
-    // $('#child_pic').change(handleChildPic);
-
     $('#save_parent').click(function() {
-        addParent();
+        searchParent();
     })
 
     $('#save_sibling').click(function() {
-        addSibling();
+        searchSibling();
     })
 
     $('#save_spouse').click(function() {
-        addSpouse();
+        searchSpouse();
     })
 
     $('#save_child').click(function() {
-        addChild();
+        searchChild();
     })
+
+    // $('#save_parent').click(function() {
+    //     addParent();
+    // })
+
+    // $('#save_sibling').click(function() {
+    //     addSibling();
+    // })
+
+    // $('#save_spouse').click(function() {
+    //     addSpouse();
+    // })
+
+    // $('#save_child').click(function() {
+    //     addChild();
+    // })
 })
+
+// proceed_button - go to add new member

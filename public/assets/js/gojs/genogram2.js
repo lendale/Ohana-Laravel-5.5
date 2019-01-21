@@ -213,8 +213,6 @@ function setupDiagram(diagram, array, focusId) {
     setupMaritalStatus(diagram);
     setupParents(diagram);
 
-    // console.log("LINK DATA", diagram.model.linkData)
-
     var node = diagram.findNodeForKey(focusId);
     if (node !== null) {
         diagram.select(node);
@@ -252,7 +250,6 @@ function setupMaritalStatus(diagram) {
         if (uxs !== undefined) {
             if (typeof uxs === "String") uxs = [uxs];
             if (typeof ms === "String") ms = [ms];
-            // console.log("Ux", uxs);
             for (var a = 0; a < uxs.length; a++) {
                 for (let b = 0; b < ms.length; b++) {
                     var wife = uxs[a];
@@ -296,7 +293,6 @@ function setupMaritalStatus(diagram) {
         if (virs !== undefined) {
             if (typeof virs === "String") virs = [virs];
             if (typeof ms === "String") ms = [ms];
-            // console.log("Vir", virs);
             for (var j = 0; j < virs.length; j++) {
                 for (let b = 0; b < ms.length; b++) {
                     var husband = virs[j];
@@ -666,16 +662,6 @@ TwinLink.prototype.computePoints = function() {
                 var birthIdSplit = birthId.split("/");
                 var birthIdDay = parseInt(birthIdSplit[1]);
                 var birthIdMonth = parseInt(birthIdSplit[0]);
-
-                // if (childBdDay == birthIdDay ||
-                //     childBdDay == (birthIdDay - 1) ||
-                //     birthIdDay == (childBdDay - 1) ||
-                //     childBdMonth == birthIdMonth ||
-                //     childBdMonth == (birthIdMonth - 1) ||
-                //     birthIdMonth == (childBdMonth - 1)) {
-                //     sameBirth++;
-                //     sumX += child.location.x;
-                // }
                 
                 if((childBdDay == birthIdDay ||
                     childBdDay == (birthIdDay - 1) ||

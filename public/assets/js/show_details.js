@@ -6,18 +6,6 @@ function getNodeData(key) {
             if(snapshot.exists()) {
                 showNodeData(snapshot.val())
             }
-            else potentialUsersTable(key);
-        });
-}
-
-function potentialUsersTable(key) {
-    userPotentialRef
-        .child(key)
-        .once("value")
-        .then(snapshot => {
-            if(snapshot.exists()) {
-                showNodeData(snapshot.val())
-            }
         });
 }
 
@@ -34,16 +22,6 @@ function showNodeData(data) {
     $('#node_living_status')
         .empty()
         .append(data.livingStatus);
-
-    if (data.uid === null || data.uid === undefined) {
-        $("#node_key")
-            .empty()
-            .append(data.tempKeyInClan);
-    } else {
-        $("#node_key")
-            .empty()
-            .append(data.uid);
-    }
 
     if (!(data.email === null || data.email === undefined)) {
         $("#node_email")

@@ -326,18 +326,18 @@
                                 <a class="btn btn-just-icon btn-simple auth_with_fb">
                                     <i class="fa fa-facebook-square"></i>
                                 </a>
-                                <!-- <a class="btn btn-just-icon btn-simple auth_with_twitter">
+                                <a class="btn btn-just-icon btn-simple auth_with_twitter">
                                     <i class="fa fa-twitter"></i>
                                 </a>
                                 <a class="btn btn-just-icon btn-simple auth_with_google">
                                     <i class="fa fa-google-plus"></i>
-                                </a> -->
+                                </a>
                             </div>
                         </div>
                     </div>
                     <div class="modal-body">
                         <form class="form" method="" action="">
-                            <p class="description text-center">or be classical</p>
+                            <p class="description text-center">Or Be Classical</p>
                             <div class="card-content">
                                 <div class="input-group">
                                     <span class="input-group-addon">
@@ -412,12 +412,12 @@
                                     <a class="btn btn-just-icon btn-round btn-facebook auth_with_fb">
                                         <i class="fa fa-facebook"></i>
                                     </a>
-                                    <!-- <a class="btn btn-just-icon btn-round btn-twitter auth_with_twitter">
+                                    <a class="btn btn-just-icon btn-round btn-twitter auth_with_twitter">
                                         <i class="fa fa-twitter"></i>
                                     </a>
                                     <a class="btn btn-just-icon btn-round btn-google auth_with_google">
                                         <i class="fa fa-google"></i>
-                                    </a> -->
+                                    </a>
                                     <h4> or be classical </h4>
                                 </div>
 

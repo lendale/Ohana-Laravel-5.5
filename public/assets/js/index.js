@@ -35,7 +35,7 @@ function checkForFirstTime(user) {
         .child(user.uid)
         .once("value")
         .then(function(snapshot) {
-            exists = snapshot.val() !== null;
+                exists = snapshot.val() !== null;
         })
         .then(function() {
             userFirstTimeCallback(user, exists);

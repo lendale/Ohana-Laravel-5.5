@@ -1,11 +1,9 @@
-// function addChild(downloadURL) {
-function addChild() {
+function addChild(downloadURL) {
     var firstName = $("#child_first_name").val();
     var middleName = $("#child_middle_name").val();
     var lastName = $("#child_last_name").val();
     var gender = $("#child_gender").val();
     var livingStatus = $("#child_living_status").val();
-    var role = $("#child_role_in_tree").val();
     var email = $('#child_email').val();
     var birthDate = $('#child_birth_date').val();
     var birthPlace = $('#child_birth_place').val();
@@ -16,15 +14,12 @@ function addChild() {
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
+        email: email,
         gender: gender,
         livingStatus: livingStatus,
-        role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        familyId: userFamilyId,
-        merged: false,
+        registered: false,
         parenthood: parenthood,
-        // photoURL: downloadURL
     };
 
     if (parentSpouseKey === currentUser.uid && currentUserGender === 'male') {
@@ -37,12 +32,12 @@ function addChild() {
         person.parentKeys = { m: currentUser.uid, f: parentSpouseKey };
     }
 
-    if (middleName.length > 0) {
-        person.middleName = middleName;
+    if (downloadURL !== undefined){
+        person.photoURL = downloadURL
     }
 
-    if (email.length > 0) {
-        person.email = email;
+    if (middleName.length > 0) {
+        person.middleName = middleName;
     }
 
     if (birthPlace.length > 0) {
@@ -52,11 +47,11 @@ function addChild() {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.gender == null ||
         person.livingStatus == null ||
-        person.role == null ||
-        person.parenthood == null ||
         person.birthDate == "" ||
+        person.parenthood == null ||
         parentSpouseKey == null
     ) {
         $("#error_details")
@@ -71,20 +66,22 @@ function addChild() {
                 .modal('show');
         }, 1000);
     }
-    else if (gender === "male") {
-        person.relationship = "son";
-        userFamilyRef.child(currentUser.uid).child('sons').push(person);
-        showSuccess();
-        setTimeout(function() {
-            return location.reload();
-        }, 10000);
-    } else {
-        person.relationship = "daughter";
-        userFamilyRef.child(currentUser.uid).child('daughters').push(person);
-        showSuccess();
-        setTimeout(function() {
-            return location.reload();
-        }, 10000);
+    else {
+        if (gender === "male") {
+            person.relationship = "son";
+            userFamilyRef.child(currentUser.uid).child('sons').push(person);
+            showSuccess();
+            setTimeout(function() {
+                return location.reload();
+            }, 10000);
+        } else {
+            person.relationship = "daughter";
+            userFamilyRef.child(currentUser.uid).child('daughters').push(person);
+            showSuccess();
+            setTimeout(function() {
+                return location.reload();
+            }, 10000);
+        }
     }
 }
 
@@ -97,29 +94,35 @@ function handleChildPic(eventData){
     var fileNameOnStorage = childPicKey + '.' + fileExtension;
     var PicStorageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
     var task = PicStorageRef.put(file);
+    
+    var submit_child = '<button id="save_childwithPhoto" type="button" class="btn btn-success add" data-dismiss="modal">Save With Photo</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
 
+    $('#submit_child_btn').html(submit_child);
+
+    console.log('FILE:', file)
+    console.log('FILENAME:', fileName)
+    console.log('FILE EXTENSION:', fileExtension)
+
+    $('#save_childwithPhoto').click(function() {
+    var task = PicStorageRef.put(file);
     task.on('state_changed', 
-    function progress(snapshot) {
-        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // uploader.value = percentage;
-        console.log('Upload is ' + percentage + '% done');
-        switch (snapshot.state) {
-            case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused');
-                break;
-            case firebase.storage.TaskState.RUNNING: // or 'running'
-                console.log('Upload is running');
-                showLoading();
-                break;
-        }
-    },
-    function error(err) {
-        window.alert('ERROR');
-    },
-        function(){
-        var downloadURL = task.snapshot.downloadURL;
-        addChild(downloadURL);
-        console.log(downloadURL)
-        console.log('Addded to the Storage')
+        function complete(){
+            var downloadURL = task.snapshot.downloadURL;
+            swal({
+                imageUrl: "assets/img/icons/loader.gif",
+                imageWidth: '90',
+                imageHeight: '90',
+                title: 'Processing Information',
+                text: "This might take a while..",
+                timer: 5000,
+                showConfirmButton: false
+                }).then(function(){},
+                    function(dismiss) {
+                        if (dismiss === "timer") {
+                            // addChild(downloadURL);
+                            searchChild(downloadURL);
+                        }
+                })
+            })
     })
 }

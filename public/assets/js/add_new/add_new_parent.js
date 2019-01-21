@@ -1,11 +1,9 @@
-// function addParent(downloadURL) {
-function addParent() {
+function addParent(downloadURL) {
     var firstName = $("#parent_first_name").val();
     var middleName = $("#parent_middle_name").val();
     var lastName = $("#parent_last_name").val();
     var gender = $("#parent_gender").val();
     var livingStatus = $("#parent_living_status").val();
-    var role = $("#parent_role_in_tree").val();
     var email = $("#parent_email").val();
     var birthDate = $('#parent_birth_date').val();
     var birthPlace = $('#parent_birth_place').val();
@@ -14,22 +12,20 @@ function addParent() {
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
+        email: email,
         gender: gender,
         livingStatus: livingStatus,
-        role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        familyId: userFamilyId,
-        merged: false,
-        // photoURL: downloadURL
+        registered: false,
+        flag: false,
     };
+
+    if (downloadURL !== undefined){
+        person.photoURL = downloadURL
+    }
 
     if (middleName.length > 0) {
         person.middleName = middleName;
-    }
-
-    if (email.length > 0) {
-        person.email = email;
     }
 
     if (birthPlace.length > 0) {
@@ -39,9 +35,9 @@ function addParent() {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.gender == null ||
         person.livingStatus == null ||
-        person.role == null ||
         person.birthDate == ""
     ) {
         $("#error_details")
@@ -74,37 +70,44 @@ function addParent() {
 }
 
 function handleParentPic(eventData){
-    // uid = firebase.auth().currentUser.uid;
+    uid = firebase.auth().currentUser.uid;
     var file = eventData.target.files[0];
     var fileName = file.name;
     var fileExtension = fileName.split(".").pop();
-    var fatherPicKey = firebase.database().ref().child('fathers').push().getKey();
-    var fileNameOnStorage = fatherPicKey + '.' + fileExtension;
+    var parentPicKey = firebase.database().ref().child('parent').push().getKey();
+    var fileNameOnStorage = parentPicKey + '.' + fileExtension;
     var PicStorageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
     var task = PicStorageRef.put(file);
 
-    task.on('state_changed', 
-    function progress(snapshot) {
-        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // uploader.value = percentage;
-        console.log('Upload is ' + percentage + '% done');
-        switch (snapshot.state) {
-            case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused');
-                break;
-            case firebase.storage.TaskState.RUNNING: // or 'running'
-                console.log('Upload is running');
-                showLoading();
-                break;
-        }
-    },
-    function error(err) {
-        window.alert('ERROR');
-    },
-        function(){
-        var downloadURL = task.snapshot.downloadURL;
-        addParent(downloadURL);
-        console.log(downloadURL)
-        console.log('Addded to the Storage')
+    var submit_parent = '<button id="save_parentwithPhoto" type="button" class="btn btn-success add" data-dismiss="modal">Save With Photo</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+
+    $('#submit_parent_btn').html(submit_parent);
+
+    console.log('FILE:', file)
+    console.log('FILENAME:', fileName)
+    console.log('FILE EXTENSION:', fileExtension)
+
+    $('#save_parentwithPhoto').click(function() {
+    var task = PicStorageRef.put(file);
+        task.on('state_changed', 
+            function complete(){
+            var downloadURL = task.snapshot.downloadURL;
+                 swal({
+                    imageUrl: "assets/img/icons/loader.gif",
+                    imageWidth: '90',
+                    imageHeight: '90',
+                    title: 'Processing Information',
+                    text: "This might take a while..",
+                    timer: 5000,
+                    showConfirmButton: false
+                    }).then(function(){},
+                        function(dismiss) {
+                            if (dismiss === "timer") {
+                            // addParent(downloadURL);
+                            searchParent(downloadURL);
+                            }
+                    })
+        })
+
     })
 }

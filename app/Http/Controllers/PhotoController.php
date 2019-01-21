@@ -11,14 +11,18 @@ class PhotoController extends Controller
         return view('album_clan');
     }
 
-    public function clan_album()
-    {
-        return view('clan-album');
-    }
-
     public function album_user()
     {
         return view('album_user');
     }
+    
+    public function album_extended()
+    {
+        return view('album_extended');
+    }
 
+    public function album_immediate()
+    {
+        return view('album_immediate');
+    }
 }

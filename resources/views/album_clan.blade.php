@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>TEST - USER ALBUM</title>
+    <title>Clan Albums</title>
     <link rel="shortcut icon" href="assets/img/favicon.ico" />
 
     <!--     Fonts and icons     -->
@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/album.css">
 </head>
-<body>
+<body class="image-container set-full-height" >
 <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -35,14 +35,30 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navigation">
                 <ul class="nav navbar-nav navbar-right">
+                    <!-- <li>
+                        <a href="/timeline">Timeline</a>
+                    </li> -->
                     <li>
                         <a href="/genealogy">Genealogy</a>
                     </li>
-                    <li class="active">
-                        <a href="/album_clan">Clan Album</a>
+                    <li>
+                         <!-- Album Dropdown -->
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Album</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/album_user">My Albums</a></li>
+                                <li><a href="/album_clan">Clan Album</a></li>
+                                <li><a href="/album_extended" disabled>Extended Album</a></li>
+                                <li><a href="/album_immediate" disabled>Immediate Album</a></li>
+                            </ul>
                     </li>
                     <li>
-                        <a href="/events">Events</a>
+                         <!-- Album Dropdown -->
+                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
+                            <ul class="dropdown-menu">
+                                <li><a href="/events">Clan Events</a></li>
+                                <li><a href="/eventsImmediate">Immediate Events</a></li>
+                                <li><a href="/eventsExtended" disabled>Extended Events</a></li>
+                            </ul>
                     </li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown">
@@ -91,53 +107,236 @@
             <!-- /.navbar-collapse -->
         </div>
 </nav>
-<main class="main section-white">
-    <section class="section container">
-        
-        <div class="row">
-            <div class="col-md-1">
-                        
-                        <a type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="You're already on the page" onclick="#tab_clanalbum"><img src="assets/img/icons/icons8-gallery-48.png"><br>album</a>
+<main>
+    <section class="select container">
+        <div class="row" id="section">
+        <div id="section">
+            <a type="button" onclick="getClanAlbumList()" class="btn btn-danger btn-sm" data-toggle="modal" title="Upload Photo" data-target="#uploadModal">Upload Photo</a>
 
-                        <a type="button" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="View your uploads"  href="/album_user"><img src="assets/img/icons/icons8-picture-48.png"><br>uploads</a>
-        
-            </div>
-        
-            <div class="col-md-11">
+            <a type="button" class="btn btn-danger btn-sm" data-toggle="modal" title="Create Album" data-target="#createAlbumCoverModal">Create Clan Album<br></a>
+        </div>
+            <div class="col-md-12">
                 <div class="container">
-                    
-                    <div class="tab-pane active" id="tab_clanalbum"><center>
-                        <div id="card-container" class="row">
-                            <div class="col-md-4">
-                                <div class="card card-blog card-atv">
-                                    <div class="card-image">
-                                        <img src="assets/img/icons/gif.gif" id="photoUrl">
-                                    </div>
-                                    <div class="card-content"> 
-                                        <h4 class="card-title">
-                                            <p>Uploaded By:</p>
-                                        </h4>
-                                        <p class="card-description" id="caption">
-                                            CAPTION 
-                                        </p>
-                                        <div class="footer">
-                                            <i class="material-icons">schedule</i>
-                                        </div>  
-                                    </div>  
+                    <center>
+                    <div id="card-container" class="row">
+                        <div class="col-md-4">
+                            <div class="card card-blog">
+                                <div class="card-image">
+                                    <img src="assets/img/filipino/album cover 1.jpg" id="cover">
+                                        <div class="card-title">                          
+                                            <p id="name">Album Name</p>
+                                        </div>
                                 </div>
+                                
+                                <div class="card-content">
+                                    <div class="card-description">
+                                        <i><p id="description">Album Description</p></i>
+                                    </div>
+                                    <div class="footer" align="left">
+                                        
+                                        <!-- <i class="material-icons">face</i> -->
+                                        <div id="creator">Album Creator</div>
+                                        <br>
+                                        <!-- <br><i class="material-icons">query_builder</i> -->
+                                        <div id="timestamp">Time</div>
+                                        <br>
+                                        <!-- <br><i class="material-icons">settings</i> -->
+                                        <div id="privacy">Ohana</div>
+                                        <br>
+                                    </div>
+                                    <div class="footer">
+                                        <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="View Photos" class="btn btn-sm btn-info btn-just-icon btn-fill btn-round"><i class="material-icons">photo_library</i>
+                                        </a>
+                                        <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Edit Album Information" class="btn btn-sm btn-success btn-just-icon btn-fill btn-round btn-wd"><i class="material-icons">edit</i>
+                                        </a>
+                                        <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-just-icon btn-fill btn-round"><i class="material-icons">delete_forever</i>
+                                        </a>
+                                    </div>
+                                </div>  
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+</main>
+
+<!-- UPLOAD PHOTO NEW MODAL -->
+<div class="modal fade bd-example-modal-lg" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			
+            <div class="modal-header">One for All, All for One! 
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					<i class="material-icons">clear</i>
+				</button>
+				<center><h2 class="modal-title">Upload Photo
+                <img src="assets/img/icons/album.png"  style="width:60px;height:60px;">
+                </h2></center>
+			</div>
+
+            <div class="modal-body">
+				<div class="row">
+                    <div class="col-md-6">
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail img-raised">
+                                <img src="assets/img/icons/cover.png" alt="..." >
                             </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+                            <div>
+                                <span class="btn btn-raised btn-round btn-danger btn-file btn-sm">
+                                <span class="fileinput-new">Select Image</span>
+                                <span class="fileinput-exists">Change</span>
+                                <input type="file" name="..." id="album_photo"/>
+                                </span>
+                                <a href="#pablo" class="btn btn-danger btn-round btn-sm fileinput-exists" data-dismiss="fileinput">Remove</a>    
+                            </div>    
+                        </div>
+                    </div>
+                
+                    <strong><p><h4>Select Album:</h4></p></strong>
+                    <div class="col-sm-6" id="all_album_list">
+                        <select class="selectpicker select-danger" data-style="select-with-transition" title="Single Select" required>
+                            <option id="photo_album">Album List</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group label-floating form-danger">
+                            <label class="control-label"><strong>Add Photo Caption</strong>(required)</label>
+                            <textarea class="form-control" id="photo_caption" rows="3" required></textarea>
                         </div>
                     </div>
 
+                    <center><a type="button" class="btn btn-danger btn-fab btn-round" name="upload_photo" id="upload_photo"><i class="material-icons">done_outline</i></a></center>
+			    </div>
+		    </div>
+	    </div>
+    </div>
+</div>
 
+<!-- UPDATE CAPTION MODAL -->
+<div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+            <div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					<i class="material-icons">clear</i>
+				</button>
+				<h3 class="modal-title">Changed your mind? We got it!
+                <img src="assets/img/icons/icons8-thinking-male-48.png">
+                </h3>
+			</div>
+
+            <div class="modal-body">
+				<div class="row">
+                    <div class="col-md-12">
+                 
+                        <div class="form-group label-floating form-danger">
+                            <label class="control-label">Input New Caption</label>
+                            <input type="text" id="picCap" class="form-control">
+                        </div>
+                    </div>
                 </div>
+			</div>
+		
+            <div class="modal-footer">
+				<button type="button" class="btn btn-default btn-simple" onclick="saveNewCaption()">Save changes</button>
+				<button type="button" class="btn btn-danger btn-simple" data-dismiss="modal">Close</button>
             </div>
 
-        </div>
-        <!-- ang naa sa babaw na div kay end sa class row -->
-    </section>
-</main>
+		</div>
+	</div>
+</div>
 
+<!-- CREATE ALBUM MODAL -->
+<div class="modal fade bd-example-modal-lg" id="createAlbumCoverModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			
+            <div class="modal-header">One for All, All for One! 
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					<i class="material-icons">clear</i>
+				</button>
+				<center><h2 class="modal-title">Create Album
+                <img src="assets/img/icons/album.png"  style="width:60px;height:60px;">
+                </h2></center>
+			</div>
+
+            <div class="modal-body">
+				<div class="row">
+                    <div class="col-md-6">
+                        <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                            <div class="fileinput-new thumbnail img-raised">
+                                <img src="assets/img/icons/cover.png" alt="..." >
+                            </div>
+                            <div class="fileinput-preview fileinput-exists thumbnail img-raised"></div>
+                            <div>
+                                <span class="btn btn-raised btn-round btn-danger btn-file btn-sm">
+                                <span class="fileinput-new">Select Album Cover</span>
+                                <span class="fileinput-exists">Change</span>
+                                <input type="file" name="..." id="album_cover"/>
+                                </span>
+                                <a href="#pablo" class="btn btn-danger btn-round btn-sm fileinput-exists" data-dismiss="fileinput">Remove</a>    
+                            </div>    
+                        </div>
+                    </div>
+                
+                    <div class="col-sm-6">
+                        <div class="form-group label-floating form-danger">
+                            <label class="control-label"><strong>Album Name</strong> (required)</label>
+                            <input type="text" id="album_name" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group label-floating form-danger">
+                            <label class="control-label"><strong>Add Album Description</strong>(required)</label>
+                            <textarea class="form-control" id="album_description" rows="3" required></textarea>
+                        </div>
+                    </div>
+    
+                    <h4>Share Album With:</h4>
+
+                        <!-- <div class="form-group"> -->
+                            <div class="form-check form-check-radio form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="album_privacy" id="album_privacy" value="Immediate Family" required disabled> Immediate Family
+                                    <span class="circle">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="form-check form-check-radio form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="album_privacy" id="album_privacy" value="Extended Family" disabled>Extended Family
+                                    <span class="circle">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+
+                            <div class="form-check form-check-radio form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="album_privacy" id="album_privacy" value="Clan" checked="checked"> Clan
+                                    <span class="circle">
+                                        <span class="check"></span>
+                                    </span>
+                                </label>
+                            </div>
+                        <!-- </div> -->
+                
+
+                    <center><a type="button" class="btn btn-danger btn-fab btn-round" name="create_album" id="create_album"><i class="material-icons">done_outline</i></a></center>
+			    </div>
+		    </div>
+	    </div>
+    </div>
+</div>
 
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js "></script>
@@ -184,7 +383,8 @@
 <!--    Control Center for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc    -->
 <script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
 
-<!-- USER ALBUM JS -->
-<script src="assets/js/album_clan.js"></script>
+<script src="assets/js/material-kit/material-kit.min.js" type="text/javascript"></script>
 
+<!-- USER ALBUM JS -->
+<script type="text/javascript" src="assets/js/album_clan.js"></script>
 </html>

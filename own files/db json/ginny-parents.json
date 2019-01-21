@@ -1,0 +1,153 @@
+{
+  "user_family" : {
+    "EZylGwAi0VVObDRSaJb4Yl1rz4b2" : {
+      "fathers" : {
+        "-LWU-ALF_vTI6Eb8-ggG" : {
+          "birthDate" : "02/16/1970",
+          "birthPlace" : "Cebu",
+          "displayName" : "Arthur Weasley",
+          "email" : "arthurweasley@gmail.com",
+          "firstName" : "Arthur",
+          "gender" : "male",
+          "lastName" : "Weasley",
+          "livingStatus" : "living",
+          "middleName" : "Black",
+          "registered" : false,
+          "relationship" : "father"
+        }
+      },
+      "mothers" : {
+        "-LWU75WxSEK5f_qeCA2R" : {
+          "birthDate" : "03/24/1971",
+          "birthPlace" : "Cebu",
+          "displayName" : "Molly Prewett",
+          "email" : "mollyweasley@gmail.com",
+          "firstName" : "Molly",
+          "gender" : "female",
+          "lastName" : "Prewett",
+          "livingStatus" : "living",
+          "middleName" : "Mop",
+          "registered" : false,
+          "relationship" : "mother"
+        }
+      }
+    }
+  },
+  "user_immediate_family" : {
+    "-LWTqQMKka3CTiWzLR7k" : {
+      "-LWU-ALF_vTI6Eb8-ggG" : {
+        "bd" : "02/16/1970",
+        "children" : {
+          "-LWU-AqNz213ccslO1oz" : "EZylGwAi0VVObDRSaJb4Yl1rz4b2"
+        },
+        "key" : "-LWU-ALF_vTI6Eb8-ggG",
+        "loc" : "/user_family/EZylGwAi0VVObDRSaJb4Yl1rz4b2/fathers/-LWU-ALF_vTI6Eb8-ggG/",
+        "ms" : {
+          "-LWU75WxSEK5f_qeCA2R" : "married"
+        },
+        "n" : "Arthur Weasley",
+        "s" : "male",
+        "ux" : {
+          "-LWU760eoAYaabl18eWr" : "-LWU75WxSEK5f_qeCA2R"
+        }
+      },
+      "-LWU75WxSEK5f_qeCA2R" : {
+        "bd" : "03/24/1971",
+        "children" : {
+          "-LWU76-J09TR4gCHWMNE" : "EZylGwAi0VVObDRSaJb4Yl1rz4b2"
+        },
+        "key" : "-LWU75WxSEK5f_qeCA2R",
+        "loc" : "/user_family/EZylGwAi0VVObDRSaJb4Yl1rz4b2/mothers/-LWU75WxSEK5f_qeCA2R/",
+        "ms" : {
+          "-LWU-ALF_vTI6Eb8-ggG" : "married"
+        },
+        "n" : "Molly Prewett",
+        "s" : "female",
+        "vir" : {
+          "-LWU760eoAYaabl18eWq" : "-LWU-ALF_vTI6Eb8-ggG"
+        }
+      },
+      "EZylGwAi0VVObDRSaJb4Yl1rz4b2" : {
+        "bd" : "01/06/1997",
+        "f" : "-LWU-ALF_vTI6Eb8-ggG",
+        "key" : "EZylGwAi0VVObDRSaJb4Yl1rz4b2",
+        "loc" : "/users/EZylGwAi0VVObDRSaJb4Yl1rz4b2/",
+        "m" : "-LWU75WxSEK5f_qeCA2R",
+        "n" : "Ginevra Potter",
+        "s" : "female"
+      }
+    },
+    "-LWU08MsQ2ulTFwKefal" : {
+      "yftR0NgeJrgjuipurADAhPss0tc2" : {
+        "bd" : "02/16/1970",
+        "key" : "yftR0NgeJrgjuipurADAhPss0tc2",
+        "loc" : "/users/yftR0NgeJrgjuipurADAhPss0tc2/",
+        "n" : "Arthur Weasley",
+        "s" : "male"
+      }
+    }
+  },
+  "users" : {
+    "-LWU-ALF_vTI6Eb8-ggG" : {
+      "birthDate" : "02/16/1970",
+      "birthPlace" : "Cebu",
+      "displayName" : "Arthur Weasley",
+      "email" : "arthurweasley@gmail.com",
+      "firstName" : "Arthur",
+      "gender" : "male",
+      "lastName" : "Weasley",
+      "livingStatus" : "living",
+      "middleName" : "Black",
+      "registered" : false,
+      "relationship" : "father",
+      "uid" : "-LWU-ALF_vTI6Eb8-ggG"
+    },
+    "-LWU75WxSEK5f_qeCA2R" : {
+      "birthDate" : "03/24/1971",
+      "birthPlace" : "Cebu",
+      "displayName" : "Molly Prewett",
+      "email" : "mollyweasley@gmail.com",
+      "firstName" : "Molly",
+      "gender" : "female",
+      "lastName" : "Prewett",
+      "livingStatus" : "living",
+      "middleName" : "Mop",
+      "registered" : false,
+      "relationship" : "mother",
+      "uid" : "-LWU75WxSEK5f_qeCA2R"
+    },
+    "EZylGwAi0VVObDRSaJb4Yl1rz4b2" : {
+      "birthDate" : "01/06/1997",
+      "birthPlace" : "Cebu",
+      "displayName" : "Ginevra Potter",
+      "email" : "ginnypotter@gmail.com",
+      "extendedId" : "-LWTqQMLZm6Dd7NZrUKG",
+      "familyId" : "-LWTqQMKka3CTiWzLR7k",
+      "firstName" : "Ginevra",
+      "gender" : "female",
+      "lastName" : "Potter",
+      "livingStatus" : "living",
+      "merged" : false,
+      "middleName" : "Weasley",
+      "registered" : true,
+      "street_address" : "Potter",
+      "uid" : "EZylGwAi0VVObDRSaJb4Yl1rz4b2"
+    },
+    "yftR0NgeJrgjuipurADAhPss0tc2" : {
+      "birthDate" : "02/16/1970",
+      "birthPlace" : "Cebu",
+      "displayName" : "Arthur Weasley",
+      "email" : "arthurweasley@gmail.com",
+      "extendedId" : "-LWU08NLlHMHtFtVdGsT",
+      "familyId" : "-LWU08MsQ2ulTFwKefal",
+      "firstName" : "Arthur",
+      "gender" : "male",
+      "lastName" : "Weasley",
+      "livingStatus" : "living",
+      "merged" : false,
+      "middleName" : "Black",
+      "registered" : true,
+      "uid" : "yftR0NgeJrgjuipurADAhPss0tc2"
+    }
+  }
+}

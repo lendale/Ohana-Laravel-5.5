@@ -1,12 +1,10 @@
-// function addSpouse(downloadURL) {
-function addSpouse() {
+function addSpouse(downloadURL) {
     var firstName = $("#spouse_first_name").val();
     var middleName = $("#spouse_middle_name").val();
     var lastName = $("#spouse_last_name").val();
     var gender = $("#spouse_gender").val();
     var livingStatus = $("#spouse_living_status").val();
     var maritalStatus = $("#spouse_relationship").val();
-    var role = $("#spouse_role_in_tree").val();
     var email = $("#spouse_email").val();
     var birthDate = $('#spouse_birth_date').val();
     var birthPlace = $('#spouse_birth_place').val();
@@ -15,23 +13,20 @@ function addSpouse() {
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
+        email: email,
         gender: gender,
         livingStatus: livingStatus,
-        maritalStatus: maritalStatus,
-        role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        familyId: userFamilyId,
-        merged: false,
-        // photoURL: downloadURL
+        registered: false,
+        maritalStatus: maritalStatus,
     };
+
+    if (downloadURL !== undefined){
+        person.photoURL = downloadURL
+    }
 
     if (middleName.length > 0) {
         person.middleName = middleName;
-    }
-
-    if (email.length > 0) {
-        person.email = email;
     }
 
     if (birthPlace.length > 0) {
@@ -41,11 +36,11 @@ function addSpouse() {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.gender == null ||
         person.livingStatus == null ||
-        person.maritalStatus == null ||
-        person.role == null ||
-        person.birthDate == ""
+        person.birthDate == "" ||
+        person.maritalStatus == null
     ) {
         $("#error_details")
             .modal('show');
@@ -77,37 +72,39 @@ function addSpouse() {
 }
 
 function handleSpousePic(eventData){
-    // uid = firebase.auth().currentUser.uid;
+    uid = firebase.auth().currentUser.uid;
     var file = eventData.target.files[0];
     var fileName = file.name;
     var fileExtension = fileName.split(".").pop();
     var spousePicKey = firebase.database().ref().child('spouse').push().getKey();
     var fileNameOnStorage = spousePicKey + '.' + fileExtension;
     var PicStorageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
-    var task = PicStorageRef.put(file);
 
+    var submit_spouse = '<button id="save_spousewithPhoto" type="button" class="btn btn-success add" data-dismiss="modal">Save With Photo</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+
+    $('#submit_spouse_btn').html(submit_spouse);
+
+    $('#save_spousewithPhoto').click(function() {
+    var task = PicStorageRef.put(file);
     task.on('state_changed', 
-    function progress(snapshot) {
-        var percentage = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        // uploader.value = percentage;
-        console.log('Upload is ' + percentage + '% done');
-        switch (snapshot.state) {
-            case firebase.storage.TaskState.PAUSED: // or 'paused'
-                console.log('Upload is paused');
-                break;
-            case firebase.storage.TaskState.RUNNING: // or 'running'
-                console.log('Upload is running');
-                showLoading();
-                break;
-        }
-    },
-    function error(err) {
-        window.alert('ERROR');
-    },
-        function(){
-        var downloadURL = task.snapshot.downloadURL;
-        addSpouse(downloadURL);
-        console.log(downloadURL)
-        console.log('Addded to the Storage')
+        function complete(){
+            var downloadURL = task.snapshot.downloadURL;
+            
+            swal({
+                imageUrl: "assets/img/icons/loader.gif",
+                imageWidth: '90',
+                imageHeight: '90',
+                title: 'Processing Information',
+                text: "This might take a while..",
+                timer: 5000,
+                showConfirmButton: false
+                }).then(function(){},
+                    function(dismiss) {
+                        if (dismiss === "timer") {
+                            // addSpouse(downloadURL);
+                            searchSpouse(downloadURL);
+                        }
+                })
     })
+})
 }

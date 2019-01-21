@@ -2,6 +2,9 @@ function displayExistingSpouse(data) {
     $("#modal_add_existing_spouse")
         .modal('show');
 
+    $('div#modal_add_existing_spouse h4').empty()
+    $('div#modal_add_existing_spouse h4').append("Add a Spouse for " + currentUser.displayName)
+
     $("#existing_spouse_first_name")
         .empty()
         .attr("value", data.firstName);
@@ -121,7 +124,6 @@ function saveExistingSpouse(data) {
     var gender = $("#existing_spouse_gender").val();
     var livingStatus = $("#existing_spouse_living_status").val();
     var maritalStatus = $("#existing_spouse_relationship").val();
-    var role = $("#existing_spouse_role_in_tree").val();
     var email = $("#existing_spouse_email").val();
     var birthDate = $('#existing_spouse_birth_date').val();
     var birthPlace = $('#existing_spouse_birth_place').val();
@@ -130,15 +132,12 @@ function saveExistingSpouse(data) {
         firstName: firstName,
         lastName: lastName,
         displayName: firstName + " " + lastName,
+        email: email,
         gender: gender,
         livingStatus: livingStatus,
         maritalStatus: maritalStatus,
-        role: role,
         birthDate: birthDate,
-        clanId: userClanId,
-        familyId: userFamilyId,
-        merged: false,
-        // photoURL: downloadURL
+        registered: true,
     };
 
     if (middleName.length > 0) {
@@ -156,10 +155,10 @@ function saveExistingSpouse(data) {
     if (
         person.firstName == "" ||
         person.lastName == "" ||
+        person.email == "" ||
         person.gender == null ||
         person.livingStatus == null ||
         person.maritalStatus == null ||
-        person.role == null ||
         person.birthDate == ""
     ) {
         $("#error_details")
@@ -176,24 +175,14 @@ function saveExistingSpouse(data) {
     }
     else if (gender === "male") {
         person.relationship = "husband";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('husbands').child(data.tempKeyInClan).set(person);
-        }
-        else if(data.uid !== null || data.uid !== undefined) {
-            userFamilyRef.child(currentUser.uid).child('husbands').child(data.uid).set(person);
-        }
+        userFamilyRef.child(currentUser.uid).child('husbands').child(data.uid).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();
         }, 10000);
     } else {
         person.relationship = "wife";
-        if(data.uid === null || data.uid === undefined) {
-            userFamilyRef.child(currentUser.uid).child('wives').child(data.tempKeyInClan).set(person);
-        }
-        else if(data.uid !== null || data.uid !== undefined) {
-            userFamilyRef.child(currentUser.uid).child('wives').child(data.uid).set(person);
-        }
+        userFamilyRef.child(currentUser.uid).child('wives').child(data.uid).set(person);
         showSuccess();
         setTimeout(function() {
             return location.reload();

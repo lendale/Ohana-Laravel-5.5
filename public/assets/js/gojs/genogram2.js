@@ -4,61 +4,19 @@ function initGenogram(data, user_id) {
     myDiagram = $(go.Diagram, "genogram", {
         // The diagram is initially displayed at the center
         initialContentAlignment: go.Spot.Center, // Centers diagram
+        // initialAutoScale: go.Diagram.UniformToFill,
         // The user won't be able to move the elements
         allowMove: true,
         "undoManager.isEnabled": true,
         // Use a custom layout defined below
         layout: $(GenogramLayout, {
             direction: 90, // direction the graph grows toward
-            layerSpacing: 70, // space between parent and child node layers
-            columnSpacing: 60 // space between children
+            layerSpacing: 60, // space between parent and child node layers (30)
+            columnSpacing: 10, // space between children
         })
     });
 
-    // Gives specific color to shape for name
-    function consanguinity(node) {
-        var loc = node.loc;
-        var key = node.key;
-
-        switch (loc) {
-            // a shade of red
-            case "/users/" + user_id + "/":
-                return "#ff4d4d";
-            case "/user_family/" + user_id + "/mothers/" + key + "/":
-                return "#ff4d4d";
-            case "/user_family/" + user_id + "/fathers/" + key + "/":
-                return "#ff4d4d";
-            case "/user_family/" + user_id + "/daughters/" + key + "/":
-                return "#ff4d4d";
-            case "/user_family/" + user_id + "/sons/" + key + "/":
-                return "#ff4d4d";
-            case "/user_family/" + user_id + "/brothers/" + key + "/":
-                return "#ff4d4d";
-            case "/user_family/" + user_id + "/sisters/" + key + "/":
-                return "#ff4d4d";
-            case "/user_family/" + key + "/mothers/" + user_id + "/":
-                return "#ff4d4d";
-            case "/user_family/" + key + "/fathers/" + user_id + "/":
-                return "#ff4d4d";
-            case "/user_family/" + key + "/daughters/" + user_id + "/":
-                return "#ff4d4d";
-            case "/user_family/" + key + "/sons/" + user_id + "/":
-                return "#ff4d4d";
-                // a shade of blue
-            case "/user_family/" + user_id + "/wives/" + key + "/":
-                return "#3366ff";
-            case "/user_family/" + user_id + "/husbands/" + key + "/":
-                return "#3366ff";
-            case "/user_family/" + key + "/wives/" + user_id + "/":
-                return "#3366ff";
-            case "/user_family/" + key + "/husbands/" + user_id + "/":
-                return "#3366ff";
-            default:
-                return "#cccccc"; // a shade of gray
-        }        
-    }
-
-    /* NODE TEMPLATES IN GENDER, MARITAL STATUS, CHILD STATUS NAMED BY CATEGORY VALUE (S) */
+    /* NODE TEMPLATES IN GENDER, MARITAL STATUS, CHILD STATUS NAMED BY CATEGORY VALUE (GENDER) */
 
     /* gender */
 
@@ -72,7 +30,7 @@ function initGenogram(data, user_id) {
                     width: 100,
                     height: 100
                 },
-                new go.Binding("source", "img")),
+                new go.Binding("source", "photoURL")),
             $(go.Panel,
                 $(go.Shape, "RoundedRectangle", {
                         width: 110,
@@ -86,8 +44,10 @@ function initGenogram(data, user_id) {
                         width: 100,
                         height: 33
                     },
-                    new go.Binding("text", "n")
-                )))
+                    new go.Binding("text", "displayName"),
+                    // new go.Binding("stroke", "", livingStatus)
+                )
+            ))
     );
 
     myDiagram.nodeTemplateMap.add("female",
@@ -100,7 +60,7 @@ function initGenogram(data, user_id) {
                     width: 100,
                     height: 100
                 },
-                new go.Binding("source", "img")),
+                new go.Binding("source", "photoURL")),
             $(go.Panel,
                 $(go.Shape, "RoundedRectangle", {
                         width: 110,
@@ -114,8 +74,10 @@ function initGenogram(data, user_id) {
                         width: 100,
                         height: 33
                     },
-                    new go.Binding("text", "n")
-                )))
+                    new go.Binding("text", "displayName"),
+                    // new go.Binding("stroke", "", livingStatus)
+                )
+            ))
     );
 
     /* nothing shows on marital status */
@@ -154,9 +116,33 @@ function initGenogram(data, user_id) {
         $(go.Shape, { strokeWidth: 1 })
     );
 
-    /* marital statu */
+    // myDiagram.linkTemplate =
+    //     $(go.Link, {
+    //         routing: go.Link.AvoidsNodes,
+    //         curve: go.Link.JumpOver,
+    //         layerName: "Background",
+    //         selectable: false,
+    //         fromSpot: go.Spot.Bottom,
+    //         toSpot: go.Spot.Top
+    //     },
+    //     $(go.Shape, { strokeWidth: 1 })
+    // );
+
+    /* marital status */
 
     myDiagram.linkTemplateMap.add("Marriage",
+        $(go.Link, {
+                selectable: false,
+                routing: go.Link.AvoidsNodes,
+                curve: go.Link.JumpOver
+            },
+            $(go.Shape, {
+                strokeWidth: 2,
+                stroke: "blue",
+            }))
+    );
+
+    myDiagram.linkTemplateMap.add("Separated",
         $(go.Link, {
                 selectable: false,
                 routing: go.Link.AvoidsNodes,
@@ -169,30 +155,10 @@ function initGenogram(data, user_id) {
             }))
     );
 
-    myDiagram.linkTemplateMap.add("Separated",
-        $(go.Link, {
-                selectable: false,
-                routing: go.Link.AvoidsNodes,
-                curve: go.Link.JumpOver
-            },
-            $(go.Shape, { stroke: "red" }),
-            $(go.Shape, { // the "from" end arrowhead
-                fromArrow: "ForwardSlash",
-                strokeWidth: 1,
-                stroke: "red"
-            }),
-            $(go.Shape, { // the "to" end arrowhead
-                toArrow: "ForwardSlash",
-                strokeWidth: 1,
-                stroke: "red"
-            })
-        )
-    );
-
     /*
         Event listener 'on click' on person. Display the information the person.
     */
-    myDiagram.addDiagramListener("ObjectSingleClicked", function(e) {
+    myDiagram.addDiagramListener("ObjectDoubleClicked", function(e) {
         var part = e.subject.part;
 
         // if (!(part instanceof go.Link)) showNodeData(part.data);
@@ -203,10 +169,46 @@ function initGenogram(data, user_id) {
     setupDiagram(myDiagram, data, user_id);
 }
 
+// Gives specific color to shape for name
+function consanguinity(node) {
+    var relationship = node.relationship;
+
+    if(node.registered == true) return "#D43143"; 
+    else if(node.livingStatus == "living") {
+        switch (relationship) {
+            // a shade of red
+            case "mother":
+                return "#e74c3c";
+            case "father":
+                return "#e74c3c";
+            case "daughter":
+                return "#e74c3c";
+            case "son":
+                return "#e74c3c";
+            case "brother":
+                return "#e74c3c";
+            case "sister":
+                return "#e74c3c";
+                // a shade of blue
+            case "wife":
+                return "#4667E8";
+            case "husband":
+                return "#4667E8";
+            default:
+                return "#cccccc"; // a shade of gray
+        }
+    } else return "#cccccc";
+}
+
+function livingStatus(node) {
+    if(node.livingStatus == "deceased") return "#666666";
+    else return "black";
+}
+
 function setupDiagram(diagram, array, focusId) {
     diagram.model = go.GraphObject.make(go.GraphLinksModel, {
         linkLabelKeysProperty: "labelKeys",
-        nodeCategoryProperty: "s",
+        nodeCategoryProperty: "gender",
         nodeDataArray: array
     });
 
@@ -263,7 +265,7 @@ function setupMaritalStatus(diagram) {
 
                     if (connect === null) {
                         if (marstat === "married") {
-                            var node = { s: "Married" };
+                            var node = { gender: "Married" };
                             model.addNodeData(node);
 
                             var link = {
@@ -274,7 +276,7 @@ function setupMaritalStatus(diagram) {
                             };
                             model.addLinkData(link);
                         } else if (marstat === "separated") {
-                            var node = { s: "Separated" };
+                            var node = { gender: "Separated" };
                             model.addNodeData(node);
 
                             var link = {
@@ -306,7 +308,7 @@ function setupMaritalStatus(diagram) {
 
                     if (connect === null) {
                         if (marstat === "married") {
-                            var node = { s: "Married" };
+                            var node = { gender: "Married" };
                             model.addNodeData(node);
 
                             var link = {
@@ -317,7 +319,7 @@ function setupMaritalStatus(diagram) {
                             };
                             model.addLinkData(link);
                         } else if (marstat === "separated") {
-                            var node = { s: "Separated" };
+                            var node = { gender: "Separated" };
                             model.addNodeData(node);
 
                             var link = {
@@ -338,7 +340,7 @@ function setupMaritalStatus(diagram) {
 function setupParents(diagram) {
     var model = diagram.model;
     var nodeDataArray = model.nodeDataArray;
-
+    
     for (var i = 0; i < nodeDataArray.length; i++) {
         var data = nodeDataArray[i];
         var key = data.key;
@@ -349,7 +351,7 @@ function setupParents(diagram) {
             var connect = findMarriage(diagram, mom, dad);
             if (connect === null) {
                 if (window.console)
-                    window.console.log("unknown marriage: " + mom + " & " + dad);
+                    // window.console.log("unknown marriage: " + mom + " & " + dad);
                 continue;
             }
 
@@ -561,7 +563,7 @@ GenogramLayout.prototype.commitNodes = function() {
         var spouseA = lablink.fromNode;
         var spouseB = lablink.toNode;
         // prefer fathers on the left, mothers on the right
-        if (spouseA.data.s === "female") {
+        if (spouseA.data.gender === "female") {
             // sex is female
             var tempSpouse = spouseA;
             spouseA = spouseB;
@@ -643,8 +645,8 @@ TwinLink.prototype.computePoints = function() {
     var result = go.Link.prototype.computePoints.call(this);
     var pts = this.points; // greek
     if (pts.length >= 4) { // greek
-        var birthId = this.toNode.data["bd"];
-        var genderId = this.toNode.data["s"];
+        var birthId = this.toNode.data["birthDate"];
+        var genderId = this.toNode.data["gender"];
         if (birthId) {
             var parents = this.fromNode;
             var sameBirth = 0;
@@ -653,8 +655,8 @@ TwinLink.prototype.computePoints = function() {
 
             while (it.next()) {
                 var child = it.value;
-                var childBd = child.data["bd"];
-                var childGender = child.data["s"];
+                var childBd = child.data["birthDate"];
+                var childGender = child.data["gender"];
                 var childSpliter = childBd.split("/");
                 var childBdDay = parseInt(childSpliter[1]);
                 var childBdMonth = parseInt(childSpliter[0]);

@@ -103,7 +103,7 @@
                                                 <span class="material-input"></span></div>
 
                                                 <div class="col-sm-10 col-sm-offset-1" required>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div id="radio_group_male" class="choice" data-toggle="wizard-radio">
                                                     <input id="Immediate" type="radio" name="family" value="Immidiate">
                                                     <div class="icon">
@@ -112,22 +112,13 @@
                                                     <h6>Immediate Family</h6>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-6">
                                                 <div id="radio_group_female" class="choice" data-toggle="wizard-radio">
                                                     <input id="Extended" type="radio" name="family" value="Extended">
                                                     <div class="icon">
                                                         <i class="material-icons">group_add</i>
                                                     </div>
                                                     <h6>Extended Family</h6>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div id="radio_group_female" class="choice" data-toggle="wizard-radio">
-                                                    <input id="Clan" type="radio" name="family" value="Clan">
-                                                    <div class="icon">
-                                                        <i class="material-icons">group_add</i>
-                                                    </div>
-                                                    <h6>Clan</h6>
                                                 </div>
                                             </div>
                                         </div>
@@ -164,15 +155,16 @@
                                                  <input id="time" type="text" placeholder="Time" class="datetimepicker form-control" autocomplete="off">
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 checkbox">
-                                            <label>
-                                                <input type="checkbox" id="check" >
-                                               
-                                            </label>
-                                         <h5 class="info-text">Create an Album for this event </h5>
-                                        
-                                         </div>
                                     </div>
+                                      <div class="col-sm-10  col-sm-offset-4 checkbox">
+                                            <label >
+                                                <input type="checkbox" id="check" ><h5 class="info-text">Create an Album for this event </h5>
+                                               
+                                              
+                                             </label>
+                                         
+                                         
+                                         </div>
                                 </div>
                             </div>
 
@@ -249,6 +241,7 @@
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-messaging.js"></script>
+<script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-storage.js"></script>
 <script src="assets/js/init.js "></script>
 
 <!--   Core JS Files   -->
@@ -272,7 +265,6 @@
 <script src="assets/js/material-kit/moment.min.js"></script>
 <!-- Authentication -->
 <script src="assets/js/auth.js"></script>
-<script src="assets/js/events_clan.js"></script>
-
+<script src="assets/js/genealogy.js"></script>
 <script defer src="assets/js/messaging.js"></script>
 </html>

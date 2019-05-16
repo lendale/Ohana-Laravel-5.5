@@ -29,13 +29,12 @@ function userFirstTimeCallback(user, exists) {
 
 function checkForFirstTime(user) {
     var exists;
-    FIREBASE_DATABASE
-        .ref()
+    FIREBASE_DATABASE.ref()
         .child("users")
         .child(user.uid)
         .once("value")
         .then(function(snapshot) {
-                exists = snapshot.val() !== null;
+            exists = snapshot.val() !== null;
         })
         .then(function() {
             userFirstTimeCallback(user, exists);
@@ -54,49 +53,39 @@ function signUpWithEmailAndPass() {
 
     FIREBASE_AUTH.createUserWithEmailAndPassword(email, password)
         .then(function() {
-            console.log('sign up success'); })
+            console.log('sign up success');
+        })
         .catch(function(error) {
-            if(error.message == "The email address is already in use by another account.") {
-                $("#error_details")
-                    .modal('show');
+            $("#error_details").modal('show');
+            $("#error_details_node").empty()
+                .append(error.message + "<br>Please try again.")
+                .css('textAlign', 'center');
+            
+            setTimeout(function() {
+                $("#error_details").modal('hide');
+            }, 5000);
 
-                $("#error_details_node")
-                    .empty()
-                    .append(error.message + "You will be redirected shortly.");
-
-                setTimeout(function() {
-                    $("#error_details")
-                        .modal('hide');
-                }, 2000);
-
-                setTimeout(function() {
-                    $("#modal_register")
-                        .modal('hide');
-                }, 2000);
-
-                setTimeout(function() {
-                    $("#modal_login")
-                        .modal('show');
-                }, 2500);
-            }
-
-            console.log('error', error); })
+            console.log('error', error.message)
+        })
 }
 
 function signInWithEmailAndPass() {
     var email = $("#login_email").val();
     var password = $("#login_password").val();
 
-    FIREBASE_AUTH.signInWithEmailAndPassword(email, password).catch(function(error) {
-            $("#error_details")
-                .modal('show');
+    FIREBASE_AUTH.signInWithEmailAndPassword(email, password)
+        .catch(function(error) {
+            $("#error_details").modal('show');
+            $("#error_details_node").empty()
+                .append(error.message + "<br>Please try again.")
+                .css('textAlign', 'center');
+            
+            setTimeout(function() {
+                $("#error_details").modal('hide');
+            }, 5000);
 
-            $("#error_details_node")
-                .empty()
-                .append(error.message);
-
-            console.log(error);
-    });
+            console.log('error', error.message)
+        })
 }
 
 function authWithFb() {

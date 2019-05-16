@@ -40,20 +40,12 @@
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>
-                         <!-- Album Dropdown -->
-                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Album</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/album_user">My Albums</a></li>
-                                <li><a href="/album_clan">Clan Album</a></li>
-                                <li><a href="/album_extended" disabled>Extended Album</a></li>
-                                <li><a href="/album_immediate" disabled>Immediate Album</a></li>
-                            </ul>
+                        <a href="/album_merged">Album</a>
                     </li>
                     <li>
-                         <!-- Album Dropdown -->
+                         <!-- Events Dropdown -->
                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
                             <ul class="dropdown-menu">
-                                <li><a href="/events">Clan Events</a></li>
                                 <li><a href="/eventsImmediate">Immediate Events</a></li>
                                 <li><a href="/eventsExtended" disabled>Extended Events</a></li>
                             </ul>
@@ -67,7 +59,6 @@
 
                                                 <div id="notificationContainer">
                                                 <div id="notificationTitle" >Notifications</div>
-                                                <
                                                 <div id="notificationsBody" class="notifications">ada</div>
                                                 <div id="notificationFooter"><a href="#">See All</a></div>
                                                 </div>
@@ -235,6 +226,8 @@
 
 
 <script src="assets/js/events_immidiate.js"></script>
+<script src="assets/js/genealogy.js"></script>
+
 
 <script defer src="assets/js/messaging.js"></script>
 <script src="assets/js/material-kit/bootstrap-datetimepicker.js" type="text/javascript"></script>

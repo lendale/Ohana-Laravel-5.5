@@ -39,16 +39,10 @@
                     <li>
                         <a href="/genealogy">Genealogy</a>
                     </li>
-                    <<li>
-                         <!-- Album Dropdown -->
-                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Album</a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/album_user">My Albums</a></li>
-                                <li><a href="/album_clan">Clan Album</a></li>
-                                <li><a href="/album_extended" disabled>Extended Album</a></li>
-                                <li><a href="/album_immediate" disabled>Immediate Album</a></li>
-                            </ul>
+                    <li>
+                        <a href="/album_merged">Album</a>
                     </li>
+                    
                     <li>
                          <!-- events Dropdown -->
                          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
@@ -108,12 +102,14 @@
 
         <main>
             <div class="container section">
-              <div id="card-container" class="row">
+                 <div class="row">
+                <a class="btn btn-danger btn-defualt material-icons " href="/createEvent"><i class="fa fa-user-plus"></i></a></div>
+              <div id="card-container" class="col-md-1">
             
             </div>
     </div>
             
-            <a class="btn btn-danger btn-defualt" href="/createEvent">+Create Event</a>
+            
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -166,7 +162,6 @@
 
 <!--     small alert modal -->
 
-
         </main>
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js"></script>
@@ -215,9 +210,6 @@
 
 <!--    Control C<script src="assets/js/events.js"></script>enter for Material Kit: activating the ripples, parallax effects, scripts from the example pages etc    -->
 <script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
-
-<script src="assets/js/events_clan.js"></script>
-
 
 <script defer src="assets/js/messaging.js"></script>
 <script src="assets/js/material-kit/bootstrap-datetimepicker.js" type="text/javascript"></script>

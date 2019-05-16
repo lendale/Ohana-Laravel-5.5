@@ -461,11 +461,11 @@
                                             <star>*</star> Required fields
                                         </div> -->
 
-                                        <div class="checkbox">
-                                            <label>
-											<input type="checkbox" name="optionsCheckboxes">
-											I agree to the <a href="#something" class="text-info">terms and conditions</a>.
-										</label>
+                                        <div>
+                                            <!-- <label> -->
+                                            <br>
+                                            <p><strong>By signing up, <br>you agree to our <a href="#something" class="text-info">terms and conditions</a>.</strong></p>
+										<!-- </label> -->
                                         </div>
                                     </div>
                                     <div class="modal-footer text-center">
@@ -481,17 +481,17 @@
     </div>
     <!--  End Signup Modal -->
 
-    <!-- Error Modal -->
-    <div class="modal fade" id="error_details" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="card card-profile card-hidden">
+    <!-- Error Modal -->    
+    <div id="error_details" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h4 id="error_details_node" class="text-left"></h4>
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                    </div>
+                    <h5 id="error_details_node"></h5>
                 </div>
             </div>
         </div>

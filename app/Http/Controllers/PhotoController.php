@@ -25,4 +25,9 @@ class PhotoController extends Controller
     {
         return view('album_immediate');
     }
+
+    public function album_merged()
+    {
+        return view('album_merged');
+    }
 }

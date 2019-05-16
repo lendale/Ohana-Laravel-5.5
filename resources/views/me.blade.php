@@ -38,7 +38,7 @@
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>
-                        <a href="/album_clan">Clan Album</a>
+                    <a href="/album_merged">Album</a>
                     </li>
                     <li>
                         <a href="/events">Events</a>

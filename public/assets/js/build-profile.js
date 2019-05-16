@@ -2,10 +2,8 @@
       Variables
     ======================== */
 
-var gen_tree = firebase.database().ref().child('gen_tree_id');
-var clan_id = gen_tree.push().getKey();
-var family_id = gen_tree.push().getKey();
-var extended_id = gen_tree.push().getKey();
+var ext_id = firebase.database().ref().child('extended-id').push().getKey();
+var fam_id = firebase.database().ref().child('family-id').push().getKey();
 
 var FB;
 var fbAccessToken;
@@ -17,6 +15,7 @@ var registered = false;
 var currentUser;
 var provider;
 var downloadURL;
+var photo_data = new Object();
 
 const FIREBASE_AUTH = firebase.auth();
 const FIREBASE_DATABASE = firebase.database();
@@ -24,7 +23,6 @@ const FIREBASE_STORAGE = firebase.storage();
 
 const rootRef = FIREBASE_DATABASE.ref();
 const usersRef = rootRef.child("users");
-const userFamilyRef = rootRef.child('user_family');
 const displayPicStorageRef = FIREBASE_STORAGE.ref().child("display_pics")
 
 /* ========================
@@ -38,9 +36,11 @@ function handleAuthStateChanged(user) {
         currentUser = user;
         checkPotentialUser();
         if (user.providerData[0].providerId === "facebook.com") {
+            console.log('handleAuthStateChanged if')
             provider = user.providerData[0].providerId;
             segregateFbData(fbResponse, currentUser.uid);
         } else if (user.providerData[0].providerId === "password") {
+            console.log('handleAuthStateChanged else if')
             provider = user.providerData[0].providerId;
             assignSignUpDataToForm();
         }
@@ -52,7 +52,22 @@ function handleAuthStateChanged(user) {
 
 $('#wizard_picture').change(handleWizardPic);
 
-$('#finish').click(function() {
+$('#next').click(function() {
+    console.log('next')
+    console.log($('#wizard_picture').val())
+    console.log(photo_data)
+    if($('#wizard_picture').val() == '' || photo_data == undefined) {
+        document.getElementById("finish").disabled = true;
+        showPhotoNull();
+    } else if($('#wizard_picture').val() == '' && photo_data != undefined) {
+        document.getElementById("finish").disabled = false;
+    } else document.getElementById("finish").disabled = false;
+
+    checkPotentialUser2();
+})
+
+$('#finish').click(function() {    
+    console.log('finish')
     if (provider === "facebook.com") {
         createAcctWithFacebook();
     } else if (provider === "password") {
@@ -108,12 +123,11 @@ window.fbAsyncInit = function() {
 }(document, "script", "facebook-jssdk"));
 
 function segregateFbData(response, uid) {
-
     //Check for undefined fields
     if (response.middle_name === undefined) {
         if (response.hometown === undefined) {
             fbUser = {
-                uid: uid,
+                key: uid,
                 fbId: response.id,
                 firstName: response.first_name,
                 lastName: response.last_name,
@@ -122,15 +136,14 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 gender: response.gender,
                 photoURL: response.picture.data.url,
-                familyId : family_id,
-                extendedId : extended_id,
-                merged: false,
                 livingStatus: "living",
-                registered: true
+                registered: true,
+                extendedId: ext_id,
+                familyId: fam_id
             };
         } else {
             fbUser = {
-                uid: uid,
+                key: uid,
                 fbId: response.id,
                 firstName: response.first_name,
                 lastName: response.last_name,
@@ -140,17 +153,16 @@ function segregateFbData(response, uid) {
                 birthPlace: response.hometown.name,
                 gender: response.gender,
                 photoURL: response.picture.data.url,
-                familyId : family_id,
-                extendedId : extended_id,
-                merged: false,
                 livingStatus: "living",
-                registered: true
+                registered: true,
+                extendedId: ext_id,
+                familyId: fam_id
             };
         }
     } else if (response.hometown === undefined) {
         if (response.middle_name === undefined) {
             fbUser = {
-                uid: uid,
+                key: uid,
                 fbId: response.id,
                 firstName: response.first_name,
                 lastName: response.last_name,
@@ -159,15 +171,14 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 gender: response.gender,
                 photoURL: response.picture.data.url,
-                familyId : family_id,
-                extendedId : extended_id,
-                merged: false,
                 livingStatus: "living",
-                registered: true
+                registered: true,
+                extendedId: ext_id,
+                familyId: fam_id
             };
         } else {
             fbUser = {
-                uid: uid,
+                key: uid,
                 fbId: response.id,
                 firstName: response.first_name,
                 middleName: response.middle_name,
@@ -177,16 +188,15 @@ function segregateFbData(response, uid) {
                 birthDate: response.birthday,
                 gender: response.gender,
                 photoURL: response.picture.data.url,
-                familyId : family_id,
-                extendedId : extended_id,
-                merged: false,
                 livingStatus: "living",
-                registered: true
+                registered: true,
+                extendedId: ext_id,
+                familyId: fam_id
             };
         }
     } else {
         fbUser = {
-            uid: uid,
+            key: uid,
             fbId: response.id,
             firstName: response.first_name,
             middleName: response.middle_name,
@@ -197,11 +207,10 @@ function segregateFbData(response, uid) {
             birthPlace: response.hometown.name,
             gender: response.gender,
             photoURL: response.picture.data.url,
-            familyId : family_id,
-            extendedId : extended_id,
-            merged: false,
             livingStatus: "living",
-            registered: true
+            registered: true,
+            extendedId: ext_id,
+            familyId: fam_id
         };
     }
 }
@@ -223,7 +232,7 @@ function createAcctWithFacebook() {
     }
 
     if (street_address !== "") {
-        fbUser.street_address = street_address;
+        fbUser.streetAddress = street_address;
     }
 
     if (barangay !== "") {
@@ -238,19 +247,9 @@ function createAcctWithFacebook() {
         fbUser.postal_code = postal_code;
     }
 
-    // if (registered) {
-    //     fbUser.tempKeyInClan = potentialUser.tempKeyInClan;
-    //     fbUser.wasPotential = true;
-    // }
-
-    if (fbResponse.family !== undefined) {
-        console.log(fbUser)
-        usersRef.child(currentUser.uid).set(fbUser);
-    } else {
-        //Set user data to 'users' node in database
-        usersRef.child(currentUser.uid).set(fbUser);
-        showSuccess();
-    }
+    console.log(fbUser)
+    usersRef.child(currentUser.uid).set(fbUser);
+    showSuccess();
 }
 
 function createAcctWithEmailAndPass(downloadURL) {
@@ -266,18 +265,17 @@ function createAcctWithEmailAndPass(downloadURL) {
     currentUser.updateProfile({ displayName: displayName });
 
     person = {
-        uid: currentUser.uid,
+        key: currentUser.uid,
         firstName: $('#first_name').val(),
         lastName: $('#last_name').val(),
         displayName: displayName,
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
         photoURL: downloadURL,
-        familyId : family_id,
-        extendedId : extended_id,
-        merged: false,
         livingStatus: "living",
-        registered: true
+        registered: true,
+        familyId: fam_id,
+        extendedId: ext_id
     }
 
     if ($("input:checked").val() === "male") {
@@ -295,7 +293,7 @@ function createAcctWithEmailAndPass(downloadURL) {
     }
 
     if (street_address !== "") {
-        person.street_address = street_address;
+        person.streetAddress = street_address;
     }
 
     if (barangay !== "") {
@@ -307,31 +305,72 @@ function createAcctWithEmailAndPass(downloadURL) {
     }
 
     if (postal_code !== "") {
-        person.postal_code = postal_code;
+        person.postalCode = postal_code;
     }
 
-    // if (registered) {
-    //     person.tempKeyInClan = potentialUser.tempKeyInClan;
-    //     person.wasPotential = true;
-    // }
+    console.log('street_address', street_address)
+    console.log('barangay', barangay)
+    console.log('city', city)
+    console.log('postal_code', postal_code)
+    console.log('downloadURL', downloadURL)
+    console.log('photo data:', photo_data)
 
-    $('#finish').click(function(){
-        usersRef.child(currentUser.uid).set(person)
-        console.log(person)
-        showSuccess();
-    })
-}
+    console.log(potentialUser)
+    if(potentialUser != undefined || potentialUser != null) {
+        console.log('sud diri')
 
-function createUserAccount() {
-    console.log('inside createUserAccount function');
-    if (!registered) {
-        if (provider === "facebook.com") {
-            createAcctWithFacebook()
-        } else if (provider === "password") {
-            createAcctWithEmailAndPass();
+        person.oldKey = potentialUser.key;
+
+        if(downloadURL !== undefined || downloadURL != null) {
+            person.photoURL = downloadURL
+        } else {
+            person.photoURL = potentialUser.photoURL;
         }
-    } else {
 
+        if(potentialUser.f != undefined) {
+            person.f = potentialUser.f;
+        }
+
+        if(potentialUser.m != undefined) {
+            person.m = potentialUser.m;
+        }
+
+        if(potentialUser.ux != undefined) {
+            person.ux = potentialUser.ux;
+        }
+
+        if(potentialUser.vir != undefined) {
+            person.vir = potentialUser.vir;
+        }
+
+        if(potentialUser.ms != undefined) {
+            person.ms = potentialUser.ms;
+        }
+
+        if(potentialUser.children != undefined) {
+            person.children = potentialUser.children;
+        }
+
+        if(potentialUser.siblings != undefined) {
+            person.siblings = potentialUser.siblings;
+        }
+
+        if(potentialUser.parenthood != undefined) {
+            person.parenthood = potentialUser.parenthood;
+        }
+
+        $('#finish').click(function() {
+            usersRef.child(currentUser.uid).set(person)
+            usersRef.child(potentialUser.key).remove()
+            console.log(person)
+            showSuccess();
+        })
+    } else {
+        $('#finish').click(function() {
+            usersRef.child(currentUser.uid).set(person)
+            console.log(person)
+            showSuccess();
+        })
     }
 }
 
@@ -386,20 +425,31 @@ function handleWizardPic(eventData) {
     var fileExtension = fileName.split(".").pop();
     var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
     var fileNameOnStorage = picKey + '.' + fileExtension;
-    var storageRef = FIREBASE_STORAGE.ref('user_profile-pics/' + currentUser.uid + '/' + fileNameOnStorage);
+    var storageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
 
-    $('#next').on('click', function(){
-        var task = storageRef.put(file);
-        console.log('lahos sa next button')
-        task.on('state_changed',
-       
-        function complete() {
-            uid = firebase.auth().currentUser.uid;
-            var downloadURL = task.snapshot.downloadURL;
-            console.log(downloadURL)
-            createAcctWithEmailAndPass(downloadURL);
-            })
-    })  
+    console.log(file)
+    console.log(fileName)
+
+    if(file.size <= 100000) {
+        $('#next').on('click', function() {
+            if(file == null) {
+                console.log('handlewizardpic')
+                showPhotoNull()
+            } else {
+                var task = storageRef.put(file);
+                console.log('lahos sa next button')
+                task.on('state_changed',
+                    function complete() {
+                        uid = firebase.auth().currentUser.uid;
+                        downloadURL = task.snapshot.downloadURL;
+                        console.log(downloadURL)
+                        createAcctWithEmailAndPass(downloadURL);
+                })
+            }
+        }) 
+    } else {
+        showPhotoError()
+    }
 }
 
 function showAvailableMergeData(data) {
@@ -410,7 +460,7 @@ function showAvailableMergeData(data) {
     $("#last_name").val(data.lastName);
     $("#birth_date").val(data.birthDate);
     $("#group_email").addClass("is-focused");
-    $("#email").val(data.email);
+    $("#email").val(currentUser.email);
 
     if (data.middleName !== undefined) {
         $("#group_middle_name").addClass("is-focused");
@@ -427,23 +477,50 @@ function showAvailableMergeData(data) {
         $("#radio_group_female").addClass("active");
         $("#radio_female").attr("checked", true);
     }
+    photo_data = data.photoURL;
+    console.log(photo_data)
+    document.getElementById("wizard_picture").required = false;
 }
 
 function checkPotentialUser() {
-    rootRef
-        .child('users')
-        .once('value')
-        .then(snapshot => {
-            snapshot.forEach(childSnapshot => {
-                if (currentUser.email === childSnapshot.val().email) {
-                    potentialUser = childSnapshot.val();
-                    registered = true;
-                }
-            })
+    console.log('checkPotentialUser')
+
+    var firstname = $('#first_name').val();
+    var lastname = $('#last_name').val();
+
+    console.log('firstname', firstname)
+    console.log('lastname', lastname)
+    usersRef.once('value').then(snapshot => {
+        snapshot.forEach(childSnapshot => {
+            if (currentUser.email === childSnapshot.val().email) {
+                potentialUser = childSnapshot.val();
+                registered = true;
+            } else checkPotentialUser2();
         })
-        .then(() => {
-            assignUserDataToForm();
+    })
+    .then(() => {
+        assignUserDataToForm();
+    })
+}
+
+function checkPotentialUser2() {
+    console.log('checkPotentialUser2')
+    var firstname = $('#first_name').val();
+    var lastname = $('#last_name').val();
+
+    usersRef.once('value').then(snapshot => {
+        snapshot.forEach(childSnapshot => {
+            if (firstname.toLowerCase() === childSnapshot.val().firstName.toLowerCase() 
+            && lastname.toLowerCase() === childSnapshot.val().lastName.toLowerCase()) {
+                console.log('existing user by name')
+                potentialUser = childSnapshot.val();
+                registered = true;
+            }
         })
+    })
+    .then(() => {
+        assignUserDataToForm();
+    })
 }
 
 function showSuccess() {
@@ -454,11 +531,40 @@ function showSuccess() {
         showConfirmButton: false,
         type: "success"
     }).then(function() {},
+    function(dismiss) {
+        if (dismiss === "timer") {
+            console.log("I was closed by the timer");
+            window.location.href = "/genealogy";
+        }
+    });
+}
 
-        function(dismiss) {
-            if (dismiss === "timer") {
-                console.log("I was closed by the timer");
-                window.location.href = "/genealogy";
-            }
-        });
+function showPhotoError() {
+    swal({
+        title: "Photo size too large!",
+        text: "Please choose another photo",
+        timer: 7000,
+        showConfirmButton: false,
+        type: "error"
+    })
+}
+
+function showPhotoLoading() {
+    swal({
+        imageUrl: "assets/img/icons/loader.gif",
+        imageWidth: '90',
+        imageHeight: '90',
+        timer: 9000,
+        showConfirmButton: false
+    })
+}
+
+function showPhotoNull() {
+    swal({
+        title: "Error Adding Photo",
+        text: "Please add a photo to be recognized..",
+        timer: 3000,
+        showConfirmButton: false,
+        type: "error"
+    })
 }

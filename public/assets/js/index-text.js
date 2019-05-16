@@ -8,7 +8,7 @@ function initHeaderText() {
             // sub: "Subtitle"
         },
         {
-            title: "Social.",
+            title: "Legacy Never Ends.",
             // sub: "Subtitle"
         }
     ];
@@ -101,7 +101,7 @@ function initTeamText() {
             "twitter": "https://www.twitter.com/andreadaksss",
             "gplus": "https://goo.gl/a3kRrQ",
             "insta": "https://www.instagram.com/andreadaksss",
-            "sub": "I love you like Kanye loves Kanye. Don't be scared of the truth because we need to restart the human foundation."
+            "sub": "Ex Nihilo Nihil Fit"
         },
     ];
 

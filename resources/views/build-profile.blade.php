@@ -50,11 +50,10 @@
                                             <div class="picture-container">
                                                 <div class="picture">
                                                     <img src="assets/img/default-avatar.png" class="picture-src" id="wizard_picture_preview" title="" />
-                                                    <input type="file" id="wizard_picture">
+                                                    <input type="file" id="wizard_picture" accept="image/jpeg" required>
                                                     <!-- <input type="file" id="wizard_picture" required> -->
                                                 </div>
-                                                <h6>Choose Picture</h6>
-                                                <!-- <h6>Choose Picture <small>(required)</small></h6> -->
+                                                <h6>Choose Picture <small>(required)</small></h6>
                                             </div>
                                         </div>
 
@@ -193,7 +192,7 @@
                                     <input id="finish" type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
                                 </div>
 
-                                <div class="pull-left">
+                                <div class="pull-left" id='previous'>
                                     <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value='Previous' />
                                 </div>
                                 <div class="clearfix"></div>

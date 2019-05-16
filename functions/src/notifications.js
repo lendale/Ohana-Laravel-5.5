@@ -2,8 +2,12 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 const index = require('../index')
 
+
 exports.sendNotifications = function(event) {
+
     var currUser = event.params.uid;
+
+
 
     if (event.data.previous.val()) {
         return;
@@ -12,15 +16,17 @@ exports.sendNotifications = function(event) {
     if (!event.data.exists()) {
         return;
     }
-
     // Setup notification
     const NOTIFICATION_SNAPSHOT = event.data;
+
     const payload = message();
 
     function message(a) {
         const message = NOTIFICATION_SNAPSHOT.val().message;
 
+
         if (message == 'Obituary') {
+
             var msg = {
                 notification: {
                     title: `Ohana`,
@@ -30,6 +36,8 @@ exports.sendNotifications = function(event) {
                     click_action: `localhost:8000/events`
                 }
             }
+
+
         } else if (message == 'Wedding') {
             var msg = {
                 notification: {
@@ -40,6 +48,7 @@ exports.sendNotifications = function(event) {
                     click_action: `localhost:8000/events`
                 }
             }
+
         } else if (message == 'Baptism') {
             var msg = {
                 notification: {
@@ -50,6 +59,7 @@ exports.sendNotifications = function(event) {
                     click_action: `localhost:8000/events`
                 }
             }
+
         } else {
             var msg = {
                 notification: {
@@ -60,28 +70,39 @@ exports.sendNotifications = function(event) {
                     click_action: `localhost:8000/events`
                 }
             }
-        }
 
+        }
         const msgPayload = msg;
+
+
         return msgPayload;
+
+
+
     }
 
+
     const gen_id = admin.database().ref().child('users').child(currUser).child('clanId');
-    
     gen_id.once('value').then(function(snapshot) {
+
         key = snapshot.val();
+
         return admin.database().ref('tokens').child(key).once('value').then((data) => {
+
             if (!data.val()) return;
 
             const snapshot = data.val();
             const tokens = [];
             const tokensWithKey = [];
+
+
             const userToken = admin.database().ref('tokens').child(key).child(currUser).child('token');
-            
             userToken.once('value').then((data) => {
+
                 const currToken = data.val();
 
                 for (let key in snapshot) {
+
                     if (snapshot[key].token != currToken) {
                         tokens.push(snapshot[key].token);
                         tokensWithKey.push({
@@ -89,6 +110,7 @@ exports.sendNotifications = function(event) {
                             key: key
                         });
                     } else {
+
                         console.log('Wai labot ang user');
                     }
                 }
@@ -100,6 +122,8 @@ exports.sendNotifications = function(event) {
                         return eRKey.remove()
                         console.log('naay error')
                     });
+
+
             });
         });
     });

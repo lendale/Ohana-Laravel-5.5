@@ -22,10 +22,8 @@ function handleAuthStateChanged(user) {
             var userRef = firebase.database().ref().child('users').child(user.uid).child('photoURL');
             userRef.once('value').then(function(snapshot) {
                photo = snapshot.val();
-               console.log(photo)
             }).then(function () {
                 display_pic.src = photo;
-                console.log(photo)
             })
         }
     } else {

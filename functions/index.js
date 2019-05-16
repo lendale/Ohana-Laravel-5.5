@@ -20,52 +20,114 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
     let treeObj = new Object()
     let prevVal = new Object()
     
-    // photo.once('value').then(function(snapshot) {
-    //     pic = snapshot.val();
-    //     console.log(pic)
-    // });
+    if (userObj.registered === true) {
+        console.log('userObj.registered')
+        if(userObj.gender === "female") {
+            console.log('sud 2 fem')
 
-    console.log('re', userObj.registered)
-    console.log('fa', userObj.familyId)
-    console.log('flag', userObj.flag)
+            const parent = root.child(`users/${userObj.m}/children`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    if(snap2.val() === userObj.oldKey) {
+                        root.child(`users/${userObj.m}/children/${userObj.oldKey}`).remove()
+                        root.child(`users/${userObj.m}/children/${userObj.key}`).set(userObj.key)
+                    }
+                })
+            })
 
-    if (userObj.registered === false) {
-    	console.log('sud 2 if')
-        if(userObj.familyId !== undefined) {
-        	console.log('sud 3')
-            treeObj = {
-                key: uid,
-                n: userObj.displayName,
-                s: userObj.gender,
-                bd: userObj.birthDate,
-                loc: `/users/${uid}/`,
-            }
+            const parent2 = root.child(`users/${userObj.f}/children`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    if(snap2.val() === userObj.oldKey) {
+                        root.child(`users/${userObj.f}/children/${userObj.oldKey}`).remove()
+                        root.child(`users/${userObj.f}/children/${userObj.key}`).set(userObj.key)
+                    }
+                })
+            })
 
-            const pr1 = root.child(`user_immediate_family/${userObj.familyId}/${uid}`).set(treeObj)
+            const sibling = root.child(`users/${userObj.key}/siblings`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    if(snap2.val() !== userObj.oldKey) {
+                        root.child(`users/${snap2.val()}/siblings/${userObj.oldKey}`).remove()
+                        root.child(`users/${snap2.val()}/siblings/${userObj.key}`).set(userObj.key)
+                    }
+                })
+            })
 
-            return Promise.all([pr1]).catch(err => {
+            const spouse = root.child(`users/${userObj.key}/vir`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    root.child(`users/${snap2.val()}/ux/${userObj.oldKey}`).remove()
+                    root.child(`users/${snap2.val()}/ux/${userObj.key}`).set(userObj.key)
+                    root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).once('value').then(snap3 => {
+                        root.child(`users/${snap2.val()}/ms/${userObj.key}`).set(snap3.val())
+                        root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).remove()
+                    })
+                })
+            })
+
+            
+            
+            const child = root.child(`users/${userObj.key}/children`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    root.child(`users/${snap2.val()}/m`).set(userObj.key)
+                })
+            })
+
+            return Promise.all([parent, parent2, sibling, spouse, child]).catch(err => {
+                console.log('Error code', err.code)
+                console.log(err)
+            })
+        } else {
+            console.log('sud 2 male')
+
+            const parent = root.child(`users/${userObj.f}/children`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    if(snap2.val() === userObj.oldKey) {
+                        root.child(`users/${userObj.f}/children/${userObj.oldKey}`).remove()
+                        root.child(`users/${userObj.f}/children/${userObj.key}`).set(userObj.key)
+                    }
+                })
+            })
+
+            const parent2 = root.child(`users/${userObj.m}/children`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    if(snap2.val() === userObj.oldKey) {
+                        root.child(`users/${userObj.m}/children/${userObj.oldKey}`).remove()
+                        root.child(`users/${userObj.m}/children/${userObj.key}`).set(userObj.key)
+                    }
+                })
+            })
+
+            const sibling = root.child(`users/${userObj.key}/siblings`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    if(snap2.val() !== userObj.oldKey) {
+                        root.child(`users/${snap2.val()}/siblings/${userObj.oldKey}`).remove()
+                        root.child(`users/${snap2.val()}/siblings/${userObj.key}`).set(userObj.key)
+                    }
+                })
+            })
+
+            const spouse = root.child(`users/${userObj.key}/ux`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    root.child(`users/${snap2.val()}/vir/${userObj.oldKey}`).remove()
+                    root.child(`users/${snap2.val()}/vir/${userObj.key}`).set(userObj.key)
+                    root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).once('value').then(snap3 => {
+                        root.child(`users/${snap2.val()}/ms/${userObj.key}`).set(snap3.val())
+                        root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).remove()
+                    })
+                })
+            })
+            
+            const child = root.child(`users/${userObj.key}/children`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    root.child(`users/${snap2.val()}/f`).set(userObj.key)
+                })
+            })
+
+            return Promise.all([parent, parent2, sibling, spouse, child]).catch(err => {
                 console.log('Error code', err.code)
                 console.log(err)
             })
         }
-    }
-    else {
-    	console.log('sud 2 else')
-    	treeObj = {
-    	    key: uid,
-    	    n: userObj.displayName,
-    	    s: userObj.gender,
-    	    bd: userObj.birthDate,
-    	    loc: `/users/${uid}/`,
-    	}
-
-    	const pr1 = root.child(`user_immediate_family/${userObj.familyId}/${uid}`).set(treeObj)
-
-    	return Promise.all([pr1]).catch(err => {
-    	    console.log('Error code', err.code)
-    	    console.log(err)
-    	})
-    }
+    } else console.log('sud 2 else')
 })
 
 exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pushKey}').onCreate((data, context) => {
@@ -104,103 +166,9 @@ exports.createUser = function(data, context) {
     let usersRef = admin.database().ref().child('users')
     let userObj = data.val()
     let uid = context.params.pushKey
-
-    userObj.uid = uid
+    userObj.key = uid
 
     return usersRef.child(uid).set(userObj)
-}
-
-function updateConnectedNodes(rootRef, clanId, oldId, newId, currentUserId) {
-    const pr1 = rootRef.child(`user_tree_go/${clanId}`).once('value').then(snapshot => {
-        let updateObj = {}
-
-        snapshot.forEach(childSnapshot => {
-            let childSnap = childSnapshot.val()
-
-            if (!(childSnap.m === null || childSnap.m === undefined)) {
-                if (childSnap.m === oldId) {
-                    updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/m`] = newId
-                }
-            }
-
-            if (!(childSnap.f === null || childSnap.f === undefined)) {
-                if (childSnap.f === oldId) {
-                    updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/f`] = newId
-                }
-            }
-
-            if (!(childSnap.ux === null || childSnap.ux === undefined)) {
-                let ux = Object.entries(childSnap.ux)
-
-                ux.forEach(([key, value]) => {
-                    if (value === oldId) {
-                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/ux/${key}`] = newId
-                    }
-                })
-            }
-
-            if (!(childSnap.vir === null || childSnap.vir === undefined)) {
-                let vir = Object.entries(childSnap.vir)
-
-                vir.forEach(([key, value]) => {
-                    if (value === oldId) {
-                        updateObj[`user_tree_go/${clanId}/${childSnapshot.key}/vir/${key}`] = newId
-                    }
-                })
-            }
-
-            if (!(childSnap.ms === null || childSnap.ms === undefined)) {
-                let ms = Object.entries(childSnap.ms)
-
-                ms.forEach(([key, value]) => {
-                    if (key === oldId) {
-                        return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${newId}`).set(value)
-                            .then(() => {
-                                return rootRef.child(`user_tree_go/${clanId}/${childSnap.key}/ms/${oldId}`).remove()
-                            })
-                    }
-                })
-            }
-        })
-
-        return updateObj
-    }).then(updateObj => {
-        // console.log('Update Object', updateObj)
-        return rootRef.update(updateObj)
-    })
-
-    const pr2 = rootRef.child(`user_family/${oldId}`).once('value').then(snapshot => {
-        return rootRef.child(`user_family/${currentUserId}`).set(snapshot.val())
-            // if (snapshot.key === oldId) {
-            //     prevVal = snapshot.val()
-            //     console.log('PREV', prevVal)
-
-        //     prevVal.forEach()
-
-        //     return rootRef.child(`user_family/${currentUserId}`).set(prevVal)
-        // }
-        // snapshot.forEach(childSnap => {
-        //         console.log('child', childSnap.val())
-        //     })
-        console.log('OLD ID', oldId)
-    }).then(() => {
-        return rootRef.child(`user_family/${oldId}`).remove()
-    })
-
-    // const pr3 = rootRef.child(`user_family/${oldId}/spouse_keys/vir`).once('value').then(snapshot => {
-    //     snapshot.forEach(childSnapshot => {
-    //         if (childSnapshot.key === oldId) {
-    //             return rootRef.child(`user_family/${currentUserId}/spouse_keys/vir/${newId}`).set(childSnapshot.value)
-    //         }
-    //     })
-    // }).then(() => {
-    //     return rootRef.child(`user_family/${currentUserId}/spouse_keys/vir/${oldId}`).remove()
-    // })
-
-    return Promise.all([pr1, pr2]).catch(err => {
-        console.log('Error code', err.code)
-        console.log(err)
-    })
 }
 
 exports.notifications = functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {

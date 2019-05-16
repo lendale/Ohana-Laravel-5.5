@@ -29,6 +29,8 @@ Route::get('/clan-album', 'PhotoController@clan_album');
 
 Route::get('/album_user', 'PhotoController@album_user');
 
+Route::get('/album_merged', 'PhotoController@album_merged');
+
 Route::get('/events', 'OhanaController@events');
 
 Route::get('/genealogy','OhanaController@genealogy');

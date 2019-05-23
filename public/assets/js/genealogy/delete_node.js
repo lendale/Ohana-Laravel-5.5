@@ -11,11 +11,14 @@ function deleteNode(data) {
         .append("Are you sure you want to delete " + data.displayName + " as your " + data.relationship + "?");
     
     $('#delete_yes').click(function() {
+        immFamilyRef.child(currentUserFamilyId).child(data.key).remove();
+        extFamilyRef.child(currentUserExtendedId).child(data.key).remove();
+
         if(data.relationship == "father") {
-            usersRef.child(data.key).child("children").remove();
-            usersRef.child(data.key).child("relationship").remove();
-            usersRef.child(data.key).child("ms").remove();
-            usersRef.child(data.key).child("ux").remove();
+            usersRef.child(data.key).child("children").child(currentUser.uid).remove();
+            // usersRef.child(data.key).child("relationship").remove();
+            // usersRef.child(data.key).child("ms").remove();
+            // usersRef.child(data.key).child("ux").remove();
             usersRef.child(currentUser.uid).child("f").remove();
 
             usersRef.child(currentUser.uid).child("siblings").once("value").then(snap => {
@@ -52,7 +55,7 @@ function deleteNode(data) {
                 })
             })
 
-            usersRef.child(currentUser.uid).child("m").once("value").then(snap => {
+            usersRef.child(currentUser.uid).child("f").once("value").then(snap => {
                 console.log(snap.val())
                 usersRef.child(snap.val()).once("value").then(snap2 => {
                     usersRef.child(snap2.val().key).child("ms").remove();

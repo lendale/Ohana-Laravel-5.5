@@ -55,15 +55,15 @@ $('#wizard_picture').change(handleWizardPic);
 $('#next').click(function() {
     console.log('next')
     console.log($('#wizard_picture').val())
-    console.log(photo_data)
-    if($('#wizard_picture').val() == '' || photo_data == undefined) {
+    console.log("photo_data", photo_data)
+    console.log("downloadURL", downloadURL)
+    if(downloadURL == undefined && $('#wizard_picture').val() == '') {
         document.getElementById("finish").disabled = true;
         showPhotoNull();
-    } else if($('#wizard_picture').val() == '' && photo_data != undefined) {
+    } else if(downloadURL != undefined || $('#wizard_picture').val() != '') {
         document.getElementById("finish").disabled = false;
-    } else document.getElementById("finish").disabled = false;
-
-    checkPotentialUser2();
+        checkPotentialUser2();
+    }
 })
 
 $('#finish').click(function() {    
@@ -271,7 +271,7 @@ function createAcctWithEmailAndPass(downloadURL) {
         displayName: displayName,
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
-        photoURL: downloadURL,
+        // photoURL: downloadURL,
         livingStatus: "living",
         registered: true,
         familyId: fam_id,
@@ -366,6 +366,8 @@ function createAcctWithEmailAndPass(downloadURL) {
             showSuccess();
         })
     } else {
+        person.photoURL = downloadURL
+
         $('#finish').click(function() {
             usersRef.child(currentUser.uid).set(person)
             console.log(person)
@@ -472,10 +474,14 @@ function showAvailableMergeData(data) {
     }
     if (data.gender === "male") {
         $("#radio_group_male").addClass("active");
+        $("#radio_group_female").removeClass("active");
         $("#radio_male").attr("checked", true);
+        $("#radio_female").attr("checked", false);
     } else {
         $("#radio_group_female").addClass("active");
+        $("#radio_group_male").removeClass("active");
         $("#radio_female").attr("checked", true);
+        $("#radio_male").attr("checked", false);
     }
     photo_data = data.photoURL;
     console.log(photo_data)
@@ -485,17 +491,12 @@ function showAvailableMergeData(data) {
 function checkPotentialUser() {
     console.log('checkPotentialUser')
 
-    var firstname = $('#first_name').val();
-    var lastname = $('#last_name').val();
-
-    console.log('firstname', firstname)
-    console.log('lastname', lastname)
     usersRef.once('value').then(snapshot => {
         snapshot.forEach(childSnapshot => {
             if (currentUser.email === childSnapshot.val().email) {
                 potentialUser = childSnapshot.val();
                 registered = true;
-            } else checkPotentialUser2();
+            }
         })
     })
     .then(() => {
@@ -508,19 +509,22 @@ function checkPotentialUser2() {
     var firstname = $('#first_name').val();
     var lastname = $('#last_name').val();
 
-    usersRef.once('value').then(snapshot => {
-        snapshot.forEach(childSnapshot => {
-            if (firstname.toLowerCase() === childSnapshot.val().firstName.toLowerCase() 
-            && lastname.toLowerCase() === childSnapshot.val().lastName.toLowerCase()) {
+    usersRef.once('value').then(snap => {
+        snap.forEach(snap2 => {
+            if (firstname.toLowerCase() === snap2.val().firstName.toLowerCase() 
+            && lastname.toLowerCase() === snap2.val().lastName.toLowerCase()) {
                 console.log('existing user by name')
-                potentialUser = childSnapshot.val();
+                potentialUser = snap2.val();
                 registered = true;
+                alert("This name has existing data. Click Previous button to update.")
             }
         })
     })
     .then(() => {
         assignUserDataToForm();
     })
+
+    return true;
 }
 
 function showSuccess() {

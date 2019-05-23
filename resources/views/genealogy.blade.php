@@ -169,7 +169,7 @@
                             <br>
                             <div class="fileinput fileinput-new text-center" data-provides="fileinput">
                                 <div class="fileinput-new thumbnail img-circle img-raised">
-                                    <img id="existing_parent_pic_view" class="fam-mem-pic" src="assets/img/placeholder.jpg" alt="...">
+                                    <img id="search_pic_view" class="fam-mem-pic" src="assets/img/placeholder.jpg" alt="...">
                                 </div>
                                 <div class="fileinput-preview fileinput-exists thumbnail img-circle img-raised"></div>
                             </div>

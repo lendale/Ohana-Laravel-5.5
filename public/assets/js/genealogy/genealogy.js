@@ -17,8 +17,6 @@
     var currentUserGender;
     var currentUserExtendedId;
     var currentUserFamilyId;
-    var currentUserFather;
-    var currentUserMother;
     
     /* ========================
           Event Listeners
@@ -38,7 +36,6 @@
 
     function tester(uid) {
         console.log(currentUser.displayName)
-        
     }
     
     /* ========================
@@ -51,8 +48,6 @@
             currentUserGender = snap.val().gender;
             currentUserExtendedId = snap.val().extendedId;
             currentUserFamilyId = snap.val().familyId;
-            currentUserFather = snap.val().f;
-            currentUserMother = snap.val().m;
             spouseGenderSetter();
             document.getElementById("add_sibling").disabled = true;
             document.getElementById("add_sibling2").disabled = true;

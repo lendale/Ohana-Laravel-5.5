@@ -73,7 +73,7 @@
                     <li class="dropdown">
                         <a class="profile-photo dropdown-toggle" data-toggle="dropdown">
                             <div class="profile-photo-small">
-                                <img id="nav_prof_pic" src="assets/img/default-avatar.png" alt="Circle Image" class="img-circle img-responsive">
+                                <img id="nav_prof_pic" src="assets/img/default-avatar.png" alt="Circle Image" class="img-circle img-responsive" style="height: 100%; width: 100%;">
                             </div>
                         </a>
                         <ul class="dropdown-menu">

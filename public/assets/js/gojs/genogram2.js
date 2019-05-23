@@ -171,33 +171,36 @@ function initGenogram(data, user_id) {
 
 // Gives specific color to shape for name
 function consanguinity(node) {
-    var relationship = node.relationship;
-
-    if(node.registered == true) return "#D43143"; 
-    else if(node.livingStatus == "living") {
-        switch (relationship) {
-            // a shade of red
-            case "mother":
-                return "#e74c3c";
-            case "father":
-                return "#e74c3c";
-            case "daughter":
-                return "#e74c3c";
-            case "son":
-                return "#e74c3c";
-            case "brother":
-                return "#e74c3c";
-            case "sister":
-                return "#e74c3c";
-                // a shade of blue
-            case "wife":
-                return "#4667E8";
-            case "husband":
-                return "#4667E8";
-            default:
-                return "#cccccc"; // a shade of gray
+    if(node.registered == true) return "#D43143";
+    else if(node.registered == false) {
+        if(node.livingStatus == "deceased") return "#cccccc";
+        else if(node.parenthood == "adopted") return "#4667E8";
+        else if(node.livingStatus == "living") {
+            switch (node.relationship) {
+                // a shade of red
+                case "mother":
+                    return "#e74c3c";
+                case "father":
+                    return "#e74c3c";
+                case "daughter":
+                    return "#e74c3c";
+                case "son":
+                    return "#e74c3c";
+                case "brother":
+                    return "#e74c3c";
+                case "sister":
+                    return "#e74c3c";
+                    // a shade of blue
+                case "wife":
+                    return "#4667E8";
+                case "husband":
+                    return "#4667E8";
+                default:
+                    return "#cccccc"; // a shade of gray
+            }
         }
-    } else return "#cccccc";
+    }
+    else return "#cccccc";
 }
 
 function livingStatus(node) {

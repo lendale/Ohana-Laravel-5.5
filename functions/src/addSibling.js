@@ -5,82 +5,121 @@ exports.addSister = function(data, context) {
     const root = data.ref.root
     let uid = context.params.uid
     let pushKey = context.params.pushKey
-    let userObj = data.val()
+    var mother;
+    var father;
 
-    const db = admin.database()
-    const usersRef = db.ref().child('users')
+    const pro1 = root.child(`users/${pushKey}`).once("value").then(snap => {
+        if(snap.exists()) {
+            console.log("if sibling")
+            root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey)
+            root.child(`users/${pushKey}/siblings/${uid}`).set(uid)
 
-    const pro1 = usersRef.child(pushKey).once("value")
-        .then(snap => {
-            if(snap.exists()) {
-                const pr2 = root.child(`users/${uid}`).once('value').then(snap => {
-                    const mother = root.child(`users/${pushKey}/m`).set(snap.val().m);
-                    const father = root.child(`users/${pushKey}/f`).set(snap.val().f);
-                    const motherChild = root.child(`users/${snap.val().m}/children/${pushKey}`).set(pushKey);
-                    const fatherChild = root.child(`users/${snap.val().f}/children/${pushKey}`).set(pushKey);
+            root.child(`users/${uid}/siblings`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    if(snap3.val() !== pushKey) {
+                        root.child(`users/${pushKey}/siblings/${snap3.val()}`).set(snap3.val())
+                        root.child(`users/${snap3.val()}/siblings/${pushKey}`).set(pushKey)
 
-                    return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
-                        console.log('Error code', err.code)
-                        console.log(err)
-                    })
+                        root.child(`users/${snap3.val()}`).once("value").then(snap4 => {
+                            root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                            root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                        })
+                    }
                 })
-                const pr3 = root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey);
-                const pr4 = root.child(`users/${pushKey}/siblings/${uid}`).set(uid);
-                const pr5 = root.child(`users/${uid}/siblings`).once('value').then(snap => {
-                    snap.forEach(snap2 => {
-                        if(snap2.val() !== pushKey) {
-                            console.log('sibling compare - not same')
-                            const pr51 = root.child(`users/${pushKey}/siblings/${snap2.val()}`).set(snap2.val());
-                            const pr52 = root.child(`users/${snap2.val()}/siblings/${pushKey}`).set(pushKey);
+            })
 
-                            return Promise.all([pr51, pr52]).catch(err => {
-                                console.log('Error code', err.code)
-                                console.log(err)
-                            })
-                        }
-                    })
-                })
+            root.child(`users/${uid}`).once('value').then(snap2 => {
+                mother = snap2.val().m;
+                father = snap2.val().f;
 
-                return Promise.all([pr2, pr3, pr4, pr5]).catch(err => {
-                    console.log('Error code', err.code)
-                    console.log(err)
-                })
-            } else {
-                const pr1 = index.createUser(data, context)
-                const pr2 = root.child(`users/${uid}`).once('value').then(snap => {
-                    const mother = root.child(`users/${pushKey}/m`).set(snap.val().m);
-                    const father = root.child(`users/${pushKey}/f`).set(snap.val().f);
-                    const motherChild = root.child(`users/${snap.val().m}/children/${pushKey}`).set(pushKey);
-                    const fatherChild = root.child(`users/${snap.val().f}/children/${pushKey}`).set(pushKey);
+                root.child(`users/${pushKey}/m`).set(mother)
+                root.child(`users/${pushKey}/f`).set(father)
+    
+                root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
+                root.child(`users/${father}/children/${pushKey}`).set(pushKey)
+    
+                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
 
-                    return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
-                        console.log('Error code', err.code)
-                        console.log(err)
-                    })
+                root.child(`users/${mother}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
-                const pr3 = root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey);
-                const pr4 = root.child(`users/${pushKey}/siblings/${uid}`).set(uid);
-                const pr5 = root.child(`users/${uid}/siblings`).once('value').then(snap => {
-                    snap.forEach(snap2 => {
-                        if(snap2.val() !== pushKey) {
-                            console.log('sibling compare - not same')
-                            const pr51 = root.child(`users/${pushKey}/siblings/${snap2.val()}`).set(snap2.val());
-                            const pr52 = root.child(`users/${snap2.val()}/siblings/${pushKey}`).set(pushKey);
+    
+                root.child(`users/${father}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
+                })
+            })
 
-                            return Promise.all([pr51, pr52]).catch(err => {
-                                console.log('Error code', err.code)
-                                console.log(err)
-                            })
-                        }
-                    })
-                })
+            root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap2 => {
+                console.log("mother", mother)
+                console.log("father", father)
+    
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`immediate_family/${snap2.val().familyId}/${mother}`).set(mother)
+                root.child(`immediate_family/${snap2.val().familyId}/${father}`).set(father)
+                
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${mother}`).set(mother)
+                root.child(`extended_family/${snap2.val().extendedId}/${father}`).set(father)
+            })
+        } else {
+            console.log("else sibling")
+            index.createUser(data, context)
 
-                return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
-                    console.log('Error code', err.code)
-                    console.log(err)
+            root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey)
+            root.child(`users/${pushKey}/siblings/${uid}`).set(uid)
+
+            root.child(`users/${uid}/siblings`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    if(snap3.val() !== pushKey) {
+                        root.child(`users/${pushKey}/siblings/${snap3.val()}`).set(snap3.val())
+                        root.child(`users/${snap3.val()}/siblings/${pushKey}`).set(pushKey)
+
+                        root.child(`users/${snap3.val()}`).once("value").then(snap4 => {
+                            root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                            root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                        })
+                    }
                 })
-            }
-        });
+            })
+
+            root.child(`users/${uid}`).once('value').then(snap2 => {
+                mother = snap2.val().m;
+                father = snap2.val().f;
+
+                root.child(`users/${pushKey}/m`).set(mother)
+                root.child(`users/${pushKey}/f`).set(father)
+    
+                root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
+                root.child(`users/${father}/children/${pushKey}`).set(pushKey)
+    
+                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+
+                root.child(`users/${mother}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
+                })
+    
+                root.child(`users/${father}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
+                })
+            })
+
+            root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap2 => {   
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`immediate_family/${snap2.val().familyId}/${mother}`).set(mother)
+                root.child(`immediate_family/${snap2.val().familyId}/${father}`).set(father)
+                
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${mother}`).set(mother)
+                root.child(`extended_family/${snap2.val().extendedId}/${father}`).set(father)
+            })
+        }
+    })
 
     return Promise.all([pro1]).catch(err => {
         console.log('Error code', err.code)
@@ -92,82 +131,121 @@ exports.addBrother = function(data, context) {
     const root = data.ref.root
     let uid = context.params.uid
     let pushKey = context.params.pushKey
-    let userObj = data.val()
+    var mother;
+    var father;
 
-    const db = admin.database()
-    const usersRef = db.ref().child('users')
+    const pro1 = root.child(`users/${pushKey}`).once("value").then(snap => {
+        if(snap.exists()) {
+            console.log("if sibling")
+            root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey)
+            root.child(`users/${pushKey}/siblings/${uid}`).set(uid)
 
-    const pro1 = usersRef.child(pushKey).once("value")
-        .then(snap => {
-            if(snap.exists()) {
-                const pr2 = root.child(`users/${uid}`).once('value').then(snap => {
-                    const mother = root.child(`users/${pushKey}/m`).set(snap.val().m);
-                    const father = root.child(`users/${pushKey}/f`).set(snap.val().f);
-                    const motherChild = root.child(`users/${snap.val().m}/children/${pushKey}`).set(pushKey);
-                    const fatherChild = root.child(`users/${snap.val().f}/children/${pushKey}`).set(pushKey);
+            root.child(`users/${uid}/siblings`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    if(snap3.val() !== pushKey) {
+                        root.child(`users/${pushKey}/siblings/${snap3.val()}`).set(snap3.val())
+                        root.child(`users/${snap3.val()}/siblings/${pushKey}`).set(pushKey)
 
-                    return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
-                        console.log('Error code', err.code)
-                        console.log(err)
-                    })
+                        root.child(`users/${snap3.val()}`).once("value").then(snap4 => {
+                            root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                            root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                        })
+                    }
                 })
-                const pr3 = root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey);
-                const pr4 = root.child(`users/${pushKey}/siblings/${uid}`).set(uid);
-                const pr5 = root.child(`users/${uid}/siblings`).once('value').then(snap => {
-                    snap.forEach(snap2 => {
-                        if(snap2.val() !== pushKey) {
-                            console.log('sibling compare - not same')
-                            const pr51 = root.child(`users/${pushKey}/siblings/${snap2.val()}`).set(snap2.val());
-                            const pr52 = root.child(`users/${snap2.val()}/siblings/${pushKey}`).set(pushKey);
+            })
 
-                            return Promise.all([pr51, pr52]).catch(err => {
-                                console.log('Error code', err.code)
-                                console.log(err)
-                            })
-                        }
-                    })
-                })
+            root.child(`users/${uid}`).once('value').then(snap2 => {
+                mother = snap2.val().m;
+                father = snap2.val().f;
 
-                return Promise.all([pr2, pr3, pr4, pr5]).catch(err => {
-                    console.log('Error code', err.code)
-                    console.log(err)
-                })
-            } else {
-                const pr1 = index.createUser(data, context)
-                const pr2 = root.child(`users/${uid}`).once('value').then(snap => {
-                    const mother = root.child(`users/${pushKey}/m`).set(snap.val().m);
-                    const father = root.child(`users/${pushKey}/f`).set(snap.val().f);
-                    const motherChild = root.child(`users/${snap.val().m}/children/${pushKey}`).set(pushKey);
-                    const fatherChild = root.child(`users/${snap.val().f}/children/${pushKey}`).set(pushKey);
+                root.child(`users/${pushKey}/m`).set(mother)
+                root.child(`users/${pushKey}/f`).set(father)
+    
+                root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
+                root.child(`users/${father}/children/${pushKey}`).set(pushKey)
+    
+                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
 
-                    return Promise.all([mother, father, motherChild, fatherChild]).catch(err => {
-                        console.log('Error code', err.code)
-                        console.log(err)
-                    })
+                root.child(`users/${mother}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
-                const pr3 = root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey);
-                const pr4 = root.child(`users/${pushKey}/siblings/${uid}`).set(uid);
-                const pr5 = root.child(`users/${uid}/siblings`).once('value').then(snap => {
-                    snap.forEach(snap2 => {
-                        if(snap2.val() !== pushKey) {
-                            console.log('sibling compare - not same')
-                            const pr51 = root.child(`users/${pushKey}/siblings/${snap2.val()}`).set(snap2.val());
-                            const pr52 = root.child(`users/${snap2.val()}/siblings/${pushKey}`).set(pushKey);
+    
+                root.child(`users/${father}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
+                })
+            })
 
-                            return Promise.all([pr51, pr52]).catch(err => {
-                                console.log('Error code', err.code)
-                                console.log(err)
-                            })
-                        }
-                    })
-                })
+            root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap2 => {
+                console.log("mother", mother)
+                console.log("father", father)
+    
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`immediate_family/${snap2.val().familyId}/${mother}`).set(mother)
+                root.child(`immediate_family/${snap2.val().familyId}/${father}`).set(father)
+                
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${mother}`).set(mother)
+                root.child(`extended_family/${snap2.val().extendedId}/${father}`).set(father)
+            })
+        } else {
+            console.log("else sibling")
+            index.createUser(data, context)
 
-                return Promise.all([pr1, pr2, pr3, pr4, pr5]).catch(err => {
-                    console.log('Error code', err.code)
-                    console.log(err)
+            root.child(`users/${uid}/siblings/${pushKey}`).set(pushKey)
+            root.child(`users/${pushKey}/siblings/${uid}`).set(uid)
+
+            root.child(`users/${uid}/siblings`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    if(snap3.val() !== pushKey) {
+                        root.child(`users/${pushKey}/siblings/${snap3.val()}`).set(snap3.val())
+                        root.child(`users/${snap3.val()}/siblings/${pushKey}`).set(pushKey)
+
+                        root.child(`users/${snap3.val()}`).once("value").then(snap4 => {
+                            root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                            root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                        })
+                    }
                 })
-            }
-        });
+            })
+
+            root.child(`users/${uid}`).once('value').then(snap2 => {
+                mother = snap2.val().m;
+                father = snap2.val().f;
+
+                root.child(`users/${pushKey}/m`).set(mother)
+                root.child(`users/${pushKey}/f`).set(father)
+    
+                root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
+                root.child(`users/${father}/children/${pushKey}`).set(pushKey)
+    
+                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+
+                root.child(`users/${mother}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
+                })
+    
+                root.child(`users/${father}`).once('value').then(snap3 => {
+                    root.child(`immediate_family/${snap3.val().familyId}/${pushKey}`).set(pushKey)
+                    root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
+                })
+            })
+
+            root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap2 => {    
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`immediate_family/${snap2.val().familyId}/${mother}`).set(mother)
+                root.child(`immediate_family/${snap2.val().familyId}/${father}`).set(father)
+                
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${mother}`).set(mother)
+                root.child(`extended_family/${snap2.val().extendedId}/${father}`).set(father)
+            })
+        }
+    })
 
     return Promise.all([pro1]).catch(err => {
         console.log('Error code', err.code)

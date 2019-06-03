@@ -1,6 +1,7 @@
 /node_modules
 /functions/node_modules
 /functions/package-lock.json
+/functions/npm-debug.log.55208941
 /public/hot
 /public/storage
 /public/assets/js/init.js
@@ -12,7 +13,6 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
+.console
 .env
 .firebaserc
-/own_files/db-json
-.console

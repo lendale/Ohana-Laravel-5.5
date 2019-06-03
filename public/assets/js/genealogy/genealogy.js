@@ -9,7 +9,10 @@
     const userFamilyRef = rootRef.child('user_family');
     const extFamilyRef = rootRef.child('extended_family');
     const immFamilyRef = rootRef.child('immediate_family');
-    
+
+    var memberImmId = firebase.database().ref().child('imm-id').push().getKey();
+    var memberExtId = firebase.database().ref().child('ext-id').push().getKey();
+
     var clanData = [];
     var extendedData = [];
     var userClanId;
@@ -28,14 +31,15 @@
         if (user) {
             currentUser = user;
             retrieveUserTree(user.uid);
-            tester(user.uid)
-            searchSibling()
-            searchSpouse()
+            // tester(user.uid)
+            // searchSibling()
+            // searchSpouse()
         } else {}
     }
 
     function tester(uid) {
-        console.log(currentUser.displayName)
+        console.log(memberImmId)
+        console.log(memberExtId)
     }
     
     /* ========================
@@ -62,6 +66,8 @@
                 retrieveFamilyData(obj.m);
                 usersRef.child(obj.f).child("relationship").set("father");
                 usersRef.child(obj.m).child("relationship").set("mother");
+                // console.log("heeeeeee", obj.f)
+                // console.log("heeeeeee", obj.m)
             } else if((obj.f != undefined || obj.f != null) &&
                 (obj.m == undefined || obj.m == null)) {
                 parentGenderSetter("female");
@@ -159,7 +165,7 @@
             getAvailableParentsUpdate(currentUser.uid);
         })
         .then(() => {
-            extendedFamily(currentUser.uid);
+            // extendedFamily(currentUser.uid);
         })
     }
 
@@ -218,7 +224,7 @@
             initGenogram(clanData, currentUser.uid);
         })
     }
-    
+
     function retrieveSingleParentData(uid) {
         usersRef.child(uid).once("value").then(snap => {
             let obj = snap.val();
@@ -278,7 +284,7 @@
             initGenogram(clanData, currentUser.uid);
         })
     }
-    
+
     function retrieveSiblingData(uid) {
         usersRef.child(uid).once("value").then(snap => {
             let obj = snap.val()
@@ -355,188 +361,9 @@
         else if(gender == "female") document.getElementById("parent_gender").options[1].disabled = true;
     }
     
-    function getAvailableParents(uid) {
-        var motherKeys = [];
-        var motherNames = [];
-        var fatherKeys = [];
-        var fatherNames = [];
-    
-        let single = $(`
-            <git class="radio">
-                <label>
-                    <input type="radio" name="availableParents2" value="${currentUser.uid}">
-                    ${currentUser.displayName}
-                </label>
-            </div>
-        `);
-        single.appendTo("#parents_container2");
-    
-        usersRef.child(uid).child('vir').once('value').then(snap => {
-            if (!(snap.val() === undefined || snap.val() === null)) {
-                fatherKeys = Object.keys(snap.val());
-                fatherNames = Object.values(snap.val());
-    
-                snap.forEach(childSnap => {
-                    usersRef.child(childSnap.val()).once('value').then(snap2 => {
-                        let div = $(`
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="availableParents2" value="${snap2.val().key}">
-                                    ${currentUser.displayName} and ${snap2.val().displayName}
-                                </label>
-                            </div>
-                        `);
-                        div.appendTo("#parents_container2");
-                    });
-                });
-            }
-        })
-    
-        usersRef.child(uid).child('ux').once('value').then(snap => {
-            if (!(snap.val() === undefined || snap.val() === null)) {
-                motherKeys = Object.keys(snap.val());
-                motherNames = Object.values(snap.val());
-    
-                snap.forEach(childSnap => {
-                    usersRef.child(childSnap.val()).once('value').then(snap2 => {
-                        let div = $(`
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="availableParents2" value="${snap2.val().key}">
-                                    ${currentUser.displayName} and ${snap2.val().displayName}
-                                </label>
-                            </div>
-                        `);
-                        div.appendTo("#parents_container2");
-                    });
-                });
-            }
-        })
-    }
-    
-    function getAvailableParentsNew(uid) {
-        var motherKeys = [];
-        var motherNames = [];
-        var fatherKeys = [];
-        var fatherNames = [];
-    
-        let single = $(`
-            <git class="radio">
-                <label>
-                    <input type="radio" name="availableParents" value="${currentUser.uid}">
-                    ${currentUser.displayName}
-                </label>
-            </div>
-        `);
-        single.appendTo("#parents_container");
-    
-        usersRef.child(uid).child('vir').once('value').then(snap => {
-            if (!(snap.val() === undefined || snap.val() === null)) {
-                fatherKeys = Object.keys(snap.val());
-                fatherNames = Object.values(snap.val());
-    
-                snap.forEach(childSnap => {
-                    usersRef.child(childSnap.val()).once('value').then(snap2 => {
-                        let div = $(`
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="availableParents" value="${snap2.val().key}">
-                                    ${currentUser.displayName} and ${snap2.val().displayName}
-                                </label>
-                            </div>
-                        `);
-                        div.appendTo("#parents_container");
-                    });
-                });
-            }
-        })
-    
-        usersRef.child(uid).child('ux').once('value').then(snap => {
-            if (!(snap.val() === undefined || snap.val() === null)) {
-                motherKeys = Object.keys(snap.val());
-                motherNames = Object.values(snap.val());
-    
-                snap.forEach(childSnap => {
-                    usersRef.child(childSnap.val()).once('value').then(snap2 => {
-                        let div = $(`
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="availableParents" value="${snap2.val().key}">
-                                    ${currentUser.displayName} and ${snap2.val().displayName}
-                                </label>
-                            </div>
-                        `);
-                        div.appendTo("#parents_container");
-                    });
-                });
-            }
-        })
-    }
-
-    function getAvailableParentsUpdate(uid) {
-        var motherKeys = [];
-        var motherNames = [];
-        var fatherKeys = [];
-        var fatherNames = [];
-    
-        let single = $(`
-            <git class="radio">
-                <label>
-                    <input type="radio" id="${currentUser.uid}" name="availableParents3" value="${currentUser.uid}">
-                    ${currentUser.displayName}
-                </label>
-            </div>
-        `);
-        single.appendTo("#parents_container3");
-    
-        usersRef.child(uid).child('vir').once('value').then(snap => {
-            if (!(snap.val() === undefined || snap.val() === null)) {
-                fatherKeys = Object.keys(snap.val());
-                fatherNames = Object.values(snap.val());
-    
-                snap.forEach(childSnap => {
-                    usersRef.child(childSnap.val()).once('value').then(snap2 => {
-                        let div = $(`
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" id="${snap2.val().key}" name="availableParents3" value="${snap2.val().key}">
-                                    ${currentUser.displayName} and ${snap2.val().displayName}
-                                </label>
-                            </div>
-                        `);
-                        div.appendTo("#parents_container3");
-                    });
-                });
-            }
-        })
-    
-        usersRef.child(uid).child('ux').once('value').then(snap => {
-            if (!(snap.val() === undefined || snap.val() === null)) {
-                motherKeys = Object.keys(snap.val());
-                motherNames = Object.values(snap.val());
-    
-                snap.forEach(childSnap => {
-                    usersRef.child(childSnap.val()).once('value').then(snap2 => {
-                        let div = $(`
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" id="${snap2.val().key}" name="availableParents3" value="${snap2.val().key}">
-                                    ${currentUser.displayName} and ${snap2.val().displayName}
-                                </label>
-                            </div>
-                        `);
-                        div.appendTo("#parents_container3");
-                    });
-                });
-            }
-        })
-    }
-    
     function extendedFamily(uid) {
         searchChildren2(uid)
         usersRef.child(currentUser.uid).once('value').then(snap => {
-            searchImmediate(uid)
-            searchUser(uid)
             if(snap.val().f) {
                 searchUser(snap.val().f);
                 searchImmediate(snap.val().f);
@@ -616,6 +443,7 @@
             snap.forEach(snap2 => {
                 console.log('siblings:',snap2.val())
                 searchImmediate(snap2.val())
+                searchUser(snap2.val())
             })
         })
     }
@@ -672,79 +500,4 @@
             })
         })
     }
-
-    function showLoading() {
-        swal({
-            // imageUrl: "assets/img/grow-tree.gif",
-            title: "Loading Photo...",
-            // text: "Please wait",
-            timer: 7000,
-            showConfirmButton: false
-            // type: "success"
-        })
-    }
     
-    function showSuccess() {
-        swal({
-            // imageUrl: "assets/img/grow-tree.gif",
-            title: "Successfully Added",
-            // text: "Please wait",
-            timer: 7000,
-            showConfirmButton: false,
-            type: "success"
-        })
-    }
-
-    function showUpdate() {
-        swal({
-            // imageUrl: "assets/img/grow-tree.gif",
-            title: "Successfully Updated",
-            // text: "Please wait",
-            timer: 4000,
-            showConfirmButton: false,
-            type: "success"
-        })
-    }
-
-    function showDeleteSuccess() {
-        swal({
-            // imageUrl: "assets/img/grow-tree.gif",
-            title: "Successfully Deleted",
-            // text: "Please wait",
-            timer: 4000,
-            showConfirmButton: false,
-            type: "success"
-        })
-    }
-    
-    function showPhotoError() {
-        swal({
-            title: "Photo size too large!",
-            text: "Please choose another photo",
-            timer: 3000,
-            showConfirmButton: false,
-            type: "error"
-        })
-    }
-    
-    function showPhotoLoading() {
-        swal({
-            imageUrl: "assets/img/icons/loader.gif",
-            imageWidth: '90',
-            imageHeight: '90',
-            timer: 9000,
-            showConfirmButton: false
-        })
-    }
-    
-    // if (!(obj.ux === undefined || obj.ux === null)) {
-    //     let arrUx = Object.values(obj.ux);
-    
-    //     obj.ux = arrUx;
-    // }
-    
-    // if (!(obj.vir === undefined || obj.vir === null)) {
-    //     let arrVir = Object.values(obj.vir);
-    
-    //     obj.vir = arrVir;
-    // }

@@ -15,6 +15,8 @@ function addSibling(downloadURL) {
         gender: gender,
         livingStatus: livingStatus,
         birthDate: birthDate,
+        extendedId: memberExtId,
+        familyId: memberImmId,
     };
 
     if (downloadURL !== undefined){
@@ -58,7 +60,6 @@ function addSibling(downloadURL) {
                 $("#modal_add_sibling").modal('hide');
 
                 for (const prop in userData) {
-                    console.log(userData[prop]);
                     $('#modal_add_choice').modal('show');
                     $("#search_bar").hide();
                     $("#search_found").show();

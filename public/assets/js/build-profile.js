@@ -308,10 +308,6 @@ function createAcctWithEmailAndPass(downloadURL) {
         person.postalCode = postal_code;
     }
 
-    console.log('street_address', street_address)
-    console.log('barangay', barangay)
-    console.log('city', city)
-    console.log('postal_code', postal_code)
     console.log('downloadURL', downloadURL)
     console.log('photo data:', photo_data)
 
@@ -364,6 +360,10 @@ function createAcctWithEmailAndPass(downloadURL) {
             usersRef.child(potentialUser.key).remove()
             console.log(person)
             showSuccess();
+            console.log('street_address', street_address)
+            console.log('barangay', barangay)
+            console.log('city', city)
+            console.log('postal_code', postal_code)
         })
     } else {
         person.photoURL = downloadURL
@@ -372,6 +372,10 @@ function createAcctWithEmailAndPass(downloadURL) {
             usersRef.child(currentUser.uid).set(person)
             console.log(person)
             showSuccess();
+            console.log('street_address', street_address)
+            console.log('barangay', barangay)
+            console.log('city', city)
+            console.log('postal_code', postal_code)
         })
     }
 }
@@ -455,7 +459,8 @@ function handleWizardPic(eventData) {
 }
 
 function showAvailableMergeData(data) {
-    $("#wizard_picture_preview").attr("src", data.photoURL);
+    if(downloadURL !== undefined) $("#wizard_picture_preview").attr("src", downloadURL);
+    else $("#wizard_picture_preview").attr("src", data.photoURL);
     $("#group_first_name").addClass("is-focused");
     $("#first_name").val(data.firstName);
     $("#group_last_name").addClass("is-focused");

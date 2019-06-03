@@ -1163,7 +1163,7 @@
                                 </div>
 
                                 <div class="col-md-4">
-                                    <select required id="spouse_relationship" class="selectpicker select-relationship" data-style="btn btn-danger btn-round" title="Relationship Status Select" data-size="7" required>
+                                    <select id="spouse_relationship" class="selectpicker select-relationship" data-style="btn btn-danger btn-round" title="Relationship Status Select" data-size="7" required>
                                         <option disabled>Relationship</option>
 	                                    <option value="married" selected>Married</option>
                                         <option value="separated">Separated</option>
@@ -2224,6 +2224,8 @@
 <script src="assets/js/gojs/genogram2.js"></script>
 
 <script src="assets/js/genealogy/genealogy.js"></script>
+<script src="assets/js/genealogy/gen_swal.js"></script>
+<script src="assets/js/genealogy/display_parents.js"></script>
 <script src="assets/js/genealogy/search_existing.js"></script>
 <script src="assets/js/genealogy/onclick_button.js"></script>
 <script src="assets/js/genealogy/show_details.js"></script>

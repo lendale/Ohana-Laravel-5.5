@@ -15,16 +15,15 @@ const eReminder= require('./src/eventsReminder')
 exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((data, context) => {
     const root = data.ref.root
     let uid = context.params.uid;
-    let photo = admin.database().ref('users').child(uid).child('photoURL')
     let userObj = data.val();
-    let treeObj = new Object()
-    let prevVal = new Object()
     
     if (userObj.registered === true) {
-        console.log('userObj.registered')
-        console.log('userObj.gender', userObj.gender)
+        root.child(`users/${uid}`).once('value').then(snap3 => {
+            root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+            root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+        })
+        
         const pro = root.child(`users/${uid}`).once("value").then(snapshot => {
-            console.log('snapshot', snapshot.val())
             // user's father
             root.child(`users/${snapshot.val().f}/children`).once('value').then(snap => {
                 snap.forEach(snap2 => {
@@ -34,6 +33,14 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                     }
                 })
             })
+
+            root.child(`users/${snapshot.val().f}`).once('value').then(snap => {
+                root.child(`immediate_family/${snap.val().familyId}/${snapshot.val().oldKey}`).remove()
+                root.child(`immediate_family/${snap.val().familyId}/${uid}`).set(uid)
+
+                root.child(`extended_family/${snap.val().extendedId}/${snapshot.val().oldKey}`).remove()
+                root.child(`extended_family/${snap.val().extendedId}/${uid}`).set(uid)
+           })
 
             // user's mother
             root.child(`users/${snapshot.val().m}/children`).once('value').then(snap => {
@@ -45,12 +52,28 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                 })
             })
 
+            root.child(`users/${snapshot.val().m}`).once('value').then(snap => {
+                root.child(`immediate_family/${snap.val().familyId}/${snapshot.val().oldKey}`).remove()
+                root.child(`immediate_family/${snap.val().familyId}/${uid}`).set(uid)
+
+                root.child(`extended_family/${snap.val().extendedId}/${snapshot.val().oldKey}`).remove()
+                root.child(`extended_family/${snap.val().extendedId}/${uid}`).set(uid)
+            })
+
             // user's siblings
             root.child(`users/${uid}/siblings`).once('value').then(snap => {
                 snap.forEach(snap2 => {
-                    if(snap2.val() !== userObj.oldKey) {
-                        root.child(`users/${snap2.val()}/siblings/${userObj.oldKey}`).remove()
+                    if(snap2.val() !== snapshot.val().oldKey) {
+                        root.child(`users/${snap2.val()}/siblings/${snapshot.val().oldKey}`).remove()
                         root.child(`users/${snap2.val()}/siblings/${uid}`).set(uid)
+
+                        root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
+                            root.child(`immediate_family/${snap3.val().familyId}/${snapshot.val().oldKey}`).remove()
+                            root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+            
+                            root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
+                            root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+                        })
                     }
                 })
             })
@@ -64,6 +87,14 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                         root.child(`users/${snap2.val()}/ms/${uid}`).set(snap3.val())
                         root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).remove()
                     })
+
+                    root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
+                        root.child(`immediate_family/${snap3.val().familyId}/${snapshot.val().oldKey}`).remove()
+                        root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+        
+                        root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
+                        root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+                    })
                 })
             })
 
@@ -74,6 +105,14 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                         root.child(`users/${snap2.val()}/f`).set(uid)
                     else if(snapshot.val().gender == "female")
                         root.child(`users/${snap2.val()}/m`).set(uid)
+                    
+                    root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
+                        root.child(`immediate_family/${snap3.val().familyId}/${snapshot.val().oldKey}`).remove()
+                        root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+            
+                        root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
+                        root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+                    })
                 })
             })
         })
@@ -82,8 +121,23 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
             console.log('Error code', err.code)
             console.log(err)
         })
-    } else console.log('sud 2 else')
+    } else {
+        console.log("sud 2 else")
+    }
+
+    return root.child(`users/${uid}/oldKey`).remove()
 })
+
+exports.createUser = function(data, context) {
+    const root = data.ref.root
+    let userObj = data.val()
+    let uid = context.params.pushKey
+    userObj.key = uid
+
+    root.child(`users/${uid}`).update(userObj)
+    root.child(`immediate_family/${userObj.familyId}/${uid}`).set(uid)
+    root.child(`extended_family/${userObj.extendedId}/${uid}`).set(uid)
+}
 
 exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pushKey}').onCreate((data, context) => {
     return parents.addMother(data, context)
@@ -116,15 +170,6 @@ exports.addSisterToClan = functions.database.ref('/user_family/{uid}/sisters/{pu
 exports.addBrotherToClan = functions.database.ref('/user_family/{uid}/brothers/{pushKey}').onCreate((data, context) => {
     return sibling.addBrother(data, context)
 })
-
-exports.createUser = function(data, context) {
-    let usersRef = admin.database().ref().child('users')
-    let userObj = data.val()
-    let uid = context.params.pushKey
-    userObj.key = uid
-
-    return usersRef.child(uid).set(userObj)
-}
 
 exports.notifications = functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {
     return notif.sendNotifications(event)

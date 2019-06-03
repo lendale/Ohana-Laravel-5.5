@@ -195,6 +195,10 @@ function consanguinity(node) {
                     return "#4667E8";
                 case "husband":
                     return "#4667E8";
+                case "aunt":
+                    return "#4667E8";
+                case "uncle":
+                    return "#4667E8";
                 default:
                     return "#cccccc"; // a shade of gray
             }

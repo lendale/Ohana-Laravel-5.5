@@ -17,6 +17,8 @@ function addChild(downloadURL) {
         gender: gender,
         livingStatus: livingStatus,
         birthDate: birthDate,
+        extendedId: memberExtId,
+        familyId: memberImmId,
         parenthood: parenthood,
     };
 
@@ -75,7 +77,6 @@ function addChild(downloadURL) {
                 $("#modal_add_child").modal('hide');
 
                 for (const prop in userData) {
-                    console.log(userData[prop]);
                     $('#modal_add_choice').modal('show');
                     $("#search_bar").hide();
                     $("#search_found").show();

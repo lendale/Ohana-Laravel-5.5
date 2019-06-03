@@ -16,6 +16,8 @@ function addSpouse(downloadURL) {
         gender: gender,
         livingStatus: livingStatus,
         birthDate: birthDate,
+        extendedId: memberExtId,
+        familyId: memberImmId,
         maritalStatus: maritalStatus,
     };
 
@@ -61,7 +63,6 @@ function addSpouse(downloadURL) {
                 $("#modal_add_spouse").modal('hide');
 
                 for (const prop in userData) {
-                    console.log(userData[prop]);
                     $('#modal_add_choice').modal('show');
                     $("#search_bar").hide();
                     $("#search_found").show();

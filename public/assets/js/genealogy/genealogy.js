@@ -1,5 +1,5 @@
 /* ========================
-      Variables
+    Variables
     ======================== */
 
     const FIREBASE_DATABASE = firebase.database();
@@ -22,7 +22,7 @@
     var currentUserFamilyId;
     
     /* ========================
-          Event Listeners
+        Event Listeners
         ======================== */
     
     firebase.auth().onAuthStateChanged(handleAuthStateChanged);
@@ -407,7 +407,7 @@
            });
     }
 
-   function searchSpouse() {
+    function searchSpouse() {
     
         usersRef.child(currentUser.uid).child('ux').once('child_added').then(snap => {
             if (snap.val()) {

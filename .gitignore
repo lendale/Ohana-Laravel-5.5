@@ -1,7 +1,6 @@
 /node_modules
 /functions/node_modules
 /functions/package-lock.json
-/functions/npm-debug.log.55208941
 /public/hot
 /public/storage
 /public/assets/js/init.js

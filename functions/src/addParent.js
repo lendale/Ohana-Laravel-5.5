@@ -10,33 +10,114 @@ exports.addMother = function(data, context) {
         if(snap.exists()) {
             root.child(`users/${uid}/m`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
-            
-            root.child(`users/${uid}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
-                root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
-            })
 
             root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap2 => {
                 root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
                 root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
             })
-            
+
+            root.child(`users/${uid}`).once('value').then(snap2 => {
+                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+            })
+
+            root.child(`users/${uid}/children`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+
+                    root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
+            root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
+            root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
             connectCurrentUserParents(uid, pushKey, "mother")
         } else {
             index.createUser(data, context)
+            
             root.child(`users/${uid}/m`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
+
+            root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap2 => {
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+            })
 
             root.child(`users/${uid}`).once('value').then(snap2 => {
                 root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
             })
 
-            root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+            root.child(`users/${uid}/children`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+
+                    root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
             })
-            
+
+            root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
+            root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
             connectCurrentUserParents(uid, pushKey, "mother")
         }
     })
@@ -57,31 +138,113 @@ exports.addFather = function(data, context) {
             root.child(`users/${uid}/f`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
 
+            root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap2 => {
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+            })
+
             root.child(`users/${uid}`).once('value').then(snap2 => {
                 root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
             })
 
-            root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+            root.child(`users/${uid}/children`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+
+                    root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
             })
-            
+
+            root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
+            root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
             connectCurrentUserParents(uid, pushKey, "father")
         } else {
             index.createUser(data, context)
+
             root.child(`users/${uid}/f`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
+
+            root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap2 => {
+                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
+                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+            })
 
             root.child(`users/${uid}`).once('value').then(snap2 => {
                 root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
             })
 
-            root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
+            root.child(`users/${uid}/children`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+
+                    root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
             })
+
+            root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
+            root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                snap2.forEach(snap3 => {
+                    root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
+                        root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
+                    })
+                    root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap4 => {
+                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
+                        root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
+                    }) 
+                })
+            })
+
             connectCurrentUserParents(uid, pushKey, "father")
         }
     })

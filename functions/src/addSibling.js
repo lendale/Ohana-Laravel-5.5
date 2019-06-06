@@ -69,12 +69,10 @@ exports.addSister = function(data, context) {
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
 
                     root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -83,11 +81,9 @@ exports.addSister = function(data, context) {
             root.child(`users/${uid}/ux`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -96,11 +92,9 @@ exports.addSister = function(data, context) {
             root.child(`users/${uid}/vir`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -167,12 +161,10 @@ exports.addSister = function(data, context) {
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
 
                     root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -181,11 +173,9 @@ exports.addSister = function(data, context) {
             root.child(`users/${uid}/ux`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -194,11 +184,9 @@ exports.addSister = function(data, context) {
             root.child(`users/${uid}/vir`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -280,12 +268,10 @@ exports.addBrother = function(data, context) {
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
 
                     root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -294,11 +280,9 @@ exports.addBrother = function(data, context) {
             root.child(`users/${uid}/ux`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -307,11 +291,9 @@ exports.addBrother = function(data, context) {
             root.child(`users/${uid}/vir`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -378,12 +360,10 @@ exports.addBrother = function(data, context) {
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
 
                     root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -392,11 +372,9 @@ exports.addBrother = function(data, context) {
             root.child(`users/${uid}/ux`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })
@@ -405,11 +383,9 @@ exports.addBrother = function(data, context) {
             root.child(`users/${uid}/vir`).once('value').then(snap2 => {
                 snap2.forEach(snap3 => {
                     root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${pushKey}`).set(pushKey)
                         root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
                     })
                     root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap4 => {
-                        root.child(`immediate_family/${snap4.val().familyId}/${snap3.val()}`).set(snap3.val())
                         root.child(`extended_family/${snap4.val().extendedId}/${snap3.val()}`).set(snap3.val())
                     }) 
                 })

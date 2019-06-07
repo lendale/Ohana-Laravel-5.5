@@ -11,14 +11,19 @@ exports.addMother = function(data, context) {
             root.child(`users/${uid}/m`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
 
-            root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
-            })
-
             root.child(`users/${uid}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/mother`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+
+                root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap3 => {
+                    root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+
+                    if(snap2.val().gender === "female") {
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                    } else {
+                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                    }
+                })
             })
 
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
@@ -55,21 +60,26 @@ exports.addMother = function(data, context) {
                 })
             })
 
-            connectCurrentUserParents(uid, pushKey, "mother")
+            connectCurrentUserParents(uid, pushKey, "father")
         } else {
             index.createUser(data, context)
 
             root.child(`users/${uid}/m`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
 
-            root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
-            })
-
             root.child(`users/${uid}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/mother`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+
+                root.child(`user_family/${uid}/mothers/${pushKey}`).once('value').then(snap3 => {
+                    root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+
+                    if(snap2.val().gender === "female") {
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                    } else {
+                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                    }
+                })
             })
 
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
@@ -106,7 +116,7 @@ exports.addMother = function(data, context) {
                 })
             })
 
-            connectCurrentUserParents(uid, pushKey, "mother")
+            connectCurrentUserParents(uid, pushKey, "father")
         }
     })
 
@@ -126,14 +136,19 @@ exports.addFather = function(data, context) {
             root.child(`users/${uid}/f`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
 
-            root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
-            })
-
             root.child(`users/${uid}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/father`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+
+                root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap3 => {
+                    root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+
+                    if(snap2.val().gender === "female") {
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                    } else {
+                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                    }
+                })
             })
 
             root.child(`users/${uid}/children`).once('value').then(snap2 => {
@@ -177,14 +192,19 @@ exports.addFather = function(data, context) {
             root.child(`users/${uid}/f`).set(pushKey)
             root.child(`users/${pushKey}/children/${uid}`).set(uid)
 
-            root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${uid}`).set(uid)
-                root.child(`extended_family/${snap2.val().extendedId}/${uid}`).set(uid)
-            })
-
             root.child(`users/${uid}`).once('value').then(snap2 => {
-                root.child(`immediate_family/${snap2.val().familyId}/${pushKey}`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/father`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
+
+                root.child(`user_family/${uid}/fathers/${pushKey}`).once('value').then(snap3 => {
+                    root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+
+                    if(snap2.val().gender === "female") {
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                    } else {
+                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                    }
+                })
             })
 
             root.child(`users/${uid}/children`).once('value').then(snap2 => {

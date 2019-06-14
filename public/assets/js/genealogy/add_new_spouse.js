@@ -100,7 +100,7 @@ function addSpouse(downloadURL) {
                     showSuccess();
                     setTimeout(function() {
                         return location.reload();
-                    }, 5000);
+                    }, 7000);
                     return true;
                 } else {
                     person.relationship = "wife";
@@ -109,7 +109,7 @@ function addSpouse(downloadURL) {
                     showSuccess();
                     setTimeout(function() {
                         return location.reload();
-                    }, 5000);
+                    }, 7000);
                     return true;
                 }
             }
@@ -126,7 +126,7 @@ function disconfirmSaveButtonSpouse(person) {
         showSuccess();
         setTimeout(function() {
             return location.reload();
-        }, 5000);
+        }, 7000);
         return true;
     } else {
         person.relationship = "wife";
@@ -135,7 +135,7 @@ function disconfirmSaveButtonSpouse(person) {
         showSuccess();
         setTimeout(function() {
             return location.reload();
-        }, 5000);
+        }, 7000);
         return true;
     }
 }

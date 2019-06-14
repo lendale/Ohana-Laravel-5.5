@@ -24,11 +24,11 @@ exports.addSister = function(data, context) {
                             if(snap4.val().gender === "female") siblingType = "sister";
                             else siblingType = "brother";
 
-                            root.child(`immediate_family/${snap4.val().familyId}/sister`).set(pushKey)
+                            root.child(`immediate_family/${snap4.val().familyId}/sister/${pushKey}`).set(pushKey)
                             root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
 
                             root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap5 => {
-                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}`).set(snap3.val())
+                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}/${snap3.val()}`).set(snap3.val())
                                 root.child(`extended_family/${snap5.val().extendedId}/${snap3.val()}`).set(snap3.val())
                             })
                         })
@@ -50,21 +50,21 @@ exports.addSister = function(data, context) {
                 root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
                 root.child(`users/${father}/children/${pushKey}`).set(pushKey)
 
-                root.child(`immediate_family/${snap2.val().familyId}/sister`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/sister/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
 
                 root.child(`users/${mother}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/daughter/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`users/${father}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/daughter/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap2 => {    
-                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}`).set(uid)
+                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}/${uid}`).set(uid)
                     root.child(`immediate_family/${snap2.val().familyId}/mother`).set(mother)
                     root.child(`immediate_family/${snap2.val().familyId}/father`).set(father)
                     
@@ -124,11 +124,11 @@ exports.addSister = function(data, context) {
                             if(snap4.val().gender === "female") siblingType = "sister";
                             else siblingType = "brother";
 
-                            root.child(`immediate_family/${snap4.val().familyId}/sister`).set(pushKey)
+                            root.child(`immediate_family/${snap4.val().familyId}/sister/${pushKey}`).set(pushKey)
                             root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
 
                             root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap5 => {
-                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}`).set(snap3.val())
+                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}/${snap3.val()}`).set(snap3.val())
                                 root.child(`extended_family/${snap5.val().extendedId}/${snap3.val()}`).set(snap3.val())
                             })
                         })
@@ -150,21 +150,21 @@ exports.addSister = function(data, context) {
                 root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
                 root.child(`users/${father}/children/${pushKey}`).set(pushKey)
 
-                root.child(`immediate_family/${snap2.val().familyId}/sister`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/sister/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
 
                 root.child(`users/${mother}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/daughter/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`users/${father}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/daughter/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`user_family/${uid}/sisters/${pushKey}`).once('value').then(snap2 => {    
-                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}`).set(uid)
+                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}/${uid}`).set(uid)
                     root.child(`immediate_family/${snap2.val().familyId}/mother`).set(mother)
                     root.child(`immediate_family/${snap2.val().familyId}/father`).set(father)
                     
@@ -239,11 +239,11 @@ exports.addBrother = function(data, context) {
                             if(snap4.val().gender === "female") siblingType = "sister";
                             else siblingType = "brother";
 
-                            root.child(`immediate_family/${snap4.val().familyId}/brother`).set(pushKey)
+                            root.child(`immediate_family/${snap4.val().familyId}/brother/${pushKey}`).set(pushKey)
                             root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
 
                             root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap5 => {
-                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}`).set(snap3.val())
+                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}/${snap3.val()}`).set(snap3.val())
                                 root.child(`extended_family/${snap5.val().extendedId}/${snap3.val()}`).set(snap3.val())
                             })
                         })
@@ -265,21 +265,21 @@ exports.addBrother = function(data, context) {
                 root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
                 root.child(`users/${father}/children/${pushKey}`).set(pushKey)
 
-                root.child(`immediate_family/${snap2.val().familyId}/brother`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/brother/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
 
                 root.child(`users/${mother}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/son`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/son/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`users/${father}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/son`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/son/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap2 => {    
-                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}`).set(uid)
+                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}/${uid}`).set(uid)
                     root.child(`immediate_family/${snap2.val().familyId}/mother`).set(mother)
                     root.child(`immediate_family/${snap2.val().familyId}/father`).set(father)
                     
@@ -339,11 +339,11 @@ exports.addBrother = function(data, context) {
                             if(snap4.val().gender === "female") siblingType = "sister";
                             else siblingType = "brother";
 
-                            root.child(`immediate_family/${snap4.val().familyId}/brother`).set(pushKey)
+                            root.child(`immediate_family/${snap4.val().familyId}/brother/${pushKey}`).set(pushKey)
                             root.child(`extended_family/${snap4.val().extendedId}/${pushKey}`).set(pushKey)
 
                             root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap5 => {
-                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}`).set(snap3.val())
+                                root.child(`immediate_family/${snap5.val().familyId}/${siblingType}/${snap3.val()}`).set(snap3.val())
                                 root.child(`extended_family/${snap5.val().extendedId}/${snap3.val()}`).set(snap3.val())
                             })
                         })
@@ -365,21 +365,21 @@ exports.addBrother = function(data, context) {
                 root.child(`users/${mother}/children/${pushKey}`).set(pushKey)
                 root.child(`users/${father}/children/${pushKey}`).set(pushKey)
 
-                root.child(`immediate_family/${snap2.val().familyId}/brother`).set(pushKey)
+                root.child(`immediate_family/${snap2.val().familyId}/brother/${pushKey}`).set(pushKey)
                 root.child(`extended_family/${snap2.val().extendedId}/${pushKey}`).set(pushKey)
 
                 root.child(`users/${mother}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/son`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/son/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`users/${father}`).once('value').then(snap3 => {
-                    root.child(`immediate_family/${snap3.val().familyId}/son`).set(pushKey)
+                    root.child(`immediate_family/${snap3.val().familyId}/son/${pushKey}`).set(pushKey)
                     root.child(`extended_family/${snap3.val().extendedId}/${pushKey}`).set(pushKey)
                 })
 
                 root.child(`user_family/${uid}/brothers/${pushKey}`).once('value').then(snap2 => {    
-                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}`).set(uid)
+                    root.child(`immediate_family/${snap2.val().familyId}/${siblingType}/${uid}`).set(uid)
                     root.child(`immediate_family/${snap2.val().familyId}/mother`).set(mother)
                     root.child(`immediate_family/${snap2.val().familyId}/father`).set(father)
                     

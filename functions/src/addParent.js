@@ -19,9 +19,9 @@ exports.addMother = function(data, context) {
                     root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
 
                     if(snap2.val().gender === "female") {
-                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter/${uid}`).set(uid)
                     } else {
-                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/son/${uid}`).set(uid)
                     }
                 })
             })
@@ -60,7 +60,7 @@ exports.addMother = function(data, context) {
                 })
             })
 
-            connectCurrentUserParents(uid, pushKey, "father")
+            connectCurrentUserParents(uid, pushKey, "mother")
         } else {
             index.createUser(data, context)
 
@@ -75,9 +75,9 @@ exports.addMother = function(data, context) {
                     root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
 
                     if(snap2.val().gender === "female") {
-                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter/${uid}`).set(uid)
                     } else {
-                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/son/${uid}`).set(uid)
                     }
                 })
             })
@@ -116,7 +116,7 @@ exports.addMother = function(data, context) {
                 })
             })
 
-            connectCurrentUserParents(uid, pushKey, "father")
+            connectCurrentUserParents(uid, pushKey, "mother")
         }
     })
 
@@ -144,9 +144,9 @@ exports.addFather = function(data, context) {
                     root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
 
                     if(snap2.val().gender === "female") {
-                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter/${uid}`).set(uid)
                     } else {
-                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/son/${uid}`).set(uid)
                     }
                 })
             })
@@ -200,9 +200,9 @@ exports.addFather = function(data, context) {
                     root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
 
                     if(snap2.val().gender === "female") {
-                        root.child(`immediate_family/${snap3.val().familyId}/daughter`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/daughter/${uid}`).set(uid)
                     } else {
-                        root.child(`immediate_family/${snap3.val().familyId}/son`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/son/${uid}`).set(uid)
                     }
                 })
             })
@@ -269,11 +269,11 @@ function connectCurrentUserParents(uid, key, parentType) {
                     return usersRef.child(`${snapshot.val()}/ms/${key}`).set('married')
                 })
                 const pr3 = usersRef.child(`${key}`).once("value").then(snap => {
-                    immFamRef.child(`${snap.val().familyId}/${snapshot.val()}`).set(snapshot.val())
+                    immFamRef.child(`${snap.val().familyId}/husband/${snapshot.val()}`).set(snapshot.val())
                     extFamRef.child(`${snap.val().extendedId}/${snapshot.val()}`).set(snapshot.val())
                 })
                 const pr4 = usersRef.child(`${snapshot.val()}`).once("value").then(snap => {
-                    immFamRef.child(`${snap.val().familyId}/${key}`).set(key)
+                    immFamRef.child(`${snap.val().familyId}/wife/${key}`).set(key)
                     extFamRef.child(`${snap.val().extendedId}/${key}`).set(key)
                 })
 
@@ -293,11 +293,11 @@ function connectCurrentUserParents(uid, key, parentType) {
                     return usersRef.child(`${snapshot.val()}/ms/${key}`).set('married')
                 })
                 const pr3 = usersRef.child(`${key}`).once("value").then(snap => {
-                    immFamRef.child(`${snap.val().familyId}/${snapshot.val()}`).set(snapshot.val())
+                    immFamRef.child(`${snap.val().familyId}/wife/${snapshot.val()}`).set(snapshot.val())
                     extFamRef.child(`${snap.val().extendedId}/${snapshot.val()}`).set(snapshot.val())
                 })
                 const pr4 = usersRef.child(`${snapshot.val()}`).once("value").then(snap => {
-                    immFamRef.child(`${snap.val().familyId}/${key}`).set(key)
+                    immFamRef.child(`${snap.val().familyId}/husband/${key}`).set(key)
                     extFamRef.child(`${snap.val().extendedId}/${key}`).set(key)
                 })
 

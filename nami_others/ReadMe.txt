@@ -29,6 +29,13 @@ Scenarios
     Register Member w/ email
     Register Member w/o email
 
+Birthday
+
+    Jan 31, 2019, Feb 1, 2019
+    Jan 30, 2019, Jan 31, 2019
+    Dec 31, 2019, Jan 1, 2020
+
+
 console.log("key", key)
 
-finish add sibling on firebase functions
+/${pushKey}

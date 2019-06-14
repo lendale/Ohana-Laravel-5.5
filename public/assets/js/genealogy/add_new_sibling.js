@@ -97,7 +97,7 @@ function addSibling(downloadURL) {
                     showSuccess();
                     setTimeout(function() {
                         return location.reload();
-                    }, 5000);
+                    }, 7000);
                     return true;
                 } else {
                     person.relationship = "sister";
@@ -106,7 +106,7 @@ function addSibling(downloadURL) {
                     showSuccess();
                     setTimeout(function() {
                         return location.reload();
-                    }, 5000);
+                    }, 7000);
                     return true;
                 }
             }
@@ -123,7 +123,7 @@ function disconfirmSaveButtonSibling(person) {
         showSuccess();
         setTimeout(function() {
             return location.reload();
-        }, 5000);
+        }, 7000);
         return true;
     } else {
         person.relationship = "sister";
@@ -132,7 +132,7 @@ function disconfirmSaveButtonSibling(person) {
         showSuccess();
         setTimeout(function() {
             return location.reload();
-        }, 5000);
+        }, 7000);
         return true;
     }
 }

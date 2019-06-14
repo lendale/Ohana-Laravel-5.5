@@ -653,7 +653,6 @@ TwinLink.prototype.computePoints = function() {
     var pts = this.points; // greek
     if (pts.length >= 4) { // greek
         var birthId = this.toNode.data["birthDate"];
-        var genderId = this.toNode.data["gender"];
         if (birthId) {
             var parents = this.fromNode;
             var sameBirth = 0;
@@ -663,14 +662,15 @@ TwinLink.prototype.computePoints = function() {
             while (it.next()) {
                 var child = it.value;
                 var childBd = child.data["birthDate"];
-                var childGender = child.data["gender"];
                 var childSpliter = childBd.split("/");
-                var childBdDay = parseInt(childSpliter[1]);
                 var childBdMonth = parseInt(childSpliter[0]);
+                var childBdDay = parseInt(childSpliter[1]);
+                var childBdYear = parseInt(childSpliter[2]);
 
                 var birthIdSplit = birthId.split("/");
-                var birthIdDay = parseInt(birthIdSplit[1]);
                 var birthIdMonth = parseInt(birthIdSplit[0]);
+                var birthIdDay = parseInt(birthIdSplit[1]);
+                var birthIdYear = parseInt(birthIdSplit[2]);
                 
                 if((childBdDay == birthIdDay ||
                     childBdDay == (birthIdDay - 1) ||
@@ -681,6 +681,20 @@ TwinLink.prototype.computePoints = function() {
                     sameBirth++;
                     sumX += child.location.x;
                 }
+
+                // if(childBdYear == birthIdYear) {
+                //     if(childBdMonth == birthIdMonth) {
+                //         if(childBdDay == birthIdDay ||
+                //             childBdDay == (birthIdDay - 1) ||
+                //             (childBdDay - 1) == birthIdDay) {
+                //             sameBirth++;
+                //             sumX += child.location.x;
+                //         }
+                //     } else if(childBdMonth == (birthIdMonth - 1) ||
+                //         (childBdMonth - 1) == birthIdMonth) {
+                            
+                //     }
+                // }
             }
 
             if (sameBirth > 0) {

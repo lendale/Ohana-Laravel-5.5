@@ -16,14 +16,26 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
     const root = data.ref.root
     let uid = context.params.uid;
     let userObj = data.val();
+    let userGender = userObj.gender;
+    let parentType, siblingType, spouseType, childType;
     
-    if (userObj.registered === true) {
-        root.child(`users/${uid}`).once('value').then(snap3 => {
-            root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
-            root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
-        })
-        
+    if (userObj.registered === true) {        
         const pro = root.child(`users/${uid}`).once("value").then(snapshot => {
+            if(userGender === "female") {
+                parentType = "mother";
+                siblingType = "sister";
+                spouseType = "wife";
+                childType = "daughter";
+            } else if(userGender === "male") {
+                parentType = "father";
+                siblingType = "brother";
+                spouseType = "husband";
+                childType = "son";
+            }
+
+            root.child(`immediate_family/${snapshot.val().familyId}/user`).set(uid)
+            root.child(`extended_family/${snapshot.val().extendedId}/${uid}`).set(uid)
+
             // user's father
             root.child(`users/${snapshot.val().f}/children`).once('value').then(snap => {
                 snap.forEach(snap2 => {
@@ -36,7 +48,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
 
             root.child(`users/${snapshot.val().f}`).once('value').then(snap => {
                 root.child(`immediate_family/${snap.val().familyId}/${snapshot.val().oldKey}`).remove()
-                root.child(`immediate_family/${snap.val().familyId}/${uid}`).set(uid)
+                root.child(`immediate_family/${snap.val().familyId}/${childType}/${uid}`).set(uid)
 
                 root.child(`extended_family/${snap.val().extendedId}/${snapshot.val().oldKey}`).remove()
                 root.child(`extended_family/${snap.val().extendedId}/${uid}`).set(uid)
@@ -54,7 +66,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
 
             root.child(`users/${snapshot.val().m}`).once('value').then(snap => {
                 root.child(`immediate_family/${snap.val().familyId}/${snapshot.val().oldKey}`).remove()
-                root.child(`immediate_family/${snap.val().familyId}/${uid}`).set(uid)
+                root.child(`immediate_family/${snap.val().familyId}/${childType}/${uid}`).set(uid)
 
                 root.child(`extended_family/${snap.val().extendedId}/${snapshot.val().oldKey}`).remove()
                 root.child(`extended_family/${snap.val().extendedId}/${uid}`).set(uid)
@@ -69,7 +81,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
 
                         root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
                             root.child(`immediate_family/${snap3.val().familyId}/${snapshot.val().oldKey}`).remove()
-                            root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+                            root.child(`immediate_family/${snap3.val().familyId}/${siblingType}/${uid}`).set(uid)
             
                             root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
                             root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
@@ -90,7 +102,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
 
                     root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
                         root.child(`immediate_family/${snap3.val().familyId}/${snapshot.val().oldKey}`).remove()
-                        root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/${spouseType}/${uid}`).set(uid)
         
                         root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
                         root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
@@ -108,7 +120,7 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                     
                     root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
                         root.child(`immediate_family/${snap3.val().familyId}/${snapshot.val().oldKey}`).remove()
-                        root.child(`immediate_family/${snap3.val().familyId}/${uid}`).set(uid)
+                        root.child(`immediate_family/${snap3.val().familyId}/${parentType}`).set(uid)
             
                         root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
                         root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
@@ -135,7 +147,7 @@ exports.createUser = function(data, context) {
     userObj.key = uid
 
     root.child(`users/${uid}`).update(userObj)
-    root.child(`immediate_family/${userObj.familyId}/${uid}`).set(uid)
+    root.child(`immediate_family/${userObj.familyId}/user`).set(uid)
     root.child(`extended_family/${userObj.extendedId}/${uid}`).set(uid)
 }
 

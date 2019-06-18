@@ -35,6 +35,8 @@ Route::get('/events', 'OhanaController@events');
 
 Route::get('/genealogy','OhanaController@genealogy');
 
+Route::get('/search','OhanaController@search');
+
 Route::get('/createEvent', 'OhanaController@createEvent');
 
 Route::get('/eventsExtended', 'OhanaController@eventsExtended');

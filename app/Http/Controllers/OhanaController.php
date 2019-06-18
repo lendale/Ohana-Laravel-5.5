@@ -40,4 +40,9 @@ class OhanaController extends Controller
     {
         return view('settings');
     }
+
+    public function search()
+    {
+        return view('search');
+    }
 }

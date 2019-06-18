@@ -271,11 +271,8 @@ function createAcctWithEmailAndPass(downloadURL) {
         displayName: displayName,
         email: $('#email').val(),
         birthDate: $('#birth_date').val(),
-        // photoURL: downloadURL,
         livingStatus: "living",
         registered: true,
-        familyId: fam_id,
-        extendedId: ext_id
     }
 
     if ($("input:checked").val() === "male") {
@@ -316,6 +313,8 @@ function createAcctWithEmailAndPass(downloadURL) {
         console.log('sud diri')
 
         person.oldKey = potentialUser.key;
+        person.familyId = potentialUser.familyId
+        person.extendedId = potentialUser.extendedId
 
         if(downloadURL !== undefined || downloadURL != null) {
             person.photoURL = downloadURL
@@ -367,6 +366,8 @@ function createAcctWithEmailAndPass(downloadURL) {
         })
     } else {
         person.photoURL = downloadURL
+        person.familyId = fam_id
+        person.extendedId = ext_id
 
         $('#finish').click(function() {
             usersRef.child(currentUser.uid).set(person)

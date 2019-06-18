@@ -671,30 +671,51 @@ TwinLink.prototype.computePoints = function() {
                 var birthIdMonth = parseInt(birthIdSplit[0]);
                 var birthIdDay = parseInt(birthIdSplit[1]);
                 var birthIdYear = parseInt(birthIdSplit[2]);
-                
-                if((childBdDay == birthIdDay ||
-                    childBdDay == (birthIdDay - 1) ||
-                    birthIdDay == (childBdDay - 1)) &&
-                    (childBdMonth == birthIdMonth ||
-                    childBdMonth == (birthIdMonth - 1) ||
-                    birthIdMonth == (childBdMonth - 1))) {
-                    sameBirth++;
-                    sumX += child.location.x;
-                }
 
-                // if(childBdYear == birthIdYear) {
-                //     if(childBdMonth == birthIdMonth) {
-                //         if(childBdDay == birthIdDay ||
-                //             childBdDay == (birthIdDay - 1) ||
-                //             (childBdDay - 1) == birthIdDay) {
-                //             sameBirth++;
-                //             sumX += child.location.x;
-                //         }
-                //     } else if(childBdMonth == (birthIdMonth - 1) ||
-                //         (childBdMonth - 1) == birthIdMonth) {
-                            
-                //     }
-                // }
+                var month31 = [01, 03, 05, 07, 08, 10, 12];
+                var month30 = [04, 06, 09, 11];
+
+                // console.log("childBd", childBd)
+                // console.log("birthId", birthId)
+
+                if(childBdYear == birthIdYear) {
+                    if(childBdMonth == birthIdMonth) {
+                        if(childBdDay == birthIdDay ||
+                        childBdDay == (birthIdDay-1) ||
+                        (childBdDay-1) == birthIdDay) {
+
+                            sameBirth++;
+                            sumX += child.location.x;
+                        }
+                    } else if(childBdMonth == (birthIdMonth-1) ||
+                    (childBdMonth-1) == birthIdMonth) {
+                        if(month31.includes(childBdMonth)) {
+                            if(birthIdDay == 1 && childBdDay == 31) {
+                                sameBirth++;
+                                sumX += child.location.x;
+                            }
+                        } else if(month31.includes(birthIdMonth)) {
+                            if(birthIdDay == 1 && childBdDay == 31) {
+                                sameBirth++;
+                                sumX += child.location.x;
+                            }
+                        } else if(month30.includes(childBdMonth)) {
+                            console.log("childBd", childBd)
+                            console.log("birthId", birthId)
+                            if(birthIdDay == 1 && childBdDay == 30) {
+                                sameBirth++;
+                                sumX += child.location.x;
+                            }
+                        } else if(month30.includes(birthIdMonth)) {
+                            console.log("childBd", childBd)
+                            console.log("birthId", birthId)
+                            if(birthIdDay == 1 && childBdDay == 30) {
+                                sameBirth++;
+                                sumX += child.location.x;
+                            }
+                        }
+                    }
+                }
             }
 
             if (sameBirth > 0) {

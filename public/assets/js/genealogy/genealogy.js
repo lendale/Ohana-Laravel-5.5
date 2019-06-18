@@ -31,15 +31,14 @@
         if (user) {
             currentUser = user;
             retrieveUserTree(user.uid);
-            // tester(user.uid)
+            tester(user.uid)
             // searchSibling()
             // searchSpouse()
         } else {}
     }
 
     function tester(uid) {
-        console.log(memberImmId)
-        console.log(memberExtId)
+        
     }
     
     /* ========================

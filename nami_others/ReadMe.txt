@@ -1,3 +1,4 @@
+LINKS
 https://gojs.net/latest/intro/panels.html
 https://gojs.net/latest/intro/palette.html
 https://gojs.net/latest/intro/nodes.html
@@ -14,7 +15,7 @@ if (!(obj.vir === undefined || obj.vir === null)) {
     obj.vir = arrVir;
 }
 
-Scenarios
+SCENARIOS
     Register new email
     Register existing email
     Login wrong credentials
@@ -29,13 +30,15 @@ Scenarios
     Register Member w/ email
     Register Member w/o email
 
-Birthday
-
+BIRTHDAY
     Jan 31, 2019, Feb 1, 2019
     Jan 30, 2019, Jan 31, 2019
     Dec 31, 2019, Jan 1, 2020
 
+TO DO LIST
+    Spouse1 is not an extended family to spouse2 but spouse1child is extended to spouse2
+    User's spouse becomes user1
+    Retrieve ms from parents only on retrieving tree
+    When deleting parent and adding another, add siblings to parent as children if parent2 is the same
 
 console.log("key", key)
-
-/${pushKey}

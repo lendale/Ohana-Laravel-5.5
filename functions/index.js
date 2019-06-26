@@ -4,10 +4,10 @@ const functions = require('firebase-functions')
 const admin = require('firebase-admin')
 admin.initializeApp()
 
-const parents = require('./src/addParent')
-const spouse = require('./src/addSpouse')
-const children = require('./src/addChild')
-const sibling = require('./src/addSibling')
+const addParents = require('./src/addParent')
+const addSpouse = require('./src/addSpouse')
+const addChildren = require('./src/addChild')
+const addSibling = require('./src/addSibling')
 const notif = require('./src/notifications')
 const djob = require('./src/cronJob')
 const eReminder= require('./src/eventsReminder')
@@ -153,35 +153,35 @@ exports.createUser = function(data, context) {
 }
 
 exports.addMotherToClan = functions.database.ref('/user_family/{uid}/mothers/{pushKey}').onCreate((data, context) => {
-    return parents.addMother(data, context)
+    return addParents.addMother(data, context)
 })
 
 exports.addFatherToClan = functions.database.ref('/user_family/{uid}/fathers/{pushKey}').onCreate((data, context) => {
-    return parents.addFather(data, context)
+    return addParents.addFather(data, context)
 })
 
 exports.addWifeToClan = functions.database.ref('/user_family/{uid}/wives/{pushKey}').onCreate((data, context) => {
-    return spouse.addWife(data, context)
+    return addSpouse.addWife(data, context)
 })
 
 exports.addHusbandToClan = functions.database.ref('/user_family/{uid}/husbands/{pushKey}').onCreate((data, context) => {
-    return spouse.addHusband(data, context)
+    return addSpouse.addHusband(data, context)
 })
 
 exports.addDaughterToClan = functions.database.ref('/user_family/{uid}/daughters/{pushKey}').onCreate((data, context) => {
-    return children.addDaughter(data, context)
+    return addChildren.addDaughter(data, context)
 })
 
 exports.addSonToClan = functions.database.ref('/user_family/{uid}/sons/{pushKey}').onCreate((data, context) => {
-    return children.addSon(data, context)
+    return addChildren.addSon(data, context)
 })
 
 exports.addSisterToClan = functions.database.ref('/user_family/{uid}/sisters/{pushKey}').onCreate((data, context) => {
-    return sibling.addSister(data, context)
+    return addSibling.addSister(data, context)
 })
 
 exports.addBrotherToClan = functions.database.ref('/user_family/{uid}/brothers/{pushKey}').onCreate((data, context) => {
-    return sibling.addBrother(data, context)
+    return addSibling.addBrother(data, context)
 })
 
 exports.notifications = functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {

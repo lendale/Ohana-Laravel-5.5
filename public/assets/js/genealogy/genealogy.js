@@ -17,6 +17,7 @@
     var extendedData = [];
     var userClanId;
     var currentUser;
+    var currentUserDetails;
     var currentUserGender;
     var currentUserExtendedId;
     var currentUserFamilyId;
@@ -34,11 +35,13 @@
             tester(user.uid)
             // searchSibling()
             // searchSpouse()
-        } else {}
+        }
     }
 
     function tester(uid) {
-        
+        usersRef.child(uid).once("value").then(snap => {
+            console.log("data", snap.val().familyId)
+        })
     }
     
     /* ========================
@@ -47,6 +50,7 @@
     
     function retrieveUserTree(uid) {
         usersRef.child(uid).once("value").then(snap => {
+            currentUserDetails = snap.val();
             let obj = snap.val();
             currentUserGender = snap.val().gender;
             currentUserExtendedId = snap.val().extendedId;

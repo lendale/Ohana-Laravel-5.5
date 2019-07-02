@@ -36,9 +36,10 @@ BIRTHDAY
     Dec 31, 2019, Jan 1, 2020
 
 TO DO LIST
-    Spouse1 is not an extended family to spouse2 but spouse1child is extended to spouse2
     User's spouse becomes user1
     Retrieve ms from parents only on retrieving tree
     When deleting parent and adding another, add siblings to parent as children if parent2 is the same
+    person1 ginny's child, person2 ginny's father
 
 console.log("key", key)
+console.log("key")

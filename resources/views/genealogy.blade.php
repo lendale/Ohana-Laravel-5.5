@@ -40,6 +40,9 @@
                         <a href="/genealogy">Genealogy</a>
                     </li>
                     <li>
+                        <a href="/search">Search</a>
+                    </li>
+                    <li>
                         <a href="/album_merged">Album</a>
                     </li>
                     <li>

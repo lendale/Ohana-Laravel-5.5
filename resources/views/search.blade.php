@@ -103,6 +103,11 @@
                                 </div>
                             </div>
 
+                            <div class="col-sm-3 col-sm-offset-9">
+                                <div class="form-group form-danger label-floating">
+                                    <button type="submit" id="submit_search" class="btn btn-danger right">Search</button>
+                                </div>
+                            </div>
                             
                             <div class="col-sm-3 col-sm-offset-1">
                                 <div  class="person1_txt">
@@ -138,13 +143,6 @@
                                     
                                 </div>
                             </div>
-
-                            <div class="col-sm-3 col-sm-offset-9">
-                                <div class="form-group form-danger label-floating">
-                                    <button type="submit" id="submit_search" class="btn btn-danger right">Search</button>
-                                </div>
-                            </div>
-
                         </div>
                     </div>
                 </div>
@@ -229,5 +227,7 @@
 <script src="assets/js/genealogy/update_spouse.js"></script>
 <script src="assets/js/genealogy/update_child.js"></script> -->
 
-<script src="assets/js/search/search.js"></script>
+<!-- <script src="assets/js/search/search.js"></script> -->
+<script src="assets/js/search/search1.js"></script>
+
 </html>

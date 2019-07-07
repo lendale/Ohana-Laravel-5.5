@@ -3,12 +3,12 @@ var usersRef= firebase.database().ref().child('users')
 var immediate_family = firebase.database().ref().child('immediate_family')
 var person1;
 var person2;
+var person1_imm = [];
+var person2_imm = [];
 var person1_key;
 var person2_key;
 var person1_familyId;
 var person2_familyId;
-var person1_imm = [];
-var person2_imm = [];
 
 firebase.auth().onAuthStateChanged(handleAuthStateChanged);
     
@@ -22,19 +22,31 @@ function getSearchData(){
     person1 = $("#person_1").val();
     person2 = $("#person_2").val();
 
+    var person1_imm_retrieved = [];
+    var person2_imm_retrieved = [];
+
+    console.log("person1", person1)
+    console.log("person2", person2)
+
     usersRef.once("value").then(snap => {
         snap.forEach(snap2 => {
             if(snap2.val().displayName.toLowerCase() == person1.toLowerCase()) {
-                console.log("search person1", person1 + true)
+                console.log("search person1", true)
+                person1_imm_retrieved = person1retrieveImm(snap2.val().familyId)
                 person1_key = snap2.val().key
                 person1_familyId = snap2.val().familyId
 
                 usersRef.once("value").then(snap3 => {
                     snap3.forEach(snap4 => {
                         if(snap4.val().displayName.toLowerCase() == person2.toLowerCase()) {
-                            console.log("search person2", person2 + true)
+                            console.log("search person2", true)
+                            person2_imm_retrieved = person2retrieveImm(snap4.val().familyId)
                             person2_key = snap4.val().key
                             person2_familyId = snap4.val().familyId
+
+                            console.log("person1_imm_retrieved", person1_imm_retrieved)
+                            console.log("person2_imm_retrieved", person2_imm_retrieved)
+
 
                             immediate1st()
                         }
@@ -50,7 +62,6 @@ function immediate1st() {
 
     immediate_family.child(person1_familyId).once("value").then(snap => {
         if(snap.val().father == person2_key) {
-            checker = true;
             html_common +='<h6>'+ person2 +' is the father of '+ person1 +'</h6>';
             $('#common_txt').html(html_common)
         } else if(snap.val().mother == person2_key) {
@@ -102,8 +113,6 @@ function immediate1st() {
     })
 
     immediate_family.child(person2_familyId).once("value").then(snap => {
-        console.log("imm1st person2")
-
         if(snap.val().father == person1_key) {
             html_common +='<h6>'+ person1 +' is the father of '+ person2 +'</h6>';
             $('#common_txt').html(html_common)
@@ -154,153 +163,48 @@ function immediate1st() {
             }
         }
     })
-
-    retrieveImm()
 }
 
-function retrieveImm() {
-    immediate_family.child(person1_familyId).once("value").then(snap => {
+function person1retrieveImmFamilyId(key) {
+    usersRef.child(key).once("value").then(snap => {
+        person1retrieveImm(snap.val().familyId)
+    })
+}
+
+function person2retrieveImmFamilyId(key) {
+    usersRef.child(key).once("value").then(snap => {
+        person2retrieveImm(snap.val().familyId)
+    })
+}
+
+function person1retrieveImm(imm_id) {
+    immediate_family.child(imm_id).once("value").then(snap => {
         person1_imm.push(snap.val().user)
-        if(snap.val().father) person1_imm.push(snap.val().father)
-        if(snap.val().mother) person1_imm.push(snap.val().mother)
-        for(var k in snap.val().brother) person1_imm.push(k)
-        for(var k in snap.val().sister) person1_imm.push(k)
-        for(var k in snap.val().husband) person1_imm.push(k)
-        for(var k in snap.val().wife) person1_imm.push(k)
-        for(var k in snap.val().son) person1_imm.push(k)
-        for(var k in snap.val().daughter) person1_imm.push(k)
+        if(snap.val().father) { person1_imm.push(snap.val().father); person1retrieveImmFamilyId(snap.val().father); }
+        if(snap.val().mother) { person1_imm.push(snap.val().mother); person1retrieveImmFamilyId(snap.val().mother); }
+        for(var k in snap.val().brother) { person1_imm.push(k); person1retrieveImmFamilyId(k); }
+        for(var k in snap.val().sister) { person1_imm.push(k); person1retrieveImmFamilyId(k); }
+        for(var k in snap.val().husband) { person1_imm.push(k); person1retrieveImmFamilyId(k); }
+        for(var k in snap.val().wife) { person1_imm.push(k); person1retrieveImmFamilyId(k); }
+        for(var k in snap.val().son) { person1_imm.push(k); person1retrieveImmFamilyId(k); }
+        for(var k in snap.val().daughter) { person1_imm.push(k); person1retrieveImmFamilyId(k); }
     })
-
-    immediate_family.child(person2_familyId).once("value").then(snap2 => {
-        person2_imm.push(snap2.val().user)
-        if(snap2.val().father) person2_imm.push(snap2.val().father)
-        if(snap2.val().mother) person2_imm.push(snap2.val().mother)
-        for(var k in snap2.val().brother) person2_imm.push(k)
-        for(var k in snap2.val().sister) person2_imm.push(k)
-        for(var k in snap2.val().husband) person2_imm.push(k)
-        for(var k in snap2.val().wife) person2_imm.push(k)
-        for(var k in snap2.val().son) person2_imm.push(k)
-        for(var k in snap2.val().daughter) person2_imm.push(k)
-    
-        person1_imm.filter(function(n) {
-            if (person2_imm.includes(n) == true) {
-                usersRef.child(n).once("value").then(snap3 => {
-                    console.log("common found", n)
-                    common_rel(n, snap3.val().displayName)
-                })
-            }
-        })
-    })
+    return person1_imm;
 }
 
-function common_rel(keys, name) {
-    var html_common = '';
-
-    immediate_family.child(person1_familyId).once("value").then(snap => {
-        console.log("common person1")
-        if(snap.val().father == keys) {
-            html_common +='<h6>'+ name +' is the father of '+ person1 +'</h6>';
-            $('#common_txt').html(html_common)
-        } else if(snap.val().mother == keys) {
-            html_common +='<h6>'+ name +' is the mother of '+ person1 +'</h6>';
-            $('#common_txt').html(html_common)
-        }
-    
-        for(var key in snap.val().brother) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the brother of '+ person1 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().sister) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the sister of '+ person1 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().husband) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the husband of '+ person1 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().wife) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the wife of '+ person1 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().son) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the son of '+ person1 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().daughter) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the daughter of '+ person1 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
+function person2retrieveImm(imm_id) {
+    immediate_family.child(imm_id).once("value").then(snap => {
+        person2_imm.push(snap.val().user)
+        if(snap.val().father) { person2_imm.push(snap.val().father); person2retrieveImmFamilyId(snap.val().father); }
+        if(snap.val().mother) { person2_imm.push(snap.val().mother); person2retrieveImmFamilyId(snap.val().mother); }
+        for(var k in snap.val().brother) { person2_imm.push(k); person2retrieveImmFamilyId(k); }
+        for(var k in snap.val().sister) { person2_imm.push(k); person2retrieveImmFamilyId(k); }
+        for(var k in snap.val().husband) { person2_imm.push(k); person2retrieveImmFamilyId(k); }
+        for(var k in snap.val().wife) { person2_imm.push(k); person2retrieveImmFamilyId(k); }
+        for(var k in snap.val().son) { person2_imm.push(k); person2retrieveImmFamilyId(k); }
+        for(var k in snap.val().daughter) { person2_imm.push(k); person2retrieveImmFamilyId(k); }
     })
-
-    immediate_family.child(person2_familyId).once("value").then(snap => {
-        console.log("common person2")
-        if(snap.val().father == keys) {
-            html_common +='<h6>'+ name +' is the father of '+ person2 +'</h6>';
-            $('#common_txt').html(html_common)
-        } else if(snap.val().mother == keys) {
-            html_common +='<h6>'+ name +' is the mother of '+ person2 +'</h6>';
-            $('#common_txt').html(html_common)
-        }
-    
-        for(var key in snap.val().brother) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the brother of '+ person2 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().sister) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the sister of '+ person2 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().husband) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the husband of '+ person2 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().wife) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the wife of '+ person2 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().son) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the son of '+ person2 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    
-        for(var key in snap.val().daughter) {
-            if(key == keys) {
-                html_common +='<h6>'+ name +' is the daughter of '+ person2 +'</h6>';
-                $('#common_txt').html(html_common)
-            }
-        }
-    })
+    return person2_imm;
 }
 
 function displayExtId_P1(){

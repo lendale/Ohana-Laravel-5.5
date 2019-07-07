@@ -39,7 +39,6 @@ TO DO LIST
     User's spouse becomes user1
     Retrieve ms from parents only on retrieving tree
     When deleting parent and adding another, add siblings to parent as children if parent2 is the same
-    person1 ginny's child, person2 ginny's father
 
 console.log("key", key)
 console.log("key")

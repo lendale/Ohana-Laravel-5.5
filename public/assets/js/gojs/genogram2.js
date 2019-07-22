@@ -190,17 +190,15 @@ function consanguinity(node) {
                     return "#e74c3c";
                 case "sister":
                     return "#e74c3c";
+                case "consanguinity":
+                    return "#e74c3c";
                     // a shade of blue
                 case "wife":
                     return "#4667E8";
                 case "husband":
                     return "#4667E8";
-                case "aunt":
-                    return "#4667E8";
-                case "uncle":
-                    return "#4667E8";
                 default:
-                    return "#cccccc"; // a shade of gray
+                    return "#4667E8"; // a shade of gray
             }
         }
     }

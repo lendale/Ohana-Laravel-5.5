@@ -16,9 +16,9 @@ if (!(obj.vir === undefined || obj.vir === null)) {
 }
 
 SCENARIOS
-    Register new email
-    Register existing email
-    Login wrong credentials
+    / Register new email
+    / Register existing email
+    / Login wrong credentials
     Add New Members
     Add Existing Parent w/ Spouse (not parent2)
     Add Existing Parent w/ Spouse (parent2)
@@ -30,15 +30,27 @@ SCENARIOS
     Register Member w/ email
     Register Member w/o email
 
+PROBLEMS
+    Address not saved
+    Loading after parent adding should be longer
+
 BIRTHDAY
     Jan 31, 2019, Feb 1, 2019
     Jan 30, 2019, Jan 31, 2019
     Dec 31, 2019, Jan 1, 2020
 
-TO DO LIST
+TO DO
+    / If siblings exist, instead of deleting parents, user can only update data
+    Retrieve ms from parents only on retrieving tree (for user's child w/o parent2)
+    User must be able to add an existing member as one parent
     User's spouse becomes user1
-    Retrieve ms from parents only on retrieving tree
-    When deleting parent and adding another, add siblings to parent as children if parent2 is the same
+    Email verification
+    Keyboard	Add enter, tab events
+    Add Existing	If user adds user2, send notification to user2 before adding
+    Add Existing	Add member with confirmation
+
+ERROR
+    add new member but exists, no name displayed
 
 console.log("key", key)
 console.log("key")

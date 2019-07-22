@@ -16,6 +16,12 @@ function showNodeData(data) {
     } else {
         document.getElementById("node_delete").disabled = false;
         document.getElementById("node_edit").disabled = false;
+    }
+
+    if(currentUserDetails.siblings) {
+        if(data.relationship == "father" || data.relationship == "mother") {
+            document.getElementById("node_delete").disabled = true;
+        }
     } 
 
     $("#modal_show_details")

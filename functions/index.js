@@ -111,6 +111,25 @@ exports.addCurrentUserToClan = functions.database.ref('/users/{uid}').onCreate((
                 })
             })
 
+            root.child(`users/${uid}/vir`).once('value').then(snap => {
+                snap.forEach(snap2 => {
+                    root.child(`users/${snap2.val()}/ux/${userObj.oldKey}`).remove()
+                    root.child(`users/${snap2.val()}/ux/${uid}`).set(uid)
+                    root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).once('value').then(snap3 => {
+                        root.child(`users/${snap2.val()}/ms/${uid}`).set(snap3.val())
+                        root.child(`users/${snap2.val()}/ms/${userObj.oldKey}`).remove()
+                    })
+
+                    root.child(`users/${snap2.val()}`).once('value').then(snap3 => {
+                        root.child(`immediate_family/${snap3.val().familyId}/${spouseType}/${snapshot.val().oldKey}`).remove()
+                        root.child(`immediate_family/${snap3.val().familyId}/${spouseType}/${uid}`).set(uid)
+        
+                        root.child(`extended_family/${snap3.val().extendedId}/${snapshot.val().oldKey}`).remove()
+                        root.child(`extended_family/${snap3.val().extendedId}/${uid}`).set(uid)
+                    })
+                })
+            })
+
             // user's children
             root.child(`users/${uid}/children`).once('value').then(snap => {
                 snap.forEach(snap2 => {

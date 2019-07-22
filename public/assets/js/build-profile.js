@@ -57,10 +57,10 @@ $('#next').click(function() {
     console.log($('#wizard_picture').val())
     console.log("photo_data", photo_data)
     console.log("downloadURL", downloadURL)
-    if(downloadURL == undefined && $('#wizard_picture').val() == '') {
+    if(downloadURL == undefined && $('#wizard_picture').val() == '' && photo_data == undefined) {
         document.getElementById("finish").disabled = true;
         showPhotoNull();
-    } else if(downloadURL != undefined || $('#wizard_picture').val() != '') {
+    } else if(downloadURL != undefined || $('#wizard_picture').val() != '' || photo_data != undefined) {
         document.getElementById("finish").disabled = false;
         checkPotentialUser2();
     }

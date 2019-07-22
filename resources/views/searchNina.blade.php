@@ -16,10 +16,12 @@
     <link href="assets/css/material-kit/bootstrap.min.css" rel="stylesheet" />
     <link href="assets/css/material-kit/material-kit.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.2/sweetalert2.min.css">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/main.css"> 
+    <!-- <link rel="stylesheet" href="assets/css/search.css">  -->
 </head>
 
-<body style="background-image: url('assets/img/beach.jpg'); background-size: cover; height: 100%; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
+<!-- <body style="background-image: url('assets/img/falling-leaves.gif'); background-color:white; background-size: cover; height: 100%; background-position: center; background-repeat: no-repeat; background-attachment: fixed;"> -->
+<body style="background-color:white;">
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -81,13 +83,15 @@
         </div>
     </nav>
 
-    <main class="main section-full-screen section-white">
-        <section class="section container">
+    <main>
+        <div class=" container">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="tab-content main-raised" style="height:70.9vh; width:100%;">
+                    <div class="" style="height:70.9vh; width:100%;">
                         <div class="row">
-                            <h3 class="title text-center">Search Relationship Between Two People</h3><br>
+                            <h3 class="title text-center">Search Connection Between Two People</h3><br>
+
+                            <input id="common_person" name="common" type="text" class="form-control">
 
                             <div class="col-sm-5 col-sm-offset-1">
                                 <div class="form-group form-danger label-floating">
@@ -103,11 +107,6 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-3 col-sm-offset-9">
-                                <div class="form-group form-danger label-floating">
-                                    <button type="submit" id="submit_search" class="btn btn-danger right">Search</button>
-                                </div>
-                            </div>
                             
                             <div class="col-sm-3 col-sm-offset-1">
                                 <div  class="person1_txt">
@@ -143,6 +142,23 @@
                                     
                                 </div>
                             </div>
+
+                            <div class="row" id="common">
+                                <div class="col-sm-10 col-sm-offset-1">
+                                    <!-- <hr>
+                                        <h5><center><b>Connection</b><center></h5>
+                                        <pre>Common Person:<div id="name">  Nina Dakay</div>
+                                        </pre> -->
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 col-sm-offset-9">
+                                <div class="form-group form-danger label-floating">
+                                    <a href="javascript:location.reload(true)" class="btn btn-danger right">Search Again</a>
+                                    <button type="submit" id="submit_search" class="btn btn-danger right">Search</button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -200,34 +216,5 @@
 <!--    Plugin for Google Places API    -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsnYLajLVHh7uvRdQCkbwnZepcCi1t0q4&libraries=places"></script>
 
-<!-- Go JS -->
-<!-- <script src="assets/js/gojs/go-debug.js"></script>
-<script src="assets/js/gojs/genogram2.js"></script> -->
-<!-- 
-<script src="assets/js/genealogy/genealogy.js"></script>
-<script src="assets/js/genealogy/search_existing.js"></script>
-<script src="assets/js/genealogy/onclick_button.js"></script>
-<script src="assets/js/genealogy/show_details.js"></script>
-<script src="assets/js/genealogy/delete_node.js"></script>
-
-<script src="assets/js/genealogy/add_existing_parent.js"></script>
-<script src="assets/js/genealogy/add_existing_sibling.js"></script>
-<script src="assets/js/genealogy/add_existing_spouse.js"></script>
-<script src="assets/js/genealogy/add_existing_child.js"></script>
-
-<script src="assets/js/genealogy/add_new_parent.js"></script>
-<script src="assets/js/genealogy/add_new_sibling.js"></script>
-<script src="assets/js/genealogy/add_new_spouse.js"></script>
-<script src="assets/js/genealogy/add_new_child.js"></script> -->
-
-<!-- <script src="assets/js/genealogy/update_details.js"></script> -->
-<!-- <script src="assets/js/genealogy/update_user.js"></script>
-<script src="assets/js/genealogy/update_parent.js"></script>
-<script src="assets/js/genealogy/update_sibling.js"></script>
-<script src="assets/js/genealogy/update_spouse.js"></script>
-<script src="assets/js/genealogy/update_child.js"></script> -->
-
-<!-- <script src="assets/js/search/search.js"></script> -->
-<script src="assets/js/search/search1.js"></script>
-
+<script src="assets/js/search/searchNina.js"></script>
 </html>

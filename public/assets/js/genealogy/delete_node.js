@@ -1,20 +1,20 @@
 function deleteNode(data) {
     if(data.relationship == "father" || data.relationship == "mother") {
         if(currentUserDetails.siblings) {
-            $("#delete_modal")
+            $("#error_details")
                 .modal("show");
 
-            $("#delete_title")
+            $("#error_details_title")
                 .empty()
                 .append("Delete " + data.displayName + "?");
             
-            $("#delete_body")
+            $("#error_details_node")
                 .empty()
-                .append("Ohana advises you to update your " + data.relationship + "'s details instead. Insist on deleting?")
+                .append("Ohana advises you to update your " + data.relationship + "'s details.")
             
-            $('#delete_yes').click(function() {
-                deleteParent(data);
-            })
+            // $('#delete_yes').click(function() {
+            //     deleteParent(data);
+            // })
         } else {
             $("#delete_modal")
                 .modal("show");

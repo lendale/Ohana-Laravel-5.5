@@ -2245,9 +2245,6 @@
 <script src="assets/js/genealogy/add_new_child.js"></script>
 
 <script src="assets/js/genealogy/delete_parent.js"></script>
-<!-- <script src="assets/js/genealogy/delete_sibling.js"></script>
-<script src="assets/js/genealogy/delete_spouse.js"></script>
-<script src="assets/js/genealogy/delete_child.js"></script> -->
 
 <script src="assets/js/genealogy/update_user.js"></script>
 <script src="assets/js/genealogy/update_parent.js"></script>

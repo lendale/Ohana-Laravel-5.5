@@ -102,6 +102,7 @@ function showSuccessPhoto() {
     function(dismiss) {
         if (dismiss === "timer") {
             location.reload()
+
         }
     })
 }
@@ -139,6 +140,19 @@ function showSuccessAlbum() {
 function showSuccessDelete() {
     swal({
         title: "Album Deleted!",
+        timer: 5000,
+        showConfirmButton: false,
+        type: "success"
+    }).then(function() {},
+    function(dismiss) {
+        if (dismiss === "timer") {
+            location.reload()
+        }
+    })
+}
+function showSuccessPhotoDelete() {
+    swal({
+        title: "Photo Deleted!",
         timer: 5000,
         showConfirmButton: false,
         type: "success"

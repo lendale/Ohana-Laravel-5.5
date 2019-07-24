@@ -9,89 +9,97 @@
 
     <!--     Fonts and icons     -->
     <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:400,700|Material+Icons" />
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Pacifico' >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
+    <link href='http://fonts.googleapis.com/css?family=Great+Vibes' rel='stylesheet' type='text/css'>
+
 
     <!-- CSS Files -->
     <link href="assets/css/material-kit/bootstrap.min.css" rel="stylesheet" />
     <!-- <link href="assets/css/test.css" rel="stylesheet" /> -->
     <!-- <link rel="stylesheet" href="assets/css/lightgallery/lightgallery.css"> -->
-    <link rel="stylesheet" href="assets/css/lightbox/lightbox.css">
+    <!-- <link rel="stylesheet" href="assets/css/lightbox/lightbox.css"> -->
+    <link href="assets/css/lightbox.css" rel="stylesheet" />
 
     <link href="assets/css/material-kit/material-kit.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.10.2/sweetalert2.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/album.css">
 </head>
-<body class="image-container set-full-height" style="background-image: url(''); background-size: cover; height: 100%; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
-<nav class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
-	                        <span class="sr-only">Toggle navigation</span>
-	                        <span class="icon-bar"></span>
-	                        <span class="icon-bar"></span>
-	                        <span class="icon-bar"></span>
-	                      </button>
-                <a class="navbar-brand">O H A N A</a>
-            </div>
+<body class="image-container set-full-height" style="background-image: url('assets/img/beach.jpg'); background-size: cover; height: 100%; background-position: center; background-repeat: no-repeat; background-attachment: fixed;">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+                    <a class="navbar-brand">O H A N A</a>
+                </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="navigation">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/genealogy">Genealogy</a>
-                    </li>
-                    <li class='active'>
-                        <a href="/album_merged">Album</a>
-                    </li>
-                    <li>
-                         <!-- Events Dropdown -->
-                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="navigation">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="/genealogy">Genealogy</a>
+                        </li>
+                        <li>
+                            <a href="/search">Search</a>
+                        </li>
+                        <li class='active'>
+                            <a href="/album_merged">Album</a>
+                        </li>
+                        <li>
+                            <!-- Events Dropdown -->
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="/eventsImmediate">Immediate Events</a></li>
+                                    <li><a href="/eventsExtended" disabled>Extended Events</a></li>
+                                </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown">
+                                <i class="material-icons">notifications</i>
+                                <span class="notification"></span>
+                                <p class="hidden-lg hidden-md">
+                                    Notifications
+                                    <b class="caret"></b>
+                                </p>
+                            </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/eventsImmediate">Immediate Events</a></li>
-                                <li><a href="/eventsExtended" disabled>Extended Events</a></li>
+                                <!-- <li><a href="#">Mike John responded to your email</a></li>
+                                <li><a href="#">You have 5 new tasks</a></li>
+                                <li><a href="#">You're now friend with Andrew</a></li>
+                                <li><a href="#">Another Notification</a></li>
+                                <li><a href="#">Another One</a></li> -->
                             </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="material-icons">notifications</i>
-                            <span class="notification"></span>
-                            <p class="hidden-lg hidden-md">
-                                Notifications
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <!-- <li><a href="#">Mike John responded to your email</a></li>
-                            <li><a href="#">You have 5 new tasks</a></li>
-                            <li><a href="#">You're now friend with Andrew</a></li>
-                            <li><a href="#">Another Notification</a></li>
-                            <li><a href="#">Another One</a></li> -->
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a class="profile-photo dropdown-toggle" data-toggle="dropdown">
-                            <div class="profile-photo-small">
-                                <img id="nav_prof_pic" src="assets/img/default-avatar.png" alt="Circle Image" class="img-circle img-responsive" style="height: 100%; width: 100%;">
-                            </div>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-header">
-                                <span id="nav_display_name"></span>
-                            </li>
-                            <li>
-                                <a href="" id="sign_out">Sign out</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="profile-photo dropdown-toggle" data-toggle="dropdown">
+                                <div class="profile-photo-small">
+                                    <img id="nav_prof_pic" src="assets/img/default-avatar.png" alt="Circle Image" class="img-circle img-responsive" style="width: 100%; height: 100%;">
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-header">
+                                    <span id="nav_display_name"></span>
+                                </li>
+                                <li>
+                                    <a href="" id="sign_out">Sign out</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
             </div>
-            <!-- /.navbar-collapse -->
-        </div>
-</nav>
+    </nav>
 <main>
-    <section class="select container ">
+    <section class="select container">
         <div class="row">
         <div id="section">
             <a type="button" class="btn btn-danger btn-sm" data-toggle="modal" title="Create Album" data-target="#createAlbumCoverModal">Create Album<br></a>
@@ -182,14 +190,8 @@
                 
                     <!-- <strong><p><h4>Album Name:</h4></p></strong> -->
                     <div id="albumNameInModal">
-                    <div class="col-sm-6" id= "photo_album_key"> </div>
+                        <div class="col-sm-6" id= "photo_album_key"> </div>
                     </div>
-                    
-                    <!-- <div class="col-sm-6" id="all_album_list">
-                        <select class="selectpicker select-danger" data-style="select-with-transition" title="Single Select" required>
-                            <option id="photo_album">Album List</option>
-                        </select>
-                    </div> -->
 
                     <div class="col-md-6">
                         <div class="form-group label-floating form-danger">
@@ -438,24 +440,6 @@
     </div>
 </div>
 
-<div class="col-md-3">
-    <div class="card text-center" style="border-style: groove; border-color: #FF451D;">
-
-        <a href="assets/img/index/nina.jpg">
-            <img class="card-img-top" src="assets/img/index/nina.jpg" id="photo" style="width:width:235px;height:200px;">
-        </a>
-               
-
-        <div class="card-content">
-            <i><p id="caption">'+value.photo_caption+'</p></i>
-
-            <a type="button" href="" title="Update Album Privacy" class="btn btn-danger btn-round btn-sm" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyPhotoAccessUpdate(this.id)">Update</a>
-            <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-round btn-sm" id="'+key+'" onClick="verifyPhotoAccessDelete(this.id)">Delete</a>
-        </div>
-    </div>
-</div>
-
-
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js "></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js "></script>
@@ -506,17 +490,5 @@
 <!-- USER ALBUM JS -->
 <script src="assets/js/album/album.js"></script>
 <script src="assets/js/album/album_merged.js"></script>
-
-<script src="assets/js/lightbox/lightbox.min.js"></script>
-
-<!-- <script src="assets/js/lightgallery/lightgallery.min.js "></script>
-<script src="assets/js/lightgallery/lg-fullscreen.min.js "></script>
-<script src="assets/js/lightgallery/lg-thumbnail.min.js "></script>
-<script src="assets/js/lightgallery/lg-zoom.min.js "></script> -->
-<!-- <script>
-$(document).ready(function(){
-    $('#lightgallery').lightGallery();
-})
-</script> -->
-
+<script src="assets/js/lightbox.js"></script>
 </html>

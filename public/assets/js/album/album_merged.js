@@ -67,7 +67,6 @@ function handleAlbumInStr(eventData){
     // console.log('FILE EXTENSION:', fileExtension)
 
     // if(file.size <= 100000){
-
     $('#create_album').on('click', function(){
         var task = albumStorageRef.put(file);
         task.on('state_changed',
@@ -98,7 +97,6 @@ function storeAlbumInDb(albumCoverURL, albumKey, strRef){
     var album_data = new Object()
     var album_name = $('#album_name').val();
     var album_description = $('#album_description').val();
-    // var album_privacy = $("input[name='album_privacy']:checked").val();
     var photoStr = 'PHOTOS/' +albumKey + '/'
     uid = firebase.auth().currentUser.uid;
     
@@ -127,12 +125,14 @@ function storeAlbumInDb(albumCoverURL, albumKey, strRef){
     albumRef.child(albumKey).child(albumKey).set(album_data);
     showSuccessAlbum()
 }
-function retrieveImmediate(){
+function retrieveImmediate1(){
     immediateFamilyRef.child(familyId).once('value')
     .then(function(data){
-        // console.log(data.val())
-        data.forEach(function(childDataKeys){
-            // console.log(childDataKeys.val())
+        console.log(data.val())
+        data.forEach(function(data2){
+            console.log(data2.val())
+        data2.forEach(function(childDataKeys){
+            console.log(childDataKeys.val())
             albumPrivacyRefImmediate.child(childDataKeys.val()).once('value')
             .then(function(snap){
                 // console.log(snap.val())
@@ -146,8 +146,35 @@ function retrieveImmediate(){
                        
                 })
             })  
+        }) 
         })
     })
+}
+function retrieveImmediate(){
+    var family = [];
+    immediateFamilyRef.child(familyId).once('value')
+    .then(function(data){
+        family.push(data.val().mother, data.val().father, data.val().user)
+        data.forEach(function(data2){
+            data2.forEach(function(data3){
+                family.push(data3.val())
+            })
+        })
+            family.forEach(function(fam_uid){
+                albumPrivacyRefImmediate.child(fam_uid).once('value')
+                .then(function(snap){
+                    snap.forEach(function(data2){
+                        albumRef.child(data2.val()).child(data2.val()).once('value')
+                        .then(function(data3){
+                            albumData.push(data3.val())
+                            // console.log('IMMEDIATE:',data3.val())
+                            displayAlbumCard()
+                        }) 
+                        
+                    })
+                })
+            })
+    })    
 }
 function retrieveExtended(){
     extendedFamilyRef.child(extendedId).once('value')
@@ -157,7 +184,9 @@ function retrieveExtended(){
             // console.log(childDataKeys.val())
             albumPrivacyRefExtended.child(childDataKeys.val()).once('value')
             .then(function(snap){
+                // console.log(snap.val())
                 snap.forEach(function(data2){
+                    // console.log(data2.val())
                     albumRef.child(data2.val()).child(data2.val()).once('value')
                     .then(function(data){
                         albumData.push(data.val())
@@ -176,7 +205,6 @@ function retrieveUser(){
                 albumRef.child(childKeys.val()).child(childKeys.val()).once('value')
                 .then(function(data2){
                     albumData.push(data2.val())
-                    // console.log('USERS:',data2.val())
                     displayAlbumCard()
                 })
             })
@@ -200,18 +228,18 @@ function displayAlbumCard(){
         var html = '';
         $.each(albumData, function(key,value){
             index=key;
-            html+= '<div class="col-md-3"><div class="card card-blog"><div class="card-image"><img src="' + value.album_cover + '" id="cover" style="width:235px;height:200px;"><div class="card-title"><p id="name">'+ value.album_name+'</p></div></div><div class="card-content"><div class="card-description"><i><p id="description">'+value.album_description+'</p></i></div><div class="footer" align="left"><div id="creator">'+value.album_creator+'</div><br><div id="timestamp">'+value.album_date+'</div><br><div id="privacy"><strong>'+value.album_privacy+'</strong></div></div><div class="footer"><a type="button" id="'+key+'" onClick="retrieveAlbumPhotos(this.id)" href="#" data-toggle="tooltip" data-placement="bottom" title="View Photos" class="btn btn-info btn-just-icon btn-fill btn-round btn-sm"><i class="material-icons">photo_library</i></a><a type="button" href="" title="Update Album Privacy" class="btn btn-warning btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="#updatePrivacy" id="'+key+'" onClick="verifyAccessUpdate(this.id)"><i class="material-icons">settings</i></a><a type="button" href="" title="Edit Album Information" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyAccessEdit(this.id)"><i class="material-icons">edit</i></a><a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-just-icon btn-fill btn-round btn-sm" id="'+key+'" onClick="verifyAccessDelete(this.id)"><i class="material-icons">delete_forever</i></a></div></div></div></div>';
+            html+= '<div class="col-md-3"><div class="card card-blog"><div class="card-image"><a href="'+value.album_cover+'"><img src="' + value.album_cover + '" id="cover" style="width:235px;height:200px;"></a><div class="card-title"><p id="name">'+ value.album_name+'</p></div></div><div class="card-content"><div class="card-description"><i><p id="description">'+value.album_description+'</p></i></div><div class="footer" align="left"><div id="creator">'+value.album_creator+'</div><br><div id="timestamp">'+value.album_date+'</div><br><div id="privacy"><strong>'+value.album_privacy+'</strong></div></div><div class="footer"><a type="button" id="'+key+'" onClick="retrieveAlbumPhotos(this.id)" href="#" data-toggle="tooltip" data-placement="bottom" title="View Photos" class="btn btn-info btn-just-icon btn-fill btn-round btn-sm"><i class="material-icons">photo_library</i></a><a type="button" href="" title="Update Album Privacy" class="btn btn-warning btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="#updatePrivacy" id="'+key+'" onClick="verifyAccessUpdate(this.id)"><i class="material-icons">settings</i></a><a type="button" href="" title="Edit Album Information" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyAccessEdit(this.id)"><i class="material-icons">edit</i></a><a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-just-icon btn-fill btn-round btn-sm" id="'+key+'" onClick="verifyAccessDelete(this.id)"><i class="material-icons">delete_forever</i></a></div></div></div></div>';
         })
         $('#card-container').html(html);
 }
-function getAlbumName(albumkey){
+// function getAlbumName(albumkey){
 
-    console.log(selectedAlbumData.album_key)
-    var aKey = '<div class="col-sm-6" id= "photo_album" value="'+selectedAlbumData.album_key+'">'+selectedAlbumData.album_name+'</div>';
-    $('#albumNameInModal').html(aKey)
+//     console.log(selectedAlbumData.album_key)
+//     var aKey = '<div class="col-sm-6" id= "photo_album" value="'+selectedAlbumData.album_key+'">'+selectedAlbumData.album_name+'</div>';
+//     // $('#albumNameInModal').html(aKey)
 
-    verifyAccessUpload(albumkey)
-}
+//     verifyAccessUpload(albumkey)
+// }
 function handlePhotoInStr(imageFile){
     var fileName = imageFile.name;
     var strRef = 'PHOTOS/' + selectedAlbumData.album_key + '/' + fileName;
@@ -414,7 +442,7 @@ function deletePhoto(clicked_key){
 
     swal({
         title: 'Are you sure?',
-        text: "You won't be able to revert this album!",
+        text: "You won't be able to revert this photo!",
         type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -430,7 +458,7 @@ function deletePhoto(clicked_key){
         console.log(delete_selected.photo_link)
         firebase.storage().ref(delete_selected.photo_link).delete();
         albumRef.child(selectedAlbumData.album_key).child(selectedAlbumData.album_key).child('album_photos').child(delete_selected.photo_key).remove()
-        showSuccessDelete()
+        showSuccessPhotoDelete()
     }
 }
 function updatePrivacy(clicked_key){
@@ -514,7 +542,7 @@ function verifyAccessUpload(albumkey){
     console.log('HEY',albumkey)
 
     if(selectedAlbumData.album_privacy == 'Public'){
-        if(selectedAlbumData.album_creatorId !== uid){
+        if(selectedAlbumData.album_creatorId !== currentUser.uid){
             showAccessErrorUpload()
         }
     }
@@ -556,28 +584,20 @@ function verifyPhotoAccessDelete(clicked_key){
         showErrorAccess()
     }
 }
-
 function retrieveAlbumPhotos(clicked_key){
     selectedAlbumData =  albumData[clicked_key];
     console.log(selectedAlbumData.album_key)
     console.log(selectedAlbumData.album_name)
 
     var selectedPhotoRef =albumRef.child(selectedAlbumData.album_key).child(selectedAlbumData.album_key).child('album_photos');
-
-    var button = '<a type="button" onclick="location.reload()" class="btn btn-danger btn-sm" title="Back To Album">Back To Album</a><a type="button" id="'+ selectedAlbumData.album_key +'" onclick="getAlbumName(this.id)" class="btn btn-danger btn-sm" data-toggle="modal" title="Upload Photo" data-target="#uploadModal">Upload Photo</a>';
-    var aNameTxt = '<br><center><h4 class="title"><div id="albumNameTxt">'+selectedAlbumData.album_name+'</div><br><br><br></h4></center>';
-
+    var aNameTxt = '<br><br><div id="albumNameTxt" class="animated bounceInLeft"><p class="title" id="albNmTxt">'+selectedAlbumData.album_name+'</p><a type="button" onclick="location.reload()" class="btn btn-white" title="Back To Album"><i class="material-icons">arrow_back_ios</i>Back To Albums</a>&nbsp;&nbsp;<a type="button" id="'+ selectedAlbumData.album_key +'" onclick="verifyAccessUpload(this.id)" class="btn btn-danger" data-toggle="modal" title="Upload Photo" data-target="#uploadModal">Upload Photo</a></div>';
 
     $('#album-title').html(aNameTxt);
-    $('#section').html(button);
-
-    // console.log(selectedPhotoRef)
+    $('#section').hide();
 
     selectedPhotoRef.once('value')
     .then(function(data){
         data.forEach(function(childData){
-            // console.log(data)
-            // console.log(childData)
             photoData.push(childData.val())
         })
     })
@@ -585,8 +605,9 @@ function retrieveAlbumPhotos(clicked_key){
         var cardDetails = '';
         $.each(photoData, function(key,value){
             
-            cardDetails+= '<div class="col-md-3" ><div class="card text-center" style="border-style: groove; border-color: #FF451D;"><a href="'+value.photo_url+'" data-lightbox="gallery" data-title="'+value.photo_caption+'"><img class="card-img-top" src="'+value.photo_url+'" id="photo" style="width:width:235px;height:200px;"></a><div class="card-content"><i><p id="caption">'+value.photo_caption+'</p></i><a type="button" href="" title="Update Album Privacy" class="btn btn-danger btn-round btn-sm" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyPhotoAccessUpdate(this.id)">Update</a><a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-round btn-sm" id="'+key+'" onClick="verifyPhotoAccessDelete(this.id)">Delete</a></div></div></div>';
+            cardDetails+= '<div class="col-md-3"><div class="card"><a href="'+value.photo_url+'" data-lightbox="gallery" data-title="'+value.photo_caption+'" style="position:relative"><img class="card-img-top" src="'+value.photo_url+'" id="photo" style="width:270px; height:270px;"><a type="button" style="position:absolute;right:20px;top:3px;" title="Update Photo Caption" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyPhotoAccessUpdate(this.id)"><img src="assets/img/icons/pen_white.png" style="width:20px;height:20px;"></a><a type="button" style="position:absolute;right:0;top:3px;" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Photo" id="'+key+'" onClick="verifyPhotoAccessDelete(this.id)"><img src="assets/img/icons/x_white.png" style="width:20px;height:20px;"></a></a></div></div>';
         })
         $('#card-container').html(cardDetails);
+
     }) 
 }

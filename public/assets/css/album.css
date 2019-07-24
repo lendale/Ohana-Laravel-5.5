@@ -11,3 +11,27 @@
     width: 100%;
     overflow: hidden;
 }
+
+.card {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+    
+}
+  
+.card:hover {
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+}
+/* 
+.thumbnails{
+    float: left;
+    width: 5%;
+    padding-right: 15px;
+    box-sizing: border-box;
+} */
+#albNmTxt{
+    font: 400 70px/1.5 'Pacifico', Helvetica, sans-serif;
+    /* font: 400 130px/0.8 'Great Vibes', Helvetica, sans-serif; */
+    /* color: #2b2b2b; */
+    color: white;
+    text-shadow: 3px 3px 0px rgba(0,0,0,0.1), 7px 7px 0px rgba(0,0,0,0.05);
+}

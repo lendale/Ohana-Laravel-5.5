@@ -54,3 +54,4 @@ ERROR
 
 console.log("key", key)
 console.log("key")
+console.log(key)

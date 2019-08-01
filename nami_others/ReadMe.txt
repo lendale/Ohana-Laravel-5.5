@@ -55,3 +55,12 @@ ERROR
 console.log("key", key)
 console.log("key")
 console.log(key)
+
+
+CURRENT SEARCH
+ginny and rose - continuos loop
+ginny and angelina - continuos loop
+
+SEARCH2
+work on dean jung
+use immediate family for checking on ginny and dean

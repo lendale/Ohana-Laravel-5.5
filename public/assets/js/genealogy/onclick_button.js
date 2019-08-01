@@ -2,7 +2,6 @@
 $(document).ready(function() {
     materialKit.initFormExtendedDatetimepickers();
 
-    $('#users_pic').change(handleWizardPic);
     $('#parent_pic').change(handleParentPic);
     $('#sibling_pic').change(handleSiblingPic);
     $('#spouse_pic').change(handleSpousePic);

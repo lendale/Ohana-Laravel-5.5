@@ -1,7 +1,14 @@
+var userData; 
+
 function updateParentModal(data) {
+    userData = data; 
+
     console.log('update parent')
+
     $("#modal_update_parent").on("hidden.bs.modal", function(){
-        return location.reload();
+        setTimeout(function() {
+            return location.reload();
+        }, 15000);
     });
 
     $("#modal_update_parent")
@@ -79,7 +86,8 @@ function updateParentModal(data) {
     })
 }
 
-function updateParent(data, downloadURL) {
+function updateParent(data, downloadURL, picLink) {
+    console.log('update_parent')
     var photoPic = $('#update_parent_pic').attr('src');
     var firstName = $("#update_parent_first_name").val();
     var middleName = $("#update_parent_middle_name").val();
@@ -101,10 +109,13 @@ function updateParent(data, downloadURL) {
         registered: registered,
     };
 
+    console.log(downloadURL)
     if (downloadURL !== undefined) {
         person.photoURL = downloadURL
+        person.photoLink = picLink
     } else if (photoPic !== undefined) {
         person.photoURL = photoPic;
+        person.photoLink = picLink
     } else {
         console.log('no image');
     }
@@ -144,10 +155,98 @@ function updateParent(data, downloadURL) {
         }, 1000);
     }
     else {
+        console.log('update in database')
         usersRef.child(data.key).update(person);
         showUpdate();
         setTimeout(function() {
             return location.reload();
         }, 2000);
     }
+}
+
+function handleParentUpdatePic(eventData){
+    var file = eventData.target.files[0];
+    var fileExtension = file.name.split(".").pop();
+    var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
+    var fileNameOnStorage = picKey + '.' + fileExtension;
+    var picLink = 'PROFILE-PICS/' + fileNameOnStorage
+    var storageRef = FIREBASE_STORAGE.ref(picLink);
+
+    if(file.size <= 100000) {
+        console.log(file)
+        if(userData.photoLink !== undefined && userData.photoURL !== undefined){
+            firebase.storage().ref(userData.photoLink).delete();
+            usersRef.child(userData.key).child('photoLink').remove()
+            usersRef.child(userData.key).child('photoURL').remove()
+            console.log('deleted and removed')
+            uploadPic()
+        }
+        else{
+            uploadPic()
+        }
+            function uploadPic(){
+                console.log('upload pic')
+            var submit_parent_btn = '<button id="update_parents_pic" type="button" class="btn btn-success add" data-dismiss="modal">Save</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+            $('#update_footer_parent').html(submit_parent_btn);
+
+            $('#update_parents_pic').click(function() {    
+            var task = storageRef.put(file);
+            console.log('file stored')
+                task.on('state_changed',
+                    function complete(){
+                        
+                        var downloadURL = task.snapshot.downloadURL;
+                        console.log(downloadURL)
+
+                        if(downloadURL != null){
+                            swal({
+                                imageUrl: "assets/img/icons/loader.gif",
+                                imageWidth: '90',
+                                imageHeight: '90',
+                                title: 'Processing Information',
+                                text: "This might take a while..",
+                                timer: 5000,
+                                showConfirmButton: false
+                            }).then(function(){},
+                                function(dismiss) {
+                                    if (dismiss === "timer") {
+                                        updateParent(userData, downloadURL, picLink);
+                                    }
+                                })
+                        }
+                        else{
+                            console.log('error')
+                        }
+                    })
+                })
+            }
+        } else {
+            console.log('photo size too large')
+        }
+}
+
+function handleParentRemovePic(){
+    swal({
+       title: 'Are you sure?',
+       text: "You won't be able to revert this photo!",
+       type: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, delete it!'
+     }).then((isConfirm) => {
+       if (isConfirm) {
+           delPic()
+       }
+   })
+
+   function delPic(){
+       console.log(userData.photoURL)
+       console.log(userData.photoLink)
+       firebase.storage().ref(userData.photoLink).delete();
+       usersRef.child(userData.key).child('photoLink').remove()
+       usersRef.child(userData.key).child('photoURL').remove()
+       showSuccessPhotoDelete()
+    console.log('photo deleted')
+   }
 }

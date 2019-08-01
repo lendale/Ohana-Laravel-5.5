@@ -90,3 +90,31 @@ function showNodeData(data) {
         deleteNode(data);
     })
 }
+
+function showSuccessPhotoDelete() {
+    swal({
+        title: "Photo Deleted!",
+        timer: 5000,
+        showConfirmButton: false,
+        type: "success"
+    }).then(function() {},
+    function(dismiss) {
+        if (dismiss === "timer") {
+            location.reload()
+        }
+    })
+}
+
+function showSuccessPhotoAdd() {
+    swal({
+        title: "Photo Updated!",
+        timer: 5000,
+        showConfirmButton: false,
+        type: "success"
+    }).then(function() {},
+    function(dismiss) {
+        if (dismiss === "timer") {
+            location.reload()
+        }
+    })
+}

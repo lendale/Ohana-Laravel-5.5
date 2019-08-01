@@ -7,10 +7,12 @@ $(document).ready(function() {
     $('#sibling_pic').change(handleSiblingPic);
     $('#spouse_pic').change(handleSpousePic);
     $('#child_pic').change(handleChildPic);
-    $('#update_parent_pic').change(handleParentPic);
-    $('#update_sibling_pic').change(handleParentPic);
-    $('#update_spouse_pic').change(handleParentPic);
-    $('#update_child_pic').change(handleParentPic);
+
+    $('#user_update_pic').change(handleUserUpdatePic);
+    $('#parent_update_pic').change(handleParentUpdatePic);
+    $('#sibling_update_pic').change(handleSiblingUpdatePic);
+    $('#spouse_update_pic').change(handleSpouseUpdatePic);
+    $('#child_update_pic').change(handleChildUpdatePic);
 
     $('ul#ul_tabs li#li_tab_search').click(function() {
         $('#btn_add').hide();

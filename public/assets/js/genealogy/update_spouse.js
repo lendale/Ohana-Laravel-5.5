@@ -1,7 +1,12 @@
+var userData; 
+
 function updateSpouseModal(data) {
+    userData = data; 
     console.log('update spouse')
     $("#modal_update_spouse").on("hidden.bs.modal", function(){
-        return location.reload();
+        setTimeout(function() {
+            return location.reload();
+        }, 20000);
     });
 
     $("#modal_update_spouse")
@@ -79,7 +84,7 @@ function updateSpouseModal(data) {
     })
 }
 
-function updateSpouse(data, downloadURL) {
+function updateSpouse(data, downloadURL, picLink) {
     var photoPic = $('#update_spouse_pic').attr('src');
     var firstName = $("#update_spouse_first_name").val();
     var middleName = $("#update_spouse_middle_name").val();
@@ -103,10 +108,13 @@ function updateSpouse(data, downloadURL) {
         maritalStatus: maritalStatus,
     };
 
+    console.log(downloadURL)
     if (downloadURL !== undefined) {
         person.photoURL = downloadURL
+        person.photoLink = picLink
     } else if (photoPic !== undefined) {
         person.photoURL = photoPic;
+        person.photoLink = picLink
     } else {
         console.log('no image');
     }
@@ -155,4 +163,85 @@ function updateSpouse(data, downloadURL) {
             return location.reload();
         }, 2000);
     }
+}
+
+function handleSpouseUpdatePic(eventData){
+    var file = eventData.target.files[0];
+    var fileExtension = file.name.split(".").pop();
+    var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
+    var fileNameOnStorage = picKey + '.' + fileExtension;
+    var picLink = 'PROFILE-PICS/' + fileNameOnStorage
+    var storageRef = FIREBASE_STORAGE.ref(picLink);
+
+    if(file.size <= 100000) {
+        console.log(file)
+        if(userData.photoLink !== undefined && userData.photoURL !== undefined){
+            firebase.storage().ref(userData.photoLink).delete();
+            usersRef.child(userData.key).child('photoLink').remove()
+            usersRef.child(userData.key).child('photoURL').remove()
+            console.log('deleted and removed')
+            uploadPic()
+        }
+        else{
+            uploadPic()
+        }
+
+            function uploadPic(){
+            var submit_spouse_btn = '<button id="update_spouse_pic" type="button" class="btn btn-success add" data-dismiss="modal">Save</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
+            $('#update_footer_spouse').html(submit_spouse_btn);
+
+            $('#update_spouse_pic').click(function() {    
+            var task = storageRef.put(file);
+            console.log('stored')
+                task.on('state_changed',
+                    function complete(){
+                        downloadURL = task.snapshot.downloadURL;
+                        console.log(downloadURL)
+
+                        swal({
+                            imageUrl: "assets/img/icons/loader.gif",
+                            imageWidth: '90',
+                            imageHeight: '90',
+                            title: 'Processing Information',
+                            text: "This might take a while..",
+                            timer: 5000,
+                            showConfirmButton: false
+                        }).then(function(){},
+                            function(dismiss) {
+                                if (dismiss === "timer") {
+                                    updateSpouse(userData, downloadURL, picLink);
+                                }
+                            })
+                        })
+                })
+            }
+        
+        } else {
+            console.log('photo size too large')
+        }
+}
+
+function handleSpouseRemovePic(){
+    swal({
+       title: 'Are you sure?',
+       text: "You won't be able to revert this photo!",
+       type: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       confirmButtonText: 'Yes, delete it!'
+     }).then((isConfirm) => {
+       if (isConfirm) {
+           delPic()
+       }
+   })
+
+   function delPic(){
+       console.log(userData.photoURL)
+       console.log(userData.photoLink)
+       firebase.storage().ref(userData.photoLink).delete();
+       usersRef.child(userData.key).child('photoLink').remove()
+       usersRef.child(userData.key).child('photoURL').remove()
+       showSuccessPhotoDelete()
+   }
 }

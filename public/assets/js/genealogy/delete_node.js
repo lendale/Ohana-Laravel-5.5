@@ -12,7 +12,7 @@ function deleteNode(data) {
             .append("If yes, your account will be deleted. Continue?");
     
         $('#delete_yes').click(function() {
-            // deleteParent(data);
+            // deleteUser(data);
         })
     } else {
         $("#delete_modal")

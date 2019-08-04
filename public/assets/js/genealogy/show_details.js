@@ -10,9 +10,10 @@ function showNodeData(data) {
     console.log(data.key)
 
     if(data.registered == true) {
-        document.getElementById("node_delete").disabled = true;
-
-        if(data.key != currentUser.uid) document.getElementById("node_edit").disabled = true;
+        if(data.key != currentUser.uid) {
+            document.getElementById("node_delete").disabled = true;
+            document.getElementById("node_edit").disabled = true;
+        }
     } else {
         document.getElementById("node_delete").disabled = false;
         document.getElementById("node_edit").disabled = false;

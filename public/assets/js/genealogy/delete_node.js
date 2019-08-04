@@ -1,36 +1,19 @@
 function deleteNode(data) {
-    if(data.relationship == "father" || data.relationship == "mother") {
-        if(currentUserDetails.siblings) {
-            $("#error_details")
-                .modal("show");
+    if(data.key == currentUser.uid) {
+        $("#delete_modal")
+            .modal("show");
 
-            $("#error_details_title")
-                .empty()
-                .append("Delete " + data.displayName + "?");
-            
-            $("#error_details_node")
-                .empty()
-                .append("Ohana advises you to update your " + data.relationship + "'s details.")
-            
-            // $('#delete_yes').click(function() {
-            //     deleteParent(data);
-            // })
-        } else {
-            $("#delete_modal")
-                .modal("show");
-
-            $("#delete_title")
-                .empty()
-                .append('Delete ' + data.displayName + "?");
-            
-            $("#delete_body")
-                .empty()
-                .append("Are you sure you want to delete " + data.displayName + " as your " + data.relationship + "?");
-            
-            $('#delete_yes').click(function() {
-                deleteParent(data);
-            })
-        }
+        $("#delete_title")
+            .empty()
+            .append('Delete ' + data.displayName + "?");
+    
+        $("#delete_body")
+            .empty()
+            .append("If yes, your account will be deleted. Continue?");
+    
+        $('#delete_yes').click(function() {
+            // deleteParent(data);
+        })
     } else {
         $("#delete_modal")
             .modal("show");

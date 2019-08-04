@@ -91,20 +91,18 @@
                                 <i class="fa fa-sitemap"></i> Tree
                             </a>
                         </li>
-                        <li id="li_tab_search">
-                            <a href="#tab_search" role="tab" data-toggle="tab">
-                                <i class="fa fa-search"></i> Search
-                            </a>
-                        </li>
                     </ul>
                     <br><br>
                     <div>
-                        <button id="btn_add" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modal_add_choice">
+                        <button id="btn_add" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#modal_add_choice" title="Add Member">
                             <i class="fa fa-user-plus"></i>
                         </button>
-                        <button id="btn_search" class="btn btn-danger btn-lg" style="display: none;">
-                            <i class="material-icons">send</i>
+                        <button id="btn_center" class="btn btn-danger btn-lg" title="Center on User">
+                            <i class="fa fa-align-center"></i>
                         </button>
+                        <!-- <button id="btn_fit" class="btn btn-danger btn-lg" title="Zoom to Fit">
+                            <i class="fa fa-search-minus"></i>
+                        </button> -->
                     </div>
                 </div>
 
@@ -112,25 +110,6 @@
                     <div class="tab-content main-raised">
                         <div class="tab-pane active" id="tab_tree">
                             <div id="genogram" style="height:65.9vh; width:100%;"></div>
-                        </div>
-
-                        <div class="tab-pane section" id="tab_search">
-                            <div class="row">
-                                <h3 class="title text-center">Search Relationship Between Two People</h3><br>
-
-                                <div class="col-sm-5 col-sm-offset-1">
-                                    <div class="form-group label-floating">
-                                        <label for="person1" class="control-label">Person 1 <small>(full name)</small></label>
-                                        <input id="person_1" name="person1" type="text" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-sm-5">
-                                    <div class="form-group label-floating">
-                                        <label for="person2" class="control-label">Person 2 <small>(full name)</small></label>
-                                        <input id="person_2" name="person2" type="text" class="form-control">
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,12 +135,12 @@
                             <input type="text" id="search_input" placeholder="Type Email or Name" onfocus="this.value=''" style="width:100%; padding: 20px 20px; font-size: 15px;">
                         </div>
                         <div class="col-md-3 col-sm-3">
-                            <button id="search_button" class="btn btn-danger btn-lg">
+                            <button id="search_button" class="btn btn-danger btn-lg" title="Search">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
                         <div class="col-md-3 col-sm-3">
-                            <button id="proceed_button" class="btn btn-danger btn-lg">
+                            <button id="proceed_button" class="btn btn-danger btn-lg" title="Add New Member">
                                 <i class="material-icons">send</i>
                             </button>
                         </div>
@@ -1530,51 +1509,6 @@
                                         </span>
                                         <div id="group_users_birth_place" class="form-group label-floating">
                                             <input id="users_birth_place" name="birthplace" type="text" class="form-control birth-place" placeholder="Place of birth">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Birth row end -->
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="material-icons">weekend</i>
-                                        </span>
-                                        <div id="group_users_street_address" class="form-group label-floating">
-                                            <input id="users_street_address" name="street_address" type="text" class="form-control street-address" placeholder="Street Address">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="material-icons">home</i>
-                                        </span>
-                                        <div id="group_users_barangay" class="form-group label-floating">
-                                            <input id="users_barangay" name="barangay" type="text" class="form-control barangay" placeholder="Barangay">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="material-icons">account_balance</i>
-                                        </span>
-                                        <div id="group_users_city" class="form-group label-floating">
-                                            <input id="users_city" name="city" type="text" class="form-control city" placeholder="City">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="material-icons">room</i>
-                                        </span>
-                                        <div id="group_users_postal_code" class="form-group label-floating">
-                                            <input id="users_postal_code" name="postal_code" type="text" class="form-control postal-code" placeholder="Postal Code">
                                         </div>
                                     </div>
                                 </div>

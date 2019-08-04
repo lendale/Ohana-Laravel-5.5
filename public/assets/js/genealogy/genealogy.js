@@ -173,24 +173,24 @@
     
             if((obj.m != undefined || obj.m != null) &&
                 (obj.f != undefined || obj.f!= null)) {
-                usersRef.child(obj.m).child("relationship").remove();
-                usersRef.child(obj.f).child("relationship").remove();
+                usersRef.child(obj.f).child("relationship").set("consanguinity");
+                usersRef.child(obj.m).child("relationship").set("consanguinity");
                 retrieveFamilyData(obj.m);
                 retrieveFamilyData(obj.f);
             } else if((obj.f != undefined || obj.f != null) &&
                 (obj.m == undefined || obj.m == null)) {
-                usersRef.child(obj.f).child("relationship").remove();
+                usersRef.child(obj.f).child("relationship").set("consanguinity");
                 retrieveFamilyData(obj.f);
             } else if((obj.m != undefined || obj.m != null) &&
                 (obj.f == undefined || obj.f == null)) {
-                usersRef.child(obj.m).child("relationship").remove();
+                usersRef.child(obj.m).child("relationship").set("consanguinity");
                 retrieveFamilyData(obj.m);
             }
     
             if(obj.siblings != undefined || obj.siblings != null) {
                 usersRef.child(uid).child('siblings').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").remove();
+                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
                         retrieveSiblingData(snap3.val());
                     })
                 })
@@ -203,7 +203,7 @@
 
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").remove();
+                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
                     })
                 })
             }
@@ -215,7 +215,7 @@
 
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").remove();
+                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
                     })
                 })
             }
@@ -246,24 +246,24 @@
     
             if((obj.m != undefined || obj.m != null) &&
                 (obj.f != undefined || obj.f!= null)) {
-                usersRef.child(obj.m).child("relationship").remove();
-                usersRef.child(obj.f).child("relationship").remove();
+                usersRef.child(obj.m).child("relationship").set("consanguinity");
+                usersRef.child(obj.f).child("relationship").set("consanguinity");
                 retrieveFamilyData(obj.m);
                 retrieveFamilyData(obj.f);
             } else if((obj.f != undefined || obj.f != null) &&
                 (obj.m == undefined || obj.m == null)) {
-                usersRef.child(obj.f).child("relationship").remove();
+                usersRef.child(obj.f).child("relationship").set("consanguinity");
                 retrieveFamilyData(obj.f);
             } else if((obj.m != undefined || obj.m != null) &&
                 (obj.f == undefined || obj.f == null)) {
-                usersRef.child(obj.m).child("relationship").remove();
+                usersRef.child(obj.m).child("relationship").set("consanguinity");
                 retrieveFamilyData(obj.m);
             }
     
             if(obj.siblings != undefined || obj.siblings != null) {
                 usersRef.child(uid).child('siblings').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").remove();
+                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
                         retrieveSiblingData(snap3.val());
                     })
                 })
@@ -272,7 +272,7 @@
             if(obj.ux != undefined || obj.ux != null) {
                 usersRef.child(uid).child('ux').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").remove();
+                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
                         retrieveFamilyData(snap3.val());
                     })
                 })
@@ -281,7 +281,7 @@
             if(obj.vir != undefined || obj.vir != null) {
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").remove();
+                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
                         retrieveFamilyData(snap3.val());
                     })
                 })

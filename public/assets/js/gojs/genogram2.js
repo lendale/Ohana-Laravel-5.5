@@ -166,6 +166,15 @@ function initGenogram(data, user_id) {
         if (!(part instanceof go.Link)) getNodeData(part.data.key);
     });
 
+    document.getElementById('btn_center').addEventListener('click', function() {
+        myDiagram.scale = 1;
+        myDiagram.scrollToRect(myDiagram.findNodeForKey(user_id).actualBounds);
+    });
+
+    // document.getElementById('btn_fit').addEventListener('click', function() {
+    //     myDiagram.zoomToFit();
+    // });
+
     setupDiagram(myDiagram, data, user_id);
 }
 

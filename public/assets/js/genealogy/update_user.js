@@ -164,21 +164,21 @@ function updateUsers(data, downloadURL, picLink) {
         person.birthPlace = birthPlace;
     }
 
-    if (street_address.length > 0) {
-        person.streetAddress = street_address;
-    }
+    // if (street_address.length > 0) {
+    //     person.streetAddress = street_address;
+    // }
 
-    if (barangay.length > 0) {
-        person.barangay = barangay;
-    }
+    // if (barangay.length > 0) {
+    //     person.barangay = barangay;
+    // }
 
-    if (city.length > 0) {
-        person.city = city;
-    }
+    // if (city.length > 0) {
+    //     person.city = city;
+    // }
 
-    if (postal_code.length > 0) {
-        person.postalCode = postal_code;
-    }
+    // if (postal_code.length > 0) {
+    //     person.postalCode = postal_code;
+    // }
 
     if (
         person.firstName == "" ||

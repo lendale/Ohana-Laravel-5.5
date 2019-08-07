@@ -19,7 +19,7 @@ SCENARIOS
     / Register new email
     / Register existing email
     / Login wrong credentials
-    Add New Members
+    / Add New Members
     Add Existing Parent w/ Spouse (not parent2)
     Add Existing Parent w/ Spouse (parent2)
     Add Existing Parent w/ Spouse (not parent2) w/ child
@@ -27,17 +27,18 @@ SCENARIOS
     Add Existing Sibling w/ Parents
     Add Existing Spouse
     Add Existing Child
-    Register Member w/ email
+    / Register Member w/ email
     Register Member w/o email
-
-PROBLEMS
-    Address not saved
-    Loading after parent adding should be longer
 
 BIRTHDAY
     Jan 31, 2019, Feb 1, 2019
     Jan 30, 2019, Jan 31, 2019
     Dec 31, 2019, Jan 1, 2020
+
+PROBLEMS
+    Address not saved
+    Loading after parent adding should be longer
+    Add new member but exists, no name displayed
 
 TO DO
     / If siblings exist, instead of deleting parents, user can only update data
@@ -46,21 +47,15 @@ TO DO
     User's spouse becomes user1
     Email verification
     Keyboard	Add enter, tab events
-    Add Existing	If user adds user2, send notification to user2 before adding
-    Add Existing	Add member with confirmation
 
-ERROR
-    add new member but exists, no name displayed
+SEARCH2
+use immediate family for checking on ginny and dean
+    retrieve immediate family of ginny and dean then compare
+    if none, retrieve ginny's child's immediate family. dean is the same
 
 console.log("key", key)
 console.log("key")
 console.log(key)
 
-
-CURRENT SEARCH
-ginny and rose - continuos loop
-ginny and angelina - continuos loop
-
-SEARCH2
-work on dean jung
-use immediate family for checking on ginny and dean
+create harry's immediate family
+check for snap4.val().m

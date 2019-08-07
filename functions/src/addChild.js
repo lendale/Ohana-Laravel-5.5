@@ -475,7 +475,7 @@ exports.addSon = function(data, context) {
                     })
                 })
 
-                root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                root.child(`users/${userObj.m}/ux`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.m) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -488,7 +488,7 @@ exports.addSon = function(data, context) {
                     })
                 })
 
-                root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                root.child(`users/${userObj.m}/vir`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.f) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -570,7 +570,7 @@ exports.addSon = function(data, context) {
                     })
                 })
     
-                root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                root.child(`users/${userObj.f}/ux`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.m) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -583,7 +583,7 @@ exports.addSon = function(data, context) {
                     })
                 })
 
-                root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                root.child(`users/${userObj.f}/vir`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.f) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -667,7 +667,7 @@ exports.addSon = function(data, context) {
                     })
                 })
 
-                root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                root.child(`users/${userObj.m}/ux`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.m) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -680,7 +680,7 @@ exports.addSon = function(data, context) {
                     })
                 })
 
-                root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                root.child(`users/${userObj.m}/vir`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.f) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -762,7 +762,7 @@ exports.addSon = function(data, context) {
                     })
                 })
     
-                root.child(`users/${uid}/ux`).once('value').then(snap2 => {
+                root.child(`users/${userObj.f}/ux`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.m) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {
@@ -775,7 +775,7 @@ exports.addSon = function(data, context) {
                     })
                 })
 
-                root.child(`users/${uid}/vir`).once('value').then(snap2 => {
+                root.child(`users/${userObj.f}/vir`).once('value').then(snap2 => {
                     snap2.forEach(snap3 => {
                         if(snap3.val() !== userObj.f) {
                             root.child(`users/${snap3.val()}`).once('value').then(snap4 => {

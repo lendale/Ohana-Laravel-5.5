@@ -50,8 +50,8 @@
     
     function retrieveUserTree(uid) {
         usersRef.child(uid).once("value").then(snap => {
-            currentUserDetails = snap.val();
             let obj = snap.val();
+            currentUserDetails = snap.val();
             currentUserGender = snap.val().gender;
             currentUserExtendedId = snap.val().extendedId;
             currentUserFamilyId = snap.val().familyId;
@@ -72,12 +72,12 @@
             } else if((obj.f != undefined || obj.f != null) &&
                 (obj.m == undefined || obj.m == null)) {
                 parentGenderSetter("female");
-                retrieveSingleParentData(obj.f);
+                retrieveFamilyData(obj.f);
                 usersRef.child(obj.f).child("relationship").set("father");
             } else if((obj.m != undefined || obj.m != null) &&
                 (obj.f == undefined || obj.f == null)) {
                 parentGenderSetter("male");
-                retrieveSingleParentData(obj.m);
+                retrieveFamilyData(obj.m);
                 usersRef.child(obj.m).child("relationship").set("mother");
             }
     
@@ -114,7 +114,7 @@
             if(obj.vir != undefined || obj.vir != null) {
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        retrieveFamilyData(snap3.val());
+                        retrieveSpouseData(snap3.val());
                         usersRef.child(snap3.val()).child("relationship").set("husband");
                     })
                 })
@@ -126,7 +126,7 @@
             if(obj.ux != undefined || obj.ux != null) {
                 usersRef.child(uid).child('ux').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        retrieveFamilyData(snap3.val());
+                        retrieveSpouseData(snap3.val());
                         usersRef.child(snap3.val()).child("relationship").set("wife");
                     })
                 })
@@ -203,7 +203,7 @@
 
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
+                        usersRef.child(snap3.val()).child("relationship").remove();
                     })
                 })
             }
@@ -215,74 +215,7 @@
 
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
-                    })
-                })
-            }
-    
-            if (!(obj.ms === undefined || obj.ms === null)) {
-                let arrMs = Object.values(obj.ms);
-    
-                obj.ms = arrMs;
-            }
-    
-            clanData.push(obj);
-    
-            return clanData;
-        })
-        .then(clanData => {
-            var genoDiv = document.getElementById("genogram");
-            var projectDiagram = go.Diagram.fromDiv(genoDiv);
-            if(projectDiagram){
-                  projectDiagram.div = null;
-             }
-            initGenogram(clanData, currentUser.uid);
-        })
-    }
-
-    function retrieveSingleParentData(uid) {
-        usersRef.child(uid).once("value").then(snap => {
-            let obj = snap.val();
-    
-            if((obj.m != undefined || obj.m != null) &&
-                (obj.f != undefined || obj.f!= null)) {
-                usersRef.child(obj.m).child("relationship").set("consanguinity");
-                usersRef.child(obj.f).child("relationship").set("consanguinity");
-                retrieveFamilyData(obj.m);
-                retrieveFamilyData(obj.f);
-            } else if((obj.f != undefined || obj.f != null) &&
-                (obj.m == undefined || obj.m == null)) {
-                usersRef.child(obj.f).child("relationship").set("consanguinity");
-                retrieveFamilyData(obj.f);
-            } else if((obj.m != undefined || obj.m != null) &&
-                (obj.f == undefined || obj.f == null)) {
-                usersRef.child(obj.m).child("relationship").set("consanguinity");
-                retrieveFamilyData(obj.m);
-            }
-    
-            if(obj.siblings != undefined || obj.siblings != null) {
-                usersRef.child(uid).child('siblings').once("value").then(snap2 => {
-                    snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
-                        retrieveSiblingData(snap3.val());
-                    })
-                })
-            }
-    
-            if(obj.ux != undefined || obj.ux != null) {
-                usersRef.child(uid).child('ux').once("value").then(snap2 => {
-                    snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
-                        retrieveFamilyData(snap3.val());
-                    })
-                })
-            }
-    
-            if(obj.vir != undefined || obj.vir != null) {
-                usersRef.child(uid).child('vir').once("value").then(snap2 => {
-                    snap2.forEach(snap3 => {
-                        usersRef.child(snap3.val()).child("relationship").set("consanguinity");
-                        retrieveFamilyData(snap3.val());
+                        usersRef.child(snap3.val()).child("relationship").remove();
                     })
                 })
             }
@@ -324,7 +257,7 @@
                 usersRef.child(uid).child('vir').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
                         usersRef.child(snap3.val()).child("relationship").remove();
-                        retrieveFamilyData(snap3.val());
+                        retrieveSpouseData(snap3.val());
                     })
                 })
             }
@@ -333,7 +266,80 @@
                 usersRef.child(uid).child('ux').once("value").then(snap2 => {
                     snap2.forEach(snap3 => {
                         usersRef.child(snap3.val()).child("relationship").remove();
-                        retrieveFamilyData(snap3.val());
+                        retrieveSpouseData(snap3.val());
+                    })
+                })
+            }
+    
+            if (!(obj.ms === undefined || obj.ms === null)) {
+                let arrMs = Object.values(obj.ms);
+    
+                obj.ms = arrMs;
+            }
+    
+            clanData.push(obj);
+    
+            return clanData;
+        })
+        .then(clanData => {
+            var genoDiv = document.getElementById("genogram");
+            var projectDiagram = go.Diagram.fromDiv(genoDiv);
+            if(projectDiagram){
+                  projectDiagram.div = null;
+             }
+            initGenogram(clanData, currentUser.uid);
+        })
+    }
+
+    function retrieveSpouseData(uid) {
+        usersRef.child(uid).once("value").then(snap => {
+            let obj = snap.val();
+    
+            if((obj.m != undefined || obj.m != null) &&
+                (obj.f != undefined || obj.f!= null)) {
+                usersRef.child(obj.f).child("relationship").remove();
+                usersRef.child(obj.m).child("relationship").remove();
+                retrieveSpouseData(obj.m);
+                retrieveSpouseData(obj.f);
+            } else if((obj.f != undefined || obj.f != null) &&
+                (obj.m == undefined || obj.m == null)) {
+                usersRef.child(obj.f).child("relationship").remove();
+                retrieveSpouseData(obj.f);
+            } else if((obj.m != undefined || obj.m != null) &&
+                (obj.f == undefined || obj.f == null)) {
+                usersRef.child(obj.m).child("relationship").remove();
+                retrieveSpouseData(obj.m);
+            }
+    
+            if(obj.siblings != undefined || obj.siblings != null) {
+                usersRef.child(uid).child('siblings').once("value").then(snap2 => {
+                    snap2.forEach(snap3 => {
+                        usersRef.child(snap3.val()).child("relationship").remove();
+                        retrieveSiblingData(snap3.val());
+                    })
+                })
+            }
+    
+            if (!(obj.ux === undefined || obj.ux === null)) {
+                let arrUx = Object.values(obj.ux);
+    
+                obj.ux = arrUx;
+
+                usersRef.child(uid).child('vir').once("value").then(snap2 => {
+                    snap2.forEach(snap3 => {
+                        usersRef.child(snap3.val()).child("relationship").remove();
+                    })
+                })
+            }
+    
+            if (!(obj.vir === undefined || obj.vir === null)) {
+                let arrVir = Object.values(obj.vir);
+    
+                obj.vir = arrVir;
+
+                usersRef.child(uid).child('vir').once("value").then(snap2 => {
+                    snap2.forEach(snap3 => {
+                        usersRef.child(snap3.val()).child("relationship").remove();
                     })
                 })
             }

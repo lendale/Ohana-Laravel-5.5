@@ -11,8 +11,6 @@ var person1_familyId;
 var person2_familyId;
 var person1_imm = [];
 var person2_imm = [];
-var person1_name;
-var person2_name;
 var older;
 
 firebase.auth().onAuthStateChanged(handleAuthStateChanged);
@@ -27,16 +25,12 @@ function getSearchData(){
     person1 = $("#person_1").val();
     person2 = $("#person_2").val();
 
-    console.log("person1", person1)
-    console.log("person2", person2)
-
     usersRef.once("value").then(snap => {
         snap.forEach(snap2 => {
             if(snap2.val().displayName.toLowerCase() == person1.toLowerCase()) {
                 console.log("search person1", person1 + true)
                 person1_key = snap2.val().key
                 person1_familyId = snap2.val().familyId
-                person1_name = snap2.val().displayName
 
                 usersRef.once("value").then(snap3 => {
                     snap3.forEach(snap4 => {
@@ -44,7 +38,6 @@ function getSearchData(){
                             console.log("search person2", person2 + true)
                             person2_key = snap4.val().key
                             person2_familyId = snap4.val().familyId
-                            person2_name = snap4.val().displayName
 
                             older = getAge(snap2.val().birthDate, snap4.val().birthDate)
 
@@ -69,6 +62,8 @@ function getAge(date1, date2) {
         if(year1 > year2) {
             oldie = person2_key;
         } else if(year2 > year1) {
+            oldie = person1_key;
+        } else if(year1 == year2) {
             oldie = person1_key;
         }
     }
@@ -289,29 +284,31 @@ function checkOlderPerson() {
         console.log("older person2")
         immediateChild(person2_key, person1_key)
     }
-
-    // checkOlderPerson2()
 }
 
 function immediateChild(key, key2) {
     console.log("immediateChild")
-
     var html_common = '';
-    var name;
-    var father;
-    var mother;
+    var name1;
+    var name2;
+    var father1;
+    var father2;
+    var mother1;
+    var mother2;
+    var ux;
+    var vir;
 
     usersRef.child(key2).once("value").then(snap => {
-        father = snap.val().f
-        mother = snap.val().m
-        name = snap.val().displayName
+        father2 = snap.val().f
+        mother2 = snap.val().m
+        name2 = snap.val().displayName
     })
 
     usersRef.child(key).child("children").once("value").then(snap => {
         snap.forEach(snap2 => {
-            if(snap2.val() == father) {
+            if(snap2.val() == father2 || snap2.val() == mother2) {
                 usersRef.child(snap2.val()).once("value").then(snap3 => {
-                    html_common +='<h6>'+ name +' is the child of '+ snap3.val().displayName +'</h6>';
+                    html_common +='<h6>'+ name2 +' is the child of '+ snap3.val().displayName +'</h6>';
                     $('#common_txt').html(html_common)
 
                     if(snap3.val().f == key) {
@@ -319,11 +316,11 @@ function immediateChild(key, key2) {
                             html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap4.val().displayName +'</h6>';
                             $('#common_txt').html(html_common)
 
-                            if(snap4.val().f == person1_key || snap4.val().m == person1_key) {            
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1_name +'</h6>';
+                            if(snap4.val().f == person1_key || snap4.val().m == person1_key) {
+                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1 +'</h6>';
                                 $('#common_txt').html(html_common)
-                            } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {            
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2_name +'</h6>';
+                            } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {
+                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2 +'</h6>';
                                 $('#common_txt').html(html_common)
                             } else {
                                 usersRef.child(snap4.val().f).once("value").then(snap5 => {
@@ -331,10 +328,10 @@ function immediateChild(key, key2) {
                                     $('#common_txt').html(html_common)
 
                                     if(snap5.val().f == person1_key || snap5.val().m == person1_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1_name +'</h6>';
+                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
                                         $('#common_txt').html(html_common)
                                     } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2_name +'</h6>';
+                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
                                         $('#common_txt').html(html_common)
                                     }
                                 })
@@ -346,10 +343,10 @@ function immediateChild(key, key2) {
                             $('#common_txt').html(html_common)
 
                             if(snap4.val().f == person1_key || snap4.val().m == person1_key) {
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1_name +'</h6>';
+                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1 +'</h6>';
                                 $('#common_txt').html(html_common)
                             } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2_name +'</h6>';
+                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2 +'</h6>';
                                 $('#common_txt').html(html_common)
                             } else {
                                 usersRef.child(snap4.val().f).once("value").then(snap5 => {
@@ -357,69 +354,10 @@ function immediateChild(key, key2) {
                                     $('#common_txt').html(html_common)
 
                                     if(snap5.val().f == person1_key || snap5.val().m == person1_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1_name +'</h6>';
+                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
                                         $('#common_txt').html(html_common)
                                     } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2_name +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    }
-                                })
-                            }
-                        })
-                    }
-                })
-            } else if(snap2.val() == mother) {
-                usersRef.child(snap2.val()).once("value").then(snap3 => {
-                    html_common +='<h6>'+ name +' is the child of '+ snap3.val().displayName +'</h6>';
-                    $('#common_txt').html(html_common)
-
-                    if(snap3.val().f == key) {
-                        usersRef.child(snap3.val().f).once("value").then(snap4 => {
-                            html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap4.val().displayName +'</h6>';
-                            $('#common_txt').html(html_common)
-
-                            if(snap4.val().f == person1_key || snap4.val().m == person1_key) {            
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1_name +'</h6>';
-                                $('#common_txt').html(html_common)
-                            } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {            
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2_name +'</h6>';
-                                $('#common_txt').html(html_common)
-                            } else {
-                                usersRef.child(snap4.val().f).once("value").then(snap5 => {
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-
-                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1_name +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2_name +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    }
-                                })
-                            }
-                        })
-                    } else if(snap3.val().m == key) {
-                        usersRef.child(snap3.val().m).once("value").then(snap4 => {
-                            html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap4.val().displayName +'</h6>';
-                            $('#common_txt').html(html_common)
-
-                            if(snap4.val().f == person1_key || snap4.val().m == person1_key) {
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1_name +'</h6>';
-                                $('#common_txt').html(html_common)
-                            } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {
-                                html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2_name +'</h6>';
-                                $('#common_txt').html(html_common)
-                            } else {
-                                usersRef.child(snap4.val().f).once("value").then(snap5 => {
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-
-                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1_name +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {            
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2_name +'</h6>';
+                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
                                         $('#common_txt').html(html_common)
                                     }
                                 })
@@ -432,72 +370,48 @@ function immediateChild(key, key2) {
             }
         })
     })
-}
 
-function checkOlderPerson2() {
-    console.log("checkOlderPerson2")
+    usersRef.child(key).once("value").then(snap => {
+        name1 = snap.val().displayName
+        father1 = snap.val().f
+        mother1 = snap.val().m
+    })
 
-    if(older == person1_key) {
-        console.log("older person1")
-        findCommon2(person1_key, person2_key, person1_familyId, person2_familyId)
-    } else if(older == person2_key) {
-        console.log("older person2")
-        findCommon2(person2_key, person1_key, person2_familyId, person1_familyId)
-    }
-}
+    usersRef.child(key2).child("ux").once("value").then(snap => {
+        snap.forEach(snap2 => {
+            ux = snap2.val()
+        })
+    })
 
-function findCommon2(key1, key2, familyId1, familyId2) {
-    console.log("immediateSpouse")
-    var key1_imm = [];
-    var key2_imm = [];
-    
-    immediate_family.child(familyId1).once("value").then(snap => {
-        key1_imm.push(snap.val().user)
-        if(snap.val().father) key1_imm.push(snap.val().father)
-        if(snap.val().mother) key1_imm.push(snap.val().mother)
-        for(var k in snap.val().brother) key1_imm.push(k)
-        for(var k in snap.val().sister) key1_imm.push(k)
-        for(var k in snap.val().husband) key1_imm.push(k)
-        for(var k in snap.val().wife) key1_imm.push(k)
-        for(var k in snap.val().son) key1_imm.push(k)
-        for(var k in snap.val().daughter) key1_imm.push(k)
+    usersRef.child(key2).child("vir").once("value").then(snap => {
+        snap.forEach(snap2 => {
+            vir = snap2.val()
+        })
+    })
 
-        immediate_family.child(familyId2).once("value").then(snap2 => {
-            key2_imm.push(snap2.val().user)
-            if(snap2.val().father) key2_imm.push(snap2.val().father)
-            if(snap2.val().mother) key2_imm.push(snap2.val().mother)
-            for(var k in snap2.val().brother) key2_imm.push(k)
-            for(var k in snap2.val().sister) key2_imm.push(k)
-            for(var k in snap2.val().husband) key2_imm.push(k)
-            for(var k in snap2.val().wife) key2_imm.push(k)
-            for(var k in snap2.val().son) key2_imm.push(k)
-            for(var k in snap2.val().daughter) key2_imm.push(k)
+    usersRef.child(key).child("children").once("value").then(snap => {
+        snap.forEach(snap2 => {
+            if(snap2.val() ==  ux || snap2.val() ==  vir) {
+                usersRef.child(snap2.val()).once("value").then(snap3 => {
+                    html_common +='<h6>'+ name2 +' is the spouse of '+ snap3.val().displayName +'</h6>';
+                    $('#common_txt').html(html_common)
 
-            console.log("key1_imm", key1_imm)
-            console.log("key2_imm", key2_imm)
-            console.log("key1", key1)
-            console.log("key2", key2)
+                    html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ name1 +'</h6>';
+                    $('#common_txt').html(html_common)
 
-            key1_imm.filter(function(n) {
-                if (key2_imm.includes(n) == true) {
-                    console.log("has common")
-
-                    usersRef.child(n).once("value").then(snap3 => {
-                        // console.log("n",snap3.val().displayName)
-                        // immediate2nd(n, snap3.val().displayName)
-                    })
-                } else {
-                    console.log("no common")
-
-                    usersRef.child(key1).child("children").once("value").then(snap3 => {
-                        snap3.forEach(snap4 => {
-                            usersRef.child(snap4.val()).once("value").then(snap5 => {
-                                findCommon2(snap4.val(), key2, snap5.val().familyId, familyId2)
-                            })
-                        })
-                    })
-                }
-            })
+                    if(father1 == person1_key || mother1 == person1_key) {
+                        html_common +='<h6>'+ name1 +' is the child of '+ person1 +'</h6>';
+                        $('#common_txt').html(html_common)
+                    } else if(father1 == person2_key || mother1 == person2_key) {
+                        html_common +='<h6>'+ name1 +' is the child of '+ person2 +'</h6>';
+                        $('#common_txt').html(html_common)
+                    } else {
+                        
+                    }
+                })
+            } else {
+                // immediateChild(snap2.val(), key2)
+            }
         })
     })
 }

@@ -135,6 +135,7 @@ function immediate1st() {
 
 function findCommon() {
     console.log("findCommon")
+    var stopper = false;
 
     immediate_family.child(person1_familyId).once("value").then(snap => {
         person1_imm.push(snap.val().user)
@@ -161,14 +162,17 @@ function findCommon() {
     
         person1_imm.filter(function(n) {
             if (person2_imm.includes(n) == true) {
+                stopper = true;
                 usersRef.child(n).once("value").then(snap3 => {
                     immediate2nd(n, snap3.val().displayName)
                 })
             }
         })
+        
+        if(stopper == false) {
+            checkOlderPerson()
+        }
     })
-
-    checkOlderPerson()
 }
 
 function immediate2nd(keys, name) {
@@ -323,16 +327,35 @@ function immediateChild(key, key2) {
                                 html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2 +'</h6>';
                                 $('#common_txt').html(html_common)
                             } else {
+                                var stopper = false;
+
                                 usersRef.child(snap4.val().f).once("value").then(snap5 => {
                                     html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
                                     $('#common_txt').html(html_common)
 
-                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {            
+                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
                                         html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
                                         $('#common_txt').html(html_common)
-                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {            
+                                        stopper = true;
+                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
                                         html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
                                         $('#common_txt').html(html_common)
+                                        stopper = true;
+                                    }
+
+                                    if(stopper == false) {
+                                        usersRef.child(snap4.val().m).once("value").then(snap5 => {
+                                            html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+        
+                                            if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
+                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
+                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            }
+                                        })
                                     }
                                 })
                             }
@@ -349,16 +372,35 @@ function immediateChild(key, key2) {
                                 html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2 +'</h6>';
                                 $('#common_txt').html(html_common)
                             } else {
+                                var stopper = false;
+
                                 usersRef.child(snap4.val().f).once("value").then(snap5 => {
                                     html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
                                     $('#common_txt').html(html_common)
 
-                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {            
+                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
                                         html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
                                         $('#common_txt').html(html_common)
-                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {            
+                                        stopper = true;
+                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
                                         html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
                                         $('#common_txt').html(html_common)
+                                        stopper = true;
+                                    }
+                                    
+                                    if(stopper == false) {
+                                        usersRef.child(snap4.val().m).once("value").then(snap5 => {
+                                            html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+        
+                                            if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
+                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
+                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            }
+                                        })
                                     }
                                 })
                             }
@@ -406,7 +448,39 @@ function immediateChild(key, key2) {
                         html_common +='<h6>'+ name1 +' is the child of '+ person2 +'</h6>';
                         $('#common_txt').html(html_common)
                     } else {
-                        
+                        var stopper = false;
+
+                        usersRef.child(father1).once("value").then(snap5 => {
+                            html_common +='<h6>'+ name1 +' is the child of '+ snap5.val().displayName +'</h6>';
+                            $('#common_txt').html(html_common)
+
+                            if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
+                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
+                                $('#common_txt').html(html_common)
+                                stopper = true;
+                            } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
+                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
+                                $('#common_txt').html(html_common)
+                                stopper = true;
+                            }
+
+                            if(stopper == false) {
+                                usersRef.child(mother1).once("value").then(snap5 => {
+                                    html_common +='<h6>'+ name1 +' is the child of '+ snap5.val().displayName +'</h6>';
+                                    $('#common_txt').html(html_common)
+        
+                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
+                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                        stopper = true;
+                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
+                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                        stopper = true;
+                                    }
+                                })
+                            }
+                        })                        
                     }
                 })
             } else {

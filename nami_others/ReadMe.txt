@@ -59,3 +59,4 @@ console.log(key)
 
 create harry's immediate family
 check for snap4.val().m
+recheck spouse becoming user

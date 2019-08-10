@@ -48,15 +48,11 @@ TO DO
     Email verification
     Keyboard	Add enter, tab events
 
-SEARCH2
-use immediate family for checking on ginny and dean
-    retrieve immediate family of ginny and dean then compare
-    if none, retrieve ginny's child's immediate family. dean is the same
-
 console.log("key", key)
 console.log("key")
 console.log(key)
+git push -u origin dev_branch
 
 create harry's immediate family
-check for snap4.val().m
 recheck spouse becoming user
+check search function

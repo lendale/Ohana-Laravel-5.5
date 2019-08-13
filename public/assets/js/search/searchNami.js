@@ -282,35 +282,22 @@ function checkOlderPerson() {
 
     if(older == person1_key) {
         console.log("older person1")
-        immediateChild1(person1_key, person2_key)
+        checker(person1_key, person2_key)
     } else if(older == person2_key) {
         console.log("older person2")
-        immediateChild1(person2_key, person1_key)
+        checker(person2_key, person1_key)
     }
 }
 
-function immediateChild1(key, key2) {
-    console.log("immediateChild1")
-    // console.log("key", key)
-    // console.log("key2", key2)
-
-    var html_common = '';
-    var name1;      var name2;
-    var father1;    var father2;
-    var mother1;    var mother2;
-    var ux1;        var ux2;
-    var vir1;       var vir2;
-
-    usersRef.child(key2).once("value").then(snap => {
-        father2 = snap.val().f
-        mother2 = snap.val().m
-        name2 = snap.val().displayName
-    })
-
-    // checks children 4 rows
+function sample() {
+    // grandchild inlaw, greatgrandparents, greatgrandchild & inlaw, great2grandparents (green)
     usersRef.child(key).child("children").once("value").then(snap => {
         snap.forEach(snap2 => {
             console.log("1 check")
+            console.log("vir2", vir2)
+            console.log("snap2", snap2.val())
+
+            // checks children 4 rows
             if(snap2.val() == father2 || snap2.val() == mother2) {
                 usersRef.child(snap2.val()).once("value").then(snap3 => {
                     html_common +='<h6>'+ name2 +' is the child of '+ snap3.val().displayName +'</h6>';
@@ -363,47 +350,9 @@ function immediateChild1(key, key2) {
                         })
                     }
                 })
-            } else {
-                immediateChild1(snap2.val(), key2)
             }
-        })
-    })
-
-    usersRef.child(key).once("value").then(snap => {
-        name1 = snap.val().displayName
-        father1 = snap.val().f
-        mother1 = snap.val().m
-    })
-
-    usersRef.child(key2).child("ux").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            ux2 = snap2.val()
-        })
-    })
-
-    usersRef.child(key2).child("vir").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            vir2 = snap2.val()
-        })
-    })
-
-    usersRef.child(key).child("ux").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            ux1 = snap2.val()
-        })
-    })
-
-    usersRef.child(key).child("vir").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            vir1 = snap2.val()
-        })
-    })
-
-    // checks key-children-spouse
-    usersRef.child(key).child("children").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            console.log("2 check")
-            if(snap2.val() ==  ux2 || snap2.val() ==  vir2) {
+            // checks key-children-spouse
+            else if(snap2.val() ==  ux2 || snap2.val() ==  vir2) {
                 usersRef.child(snap2.val()).once("value").then(snap3 => {
                     html_common +='<h6>'+ name2 +' is the spouse of '+ snap3.val().displayName +'</h6>';
                     $('#common_txt').html(html_common)
@@ -454,12 +403,12 @@ function immediateChild1(key, key2) {
                     }
                 })
             } else {
-                // immediateChild(snap2.val(), key2)
+                immediateChild1(snap2.val(), key2)
             }
         })
     })
 
-    // checks key-sibling-child
+    // niece/nephew inlaw, great aunt/uncle, great niece/nephew & inlaw (orange)
     usersRef.child(key).child("siblings").once("value").then(snap => {
         snap.forEach(snap2 => {
             console.log("3 check")
@@ -509,7 +458,7 @@ function immediateChild1(key, key2) {
         })
     })
 
-    // checks key-spouse-sibling-child
+    // aunt/uncle inlaw, great aunt/uncle inlaw, first cousin & inlaw (blue)
     usersRef.child(key).once("value").then(snap => {
         console.log("4 check")
         var spouse;
@@ -661,435 +610,350 @@ function immediateChild1(key, key2) {
             }
         })
     })
-}
 
-function immediateChild3(key, key2) {
-    console.log("immediateChild")
-    console.log("key", key)
-    console.log("key2", key2)
-
-    var html_common = '';
-    var name1;      var name2;
-    var father1;    var father2;
-    var mother1;    var mother2;
-    var ux1;        var ux2;
-    var vir1;       var vir2;
-
-    usersRef.child(key).once("value").then(snap => {
-        name1 = snap.val().displayName
-        father1 = snap.val().f
-        mother1 = snap.val().m
-    })
-
-    usersRef.child(key).child("ux").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            ux1 = snap2.val()
-        })
-    })
-
-    usersRef.child(key).child("vir").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            vir1 = snap2.val()
-        })
-    })
-
-    usersRef.child(key2).once("value").then(snap => {
-        name2 = snap.val().displayName
-        father2 = snap.val().f
-        mother2 = snap.val().m
-    })
-
-    usersRef.child(key2).child("ux").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            ux2 = snap2.val()
-        })
-    })
-
-    usersRef.child(key2).child("vir").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            vir2 = snap2.val()
-        })
-    })
-
-    siblingChildCheck()
-    childSpouseCheck()
-    childCheck()
-    // spouseSiblingCheck()
-
-    // checks children 4 rows editor2 same
-    function childCheck() {
-        console.log("childCheck")
-        usersRef.child(key).child("children").once("value").then(snap => {
-            snap.forEach(snap2 => {
-                if(snap2.val() == father2 || snap2.val() == mother2) {
-                    usersRef.child(snap2.val()).once("value").then(snap3 => {
-                        html_common +='<h6>'+ name2 +' is the child of '+ snap3.val().displayName +'</h6>';
-                        $('#common_txt').html(html_common)
-
-                        if(snap3.val().f == key || snap3.val().m == key) {
-                            usersRef.child(key).once("value").then(snap4 => {
-                                html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap4.val().displayName +'</h6>';
-                                $('#common_txt').html(html_common)
-
-                                if(snap4.val().f == person1_key || snap4.val().m == person1_key) {
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                } else {
-                                    parentLoop(snap4.val().f)
-
-                                    function parentLoop(keey) {
-                                        usersRef.child(keey).once("value").then(snap5 => {
-                                            html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
-                                            $('#common_txt').html(html_common)
+    // green and orange
+    usersRef.child(key).once("value").then(keysnap => {
+        usersRef.child(key2).once("value").then(key2snap => {
+            console.log("1 check")
+            var spouse;
     
-                                            if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
-                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
-                                                $('#common_txt').html(html_common)
-                                            } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
-                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
-                                                $('#common_txt').html(html_common)
-                                            } else {
-                                                parentLoop(snap4.val().m)
-                                            }
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    })
-                } else {
-                    immediateChild(snap2.val(), key2)
-                }
-            })
-        })
-    }
-    
-    // checks key-children-spouse editor2 not same
-    function childSpouseCheck() {
-        console.log("childSpouseCheck")
-        usersRef.child(key).child("children").once("value").then(snap => {
-            snap.forEach(snap2 => {
-                if(snap2.val() ==  ux2 || snap2.val() ==  vir2) {
-                    usersRef.child(snap2.val()).once("value").then(snap3 => {
-                        html_common +='<h6>'+ name2 +' is the spouse of '+ snap3.val().displayName +'</h6>';
-                        $('#common_txt').html(html_common)
-    
-                        html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ name1 +'</h6>';
-                        $('#common_txt').html(html_common)
-    
-                        if(father1 == person1_key || mother1 == person1_key) {
-                            html_common +='<h6>'+ name1 +' is the child of '+ person1 +'</h6>';
-                            $('#common_txt').html(html_common)
-                        } else if(father1 == person2_key || mother1 == person2_key) {
-                            html_common +='<h6>'+ name1 +' is the child of '+ person2 +'</h6>';
-                            $('#common_txt').html(html_common)
-                        } else {
-                            parentLoop2(father1)
-
-                            function parentLoop2(keeey) {
-                                usersRef.child(keeey).once("value").then(snap5 => {
-                                    html_common +='<h6>'+ name1 +' is the child of '+ snap5.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-        
-                                    if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
-                                        html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else {
-                                        parentLoop2(mother1)
-                                    }
-                                }) 
-                            }
-                        }
-                    })
-                }
-            })
-        })
-    }
-
-    // checks key-sibling-child editor2 same
-    function siblingChildCheck() {   
-        console.log("siblingChildCheck")
-        usersRef.child(key).child("siblings").once("value").then(snap => {
-            snap.forEach(snap2 => {
-                childLoop(snap2.val())
-                function childLoop(keey) {
-                    usersRef.child(keey).once("value").then(snap3 => {
-                        for(var i in snap3.val().children) {
-                            if(i == vir2 || i == ux2) {
-                                usersRef.child(i).once("value").then(snap4 => {
-                                    html_common +='<h6>'+ name2 +' is the spouse of '+ snap4.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-                
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap3.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-
-                                    if(snap3.val().key == snap2.val()) {
-                                        html_common +='<h6>'+ snap3.val().displayName +' is the sibling of '+ name1 +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else if(snap3.val().f == snap2.val() || snap3.val().m == snap2.val()) {
-                                        usersRef.child(snap2.val()).once("value").then(snap5 => {
-                                            html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
-                                            $('#common_txt').html(html_common)
-
-                                            html_common +='<h6>'+ snap5.val().displayName +' is the sibling of '+ name1 +'</h6>';
-                                            $('#common_txt').html(html_common)
-                                        })
-                                    }
-                                })
-                            } else if(i == father2 || i == mother2) {
-                                usersRef.child(i).once("value").then(snap4 => {
-                                    html_common +='<h6>'+ name2 +' is the child of '+ snap4.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-                
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap3.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-
-                                    html_common +='<h6>'+ snap3.val().displayName +' is the sibling of '+ name1 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                })
-                            }  else {
-                                childLoop(i)
-                            }
-                        }
-                    })
-                }
-            })
-        })   
-    }
-
-    // checks key-spouse-sibling
-    function spouseSiblingCheck() {
-        var spouse;
-        if(vir1 == undefined) spouse = vir1;
-        else if(ux1 == undefined) spouse = ux1;
-
-        usersRef.child(spouse).child("siblings").once("value").then(snap => {
-
-        })
-    }
-}
-
-// shortened function
-function immediateChild2(key, key2) {
-    console.log("immediateChild")
-    // console.log("key", key)
-    // console.log("key2", key2)
-
-    var html_common = '';
-    var name1;      var name2;
-    var father1;    var father2;
-    var mother1;    var mother2;
-    var ux1;        var ux2;
-    var vir1;       var vir2;
-
-    usersRef.child(key).once("value").then(snap => {
-        name1 = snap.val().displayName
-        father1 = snap.val().f
-        mother1 = snap.val().m
-    })
-
-    usersRef.child(key).child("ux").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            ux1 = snap2.val()
-        })
-    })
-
-    usersRef.child(key).child("vir").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            vir1 = snap2.val()
-        })
-    })
-
-    usersRef.child(key2).once("value").then(snap => {
-        name2 = snap.val().displayName
-        father2 = snap.val().f
-        mother2 = snap.val().m
-    })
-
-    usersRef.child(key2).child("ux").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            ux2 = snap2.val()
-        })
-    })
-
-    usersRef.child(key2).child("vir").once("value").then(snap => {
-        snap.forEach(snap2 => {
-            vir2 = snap2.val()
-        })
-    })
-
-    siblingChildCheck()
-    childSpouseCheck()
-    childCheck()
-    // spouseSiblingCheck()
-
-    // checks children 4 rows
-    function childCheck() {
-        console.log("childCheck")
-        usersRef.child(key).child("children").once("value").then(snap => {
-            snap.forEach(snap2 => {
-                if(snap2.val() == father2 || snap2.val() == mother2) {
-                    usersRef.child(snap2.val()).once("value").then(snap3 => {
-                        html_common +='<h6>'+ name2 +' is the child of '+ snap3.val().displayName +'</h6>';
-                        $('#common_txt').html(html_common)
-
-                        if(snap3.val().f == key || snap3.val().m == key) {
-                            usersRef.child(key).once("value").then(snap4 => {
-                                html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap4.val().displayName +'</h6>';
-                                $('#common_txt').html(html_common)
-
-                                if(snap4.val().f == person1_key || snap4.val().m == person1_key) {
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person1 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                } else if(snap4.val().f == person2_key || snap4.val().m == person2_key) {
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ person2 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                } else {
-                                    parentLoop(snap4.val().f)
-
-                                    function parentLoop(keey) {
-                                        usersRef.child(keey).once("value").then(snap5 => {
-                                            html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
-                                            $('#common_txt').html(html_common)
-    
-                                            if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
-                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
-                                                $('#common_txt').html(html_common)
-                                            } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
-                                                html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
-                                                $('#common_txt').html(html_common)
-                                            } else {
-                                                parentLoop(snap4.val().m)
-                                            }
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    })
-                } else {
-                    immediateChild(snap2.val(), key2)
-                }
-            })
-        })
-    }
-    
-    // checks key-children-spouse
-    function childSpouseCheck() {
-        console.log("childSpouseCheck")
-        usersRef.child(key).child("children").once("value").then(snap => {
-            snap.forEach(snap2 => {
-                if(snap2.val() ==  ux2 || snap2.val() ==  vir2) {
-                    usersRef.child(snap2.val()).once("value").then(snap3 => {
-                        html_common +='<h6>'+ name2 +' is the spouse of '+ snap3.val().displayName +'</h6>';
-                        $('#common_txt').html(html_common)
-    
-                        html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ name1 +'</h6>';
-                        $('#common_txt').html(html_common)
-    
-                        if(father1 == person1_key || mother1 == person1_key) {
-                            html_common +='<h6>'+ name1 +' is the child of '+ person1 +'</h6>';
-                            $('#common_txt').html(html_common)
-                        } else if(father1 == person2_key || mother1 == person2_key) {
-                            html_common +='<h6>'+ name1 +' is the child of '+ person2 +'</h6>';
-                            $('#common_txt').html(html_common)
-                        } else {    
-                            usersRef.child(father1).once("value").then(snap5 => {
-                                html_common +='<h6>'+ name1 +' is the child of '+ snap5.val().displayName +'</h6>';
-                                $('#common_txt').html(html_common)
-    
-                                if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
-                                    html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
-                                    html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                }
-    
-                                if(stopper == false) {
-                                    usersRef.child(mother1).once("value").then(snap5 => {
-                                        html_common +='<h6>'+ name1 +' is the child of '+ snap5.val().displayName +'</h6>';
-                                        $('#common_txt').html(html_common)
+            if(key2snap.val().ux != undefined) spouse = key2snap.val().ux
+            else if(key2snap.val().vir != undefined) spouse = key2snap.val().vir
             
-                                        if(snap5.val().f == person1_key || snap5.val().m == person1_key) {
-                                            html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person1 +'</h6>';
+            // grandchild inlaw, greatgrandparents, greatgrandchild & inlaw, great2grandparents (green)
+            for(var a in keysnap.val().children) {
+                if(a == key2snap.val().f || a == key2snap.val().m) {
+                    usersRef.child(a).once("value").then(asnap => {
+                        html_common +='<h6>'+ key2snap.val().displayName +' is the child of '+ asnap.val().displayName +'</h6>';
+                        $('#common_txt').html(html_common)
+    
+                        if(asnap.val().f == key || asnap.val().m == key) {
+                            html_common +='<h6>'+ asnap.val().displayName +' is the child of '+ keysnap.val().displayName +'</h6>';
+                            $('#common_txt').html(html_common)
+    
+                            if(keysnap.val().f == person1_key || keysnap.val().m == person1_key) {
+                                html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                $('#common_txt').html(html_common)
+                            } else if(keysnap.val().f == person2_key || keysnap.val().m == person2_key) {
+                                html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                $('#common_txt').html(html_common)
+                            } else {
+                                var stopper = false;
+            
+                                usersRef.child(keysnap.val().f).once("value").then(keyfsnap => {
+                                    html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keyfsnap.val().displayName +'</h6>';
+                                    $('#common_txt').html(html_common)
+            
+                                    if(keyfsnap.val().f == person1_key || keyfsnap.val().m == person1_key) {
+                                        html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                        stopper = true;
+                                    } else if(keyfsnap.val().f == person2_key || keyfsnap.val().m == person2_key) {
+                                        html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                        stopper = true;
+                                    }
+                                    
+                                    if(stopper == false) {
+                                        usersRef.child(keysnap.val().m).once("value").then(keymsnap => {
+                                            html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keymsnap.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+                                        
+                                            if(keymsnap.val().f == person1_key || keymsnap.val().m == person1_key) {
+                                                html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } else if(keymsnap.val().f == person2_key || keymsnap.val().m == person2_key) {
+                                                html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            }
+                                        })
+                                    }
+                                })
+                            }
+                        }
+                    })
+                } else {
+                    for(var b in spouse) {
+                        if(a == b) {
+                            usersRef.child(a).once("value").then(asnap => {
+                                html_common +='<h6>'+ key2snap.val().displayName +' is the spouse of '+ asnap.val().displayName +'</h6>';
+                                $('#common_txt').html(html_common)
+    
+                                html_common +='<h6>'+ asnap.val().displayName +' is the child of '+ keysnap.val().displayName +'</h6>';
+                                $('#common_txt').html(html_common)
+    
+                                if(keysnap.val().f == person1_key || keysnap.val().m == person1_key) {
+                                    html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                    $('#common_txt').html(html_common)
+                                } else if(keysnap.val().f == person2_key || keysnap.val().m == person2_key) {
+                                    html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                    $('#common_txt').html(html_common)
+                                } else {
+                                    var stopper = false;
+                
+                                    usersRef.child(keysnap.val().f).once("value").then(keyfsnap => {
+                                        html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keyfsnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                
+                                        if(keyfsnap.val().f == person1_key || keyfsnap.val().m == person1_key) {
+                                            html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person1 +'</h6>';
                                             $('#common_txt').html(html_common)
                                             stopper = true;
-                                        } else if(snap5.val().f == person2_key || snap5.val().m == person2_key) {
-                                            html_common +='<h6>'+ snap5.val().displayName +' is the child of '+ person2 +'</h6>';
+                                        } else if(keyfsnap.val().f == person2_key || keyfsnap.val().m == person2_key) {
+                                            html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person2 +'</h6>';
                                             $('#common_txt').html(html_common)
                                             stopper = true;
                                         }
+                                        
+                                        if(stopper == false) {
+                                            usersRef.child(keysnap.val().m).once("value").then(keymsnap => {
+                                                html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keymsnap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            
+                                                if(keymsnap.val().f == person1_key || keymsnap.val().m == person1_key) {
+                                                    html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                } else if(keymsnap.val().f == person2_key || keymsnap.val().m == person2_key) {
+                                                    html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                }
+                                            })
+                                        }
                                     })
                                 }
-                            })                        
+                            })
+                        } else {
+                            checker(a, key2)
                         }
-                    })
+                    }
                 }
-            })
-        })
-    }
+            }
 
-    // checks key-sibling-child
-    function siblingChildCheck() {   
-        console.log("siblingChildCheck")
-        usersRef.child(key).child("siblings").once("value").then(snap => {
-            snap.forEach(snap2 => {
-                childLoop(snap2.val())
-
+            // niece/nephew inlaw, great aunt/uncle, great niece/nephew & inlaw (orange)
+            for(var c in keysnap.val().siblings) {
+                childLoop(c)
+    
                 function childLoop(keey) {
-                    usersRef.child(keey).once("value").then(snap3 => {
-                        for(var i in snap3.val().children) {
-                            if(i == vir2 || i == ux2) {
-                                usersRef.child(i).once("value").then(snap4 => {
-                                    html_common +='<h6>'+ name2 +' is the spouse of '+ snap4.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-                
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap3.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-
-                                    if(snap3.val().key == snap2.val()) {
-                                        html_common +='<h6>'+ snap3.val().displayName +' is the sibling of '+ name1 +'</h6>';
+                    usersRef.child(keey).once("value").then(keeysnap => {
+                        for(var d in keeysnap.val().children) {
+                            for(var e in spouse) {
+                                if(d == e) {
+                                    usersRef.child(d).once("value").then(dsnap => {
+                                        html_common +='<h6>'+ key2snap.val().displayName +' is the spouse of '+ dsnap.val().displayName +'</h6>';
                                         $('#common_txt').html(html_common)
-                                    } else if(snap3.val().f == snap2.val() || snap3.val().m == snap2.val()) {
-                                        usersRef.child(snap2.val()).once("value").then(snap5 => {
-                                            html_common +='<h6>'+ snap3.val().displayName +' is the child of '+ snap5.val().displayName +'</h6>';
+                    
+                                        html_common +='<h6>'+ dsnap.val().displayName +' is the child of '+ keeysnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+        
+                                        if(keey == c) {
+                                            html_common +='<h6>'+ keeysnap.val().displayName +' is the sibling of '+ keysnap.val().displayName +'</h6>';
                                             $('#common_txt').html(html_common)
-
-                                            html_common +='<h6>'+ snap5.val().displayName +' is the sibling of '+ name1 +'</h6>';
-                                            $('#common_txt').html(html_common)
-                                        })
-                                    }
-                                })
-                            } else if(i == father2 || i == mother2) {
-                                usersRef.child(i).once("value").then(snap4 => {
-                                    html_common +='<h6>'+ name2 +' is the child of '+ snap4.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-                
-                                    html_common +='<h6>'+ snap4.val().displayName +' is the child of '+ snap3.val().displayName +'</h6>';
-                                    $('#common_txt').html(html_common)
-
-                                    html_common +='<h6>'+ snap3.val().displayName +' is the sibling of '+ name1 +'</h6>';
-                                    $('#common_txt').html(html_common)
-                                })
-                            }  else {
-                                childLoop(i)
+                                        } else if(keeysnap.val().f == c || keeysnap.val().m == c) {
+                                            usersRef.child(c).once("value").then(csnap => {
+                                                html_common +='<h6>'+ keeysnap.val().displayName +' is the child of '+ csnap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+        
+                                                html_common +='<h6>'+ csnap.val().displayName +' is the sibling of '+ keysnap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            })
+                                        }
+                                    })
+                                } else if(d == key2snap.val().f || d == key2snap.val().m) {
+                                    usersRef.child(d).once("value").then(dsnap => {
+                                        html_common +='<h6>'+ key2snap.val().displayName +' is the child of '+ dsnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                    
+                                        html_common +='<h6>'+ dsnap.val().displayName +' is the child of '+ keeysnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+        
+                                        html_common +='<h6>'+ keeysnap.val().displayName +' is the sibling of '+ keysnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    })
+                                } else {
+                                    childLoop(d)
+                                }
                             }
                         }
                     })
                 }
-            })
-        })   
-    }
+            }
+        })
+    })
+}
 
-    // checks key-spouse-sibling
-    function spouseSiblingCheck() {
+function checker(key, key2) {
+    var html_common = '';
 
-    }
+    usersRef.child(key).once("value").then(keysnap => {
+        usersRef.child(key2).once("value").then(key2snap => {
+            console.log("1 check")
+            var spouse;
+    
+            if(key2snap.val().ux != undefined) spouse = key2snap.val().ux
+            else if(key2snap.val().vir != undefined) spouse = key2snap.val().vir
+            
+            // grandchild inlaw, greatgrandparents, greatgrandchild & inlaw, great2grandparents (green)
+            for(var a in keysnap.val().children) {
+                parentLoop(a, key2)
+
+                function parentLoop(kay, kay2) {
+                    usersRef.child(kay).once("value").then(kaysnap => {
+                        usersRef.child(kay2).once("value").then(kay2snap => {
+                            if(kay == kay2snap.val().f || kay == kay2snap.val().m) {
+                                html_common +='<h6>'+ kay2snap.val().displayName +' is the child of '+ kaysnap.val().displayName +'</h6>';
+                                $('#common_txt').html(html_common)
+        
+                                if(kaysnap.val().f == key || kaysnap.val().m == key) {
+                                    html_common +='<h6>'+ kaysnap.val().displayName +' is the child of '+ keysnap.val().displayName +'</h6>';
+                                    $('#common_txt').html(html_common)
+            
+                                    if(keysnap.val().f == person1_key || keysnap.val().m == person1_key) {
+                                        html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    } else if(keysnap.val().f == person2_key || keysnap.val().m == person2_key) {
+                                        html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    } else {
+                                        var stopper = false;
+                    
+                                        usersRef.child(keysnap.val().f).once("value").then(keyfsnap => {
+                                            html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keyfsnap.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+                    
+                                            if(keyfsnap.val().f == person1_key || keyfsnap.val().m == person1_key) {
+                                                html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                                stopper = true;
+                                            } else if(keyfsnap.val().f == person2_key || keyfsnap.val().m == person2_key) {
+                                                html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                                stopper = true;
+                                            }
+                                            
+                                            if(stopper == false) {
+                                                usersRef.child(keysnap.val().m).once("value").then(keymsnap => {
+                                                    html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keymsnap.val().displayName +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                
+                                                    if(keymsnap.val().f == person1_key || keymsnap.val().m == person1_key) {
+                                                        html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                        $('#common_txt').html(html_common)
+                                                    } else if(keymsnap.val().f == person2_key || keymsnap.val().m == person2_key) {
+                                                        html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                        $('#common_txt').html(html_common)
+                                                    }
+                                                })
+                                            }
+                                        })
+                                    }
+                                }
+                            } else {
+                                for(var b in spouse) {
+                                    if(kay == b) {
+                                            html_common +='<h6>'+ kay2snap.val().displayName +' is the spouse of '+ kaysnap.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+                
+                                            html_common +='<h6>'+ kaysnap.val().displayName +' is the child of '+ keysnap.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+                
+                                            if(keysnap.val().f == person1_key || keysnap.val().m == person1_key) {
+                                                html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } else if(keysnap.val().f == person2_key || keysnap.val().m == person2_key) {
+                                                html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } else {
+                                                var stopper = false;
+                            
+                                                usersRef.child(keysnap.val().f).once("value").then(keyfsnap => {
+                                                    html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keyfsnap.val().displayName +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                            
+                                                    if(keyfsnap.val().f == person1_key || keyfsnap.val().m == person1_key) {
+                                                        html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                        $('#common_txt').html(html_common)
+                                                        stopper = true;
+                                                    } else if(keyfsnap.val().f == person2_key || keyfsnap.val().m == person2_key) {
+                                                        html_common +='<h6>'+ keyfsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                        $('#common_txt').html(html_common)
+                                                        stopper = true;
+                                                    }
+                                                    
+                                                    if(stopper == false) {
+                                                        usersRef.child(keysnap.val().m).once("value").then(keymsnap => {
+                                                            html_common +='<h6>'+ keysnap.val().displayName +' is the child of '+ keymsnap.val().displayName +'</h6>';
+                                                            $('#common_txt').html(html_common)
+                                                        
+                                                            if(keymsnap.val().f == person1_key || keymsnap.val().m == person1_key) {
+                                                                html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person1 +'</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                            } else if(keymsnap.val().f == person2_key || keymsnap.val().m == person2_key) {
+                                                                html_common +='<h6>'+ keymsnap.val().displayName +' is the child of '+ person2 +'</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                        
+                                    } else {
+                                        parentLoop(a, kay2)
+                                    }
+                                }
+                            }
+                        })
+                    })
+                }
+            }
+
+            // niece/nephew inlaw, great aunt/uncle, great niece/nephew & inlaw (orange)
+            for(var c in keysnap.val().siblings) {
+                childLoop(c)
+    
+                function childLoop(keey) {
+                    usersRef.child(keey).once("value").then(keeysnap => {
+                        for(var d in keeysnap.val().children) {
+                            for(var e in spouse) {
+                                if(d == e) {
+                                    usersRef.child(d).once("value").then(dsnap => {
+                                        html_common +='<h6>'+ key2snap.val().displayName +' is the spouse of '+ dsnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                    
+                                        html_common +='<h6>'+ dsnap.val().displayName +' is the child of '+ keeysnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+        
+                                        if(keey == c) {
+                                            html_common +='<h6>'+ keeysnap.val().displayName +' is the sibling of '+ keysnap.val().displayName +'</h6>';
+                                            $('#common_txt').html(html_common)
+                                        } else if(keeysnap.val().f == c || keeysnap.val().m == c) {
+                                            usersRef.child(c).once("value").then(csnap => {
+                                                html_common +='<h6>'+ keeysnap.val().displayName +' is the child of '+ csnap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+        
+                                                html_common +='<h6>'+ csnap.val().displayName +' is the sibling of '+ keysnap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            })
+                                        }
+                                    })
+                                } else if(d == key2snap.val().f || d == key2snap.val().m) {
+                                    usersRef.child(d).once("value").then(dsnap => {
+                                        html_common +='<h6>'+ key2snap.val().displayName +' is the child of '+ dsnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                    
+                                        html_common +='<h6>'+ dsnap.val().displayName +' is the child of '+ keeysnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+        
+                                        html_common +='<h6>'+ keeysnap.val().displayName +' is the sibling of '+ keysnap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    })
+                                } else {
+                                    childLoop(d)
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+        })
+    })
 }

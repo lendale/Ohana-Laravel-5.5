@@ -54,12 +54,7 @@
                             <a href="/album_merged">Album</a>
                         </li>
                         <li>
-                            <!-- Events Dropdown -->
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Events</a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/eventsImmediate">Immediate Events</a></li>
-                                    <li><a href="/eventsExtended" disabled>Extended Events</a></li>
-                                </ul>
+                            <a href="/events">Events</a>
                         </li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown">
@@ -102,7 +97,7 @@
     <section class="select container">
         <div class="row">
         <div id="section">
-            <a type="button" class="btn btn-danger btn-sm" data-toggle="modal" title="Create Album" data-target="#createAlbumCoverModal">Create Album<br></a>
+            <a type="button" id="create_album" class="btn btn-danger btn-sm" data-toggle="modal" title="Create Album" data-target="#createAlbumCoverModal">Create Album<br></a>
             <!-- <a type="button" id="uploadBtn" onclick="getAlbumList()" class="btn btn-danger btn-sm" data-toggle="modal" title="Upload Photo" data-target="#uploadModal">Upload Photo</a> -->
         </div>
         <div id="album-title">
@@ -433,7 +428,7 @@
                         <!-- </div> -->
                 
 
-                    <center><a type="button" class="btn btn-danger btn-fab btn-round" name="create_album" id="create_album"><i class="material-icons">done_outline</i></a></center>
+                    <center><a type="button" class="btn btn-danger btn-fab btn-round" name="create_album" id="create_album_btn"><i class="material-icons">done_outline</i></a></center>
 			    </div>
 		    </div>
 	    </div>

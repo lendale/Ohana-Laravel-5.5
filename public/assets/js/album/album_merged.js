@@ -13,7 +13,7 @@ firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         currentUser = user;
         uid = currentUser.uid;
-        // check()
+        check()
         retrieveUser()
         getUserData()
     } else {
@@ -38,20 +38,46 @@ function getUserData(uid){
         })
 }
 function check(){
+    var u;
+    var i;
+    var e;
+    var p;
     albumPrivacyRefUsers.child(uid).once("value")
         .then(function(snapshot) {
-        if (snapshot.exists()){ 
-            console.log('Album is filled')
-        }else{
-            console.log('Album is emptyy')
-            swal({
-                type: 'question',
-                text: "Create your own album now!",
-                showConfirmButton: true
+            // console.log(snapshot.val())
+            u = snapshot.val()
+                albumPrivacyRefImmediate.child(uid).once("value")
+                    .then(function(snapshot) {
+                    // console.log(snapshot.val())
+                    i = snapshot.val()
+                    albumPrivacyRefPublic.child(uid).once("value")
+                        .then(function(snapshot) {
+                            // console.log(snapshot.val())
+                            p = snapshot.val()
+                            albumPrivacyRefExtended.child(uid).once("value")
+                                .then(function(snapshot) {
+                                    // console.log(snapshot.val())
+                                    e = snapshot.val()
+
+                                    if(u == null && i == null && p == null && e == null ){
+                                        swal({
+                                            text: 'You have not uploaded nor created an album.',
+                                            type: 'question',
+                                            showCancelButton: true,
+                                            showConfirmButton: true,
+                                            confirmButtonColor: '#ff5349',
+                                            cancelButtonColor: '#808080',
+                                            confirmButtonText: 'Create Now'
+                                        }).then((isConfirm) => {
+                                            if (isConfirm) {
+                                                $('#create_album').click();
+                                            }
+                                          })  
+                                    }
+                })
             })
-        }
-    })
-    
+        })
+    })   
 }
 function handleAlbumInStr(eventData){
     var file = eventData.target.files[0];
@@ -63,11 +89,9 @@ function handleAlbumInStr(eventData){
     var albumStorageRef = firebase.storage().ref(strRef);
 
     console.log('FILE:', file)
-    // console.log('FILENAME:', fileName)
-    // console.log('FILE EXTENSION:', fileExtension)
 
-    // if(file.size <= 100000){
-    $('#create_album').on('click', function(){
+    if(file.size <= 100000){
+    $('#create_album_btn').on('click', function(){
         var task = albumStorageRef.put(file);
         task.on('state_changed',
             function complete(){
@@ -88,9 +112,9 @@ function handleAlbumInStr(eventData){
                   });
             })
     })
-    // }else{
-    //     showPhotoError()
-    // }
+    }else{
+        showPhotoError()
+    }
 }
 function storeAlbumInDb(albumCoverURL, albumKey, strRef){
     console.log('LOCATION: STOREALBUMINDB', albumCoverURL)
@@ -332,8 +356,8 @@ function deleteAlbum(clicked_key){
         text: "You won't be able to revert this album!",
         type: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#ff5349',
+        cancelButtonColor: '#808080',
         confirmButtonText: 'Yes, delete it!'
       }).then((isConfirm) => {
         if (isConfirm) {
@@ -434,7 +458,7 @@ function updatePhoto(clicked_key){
             photo_caption: cap
         }
         albumRef.child(selectedAlbumData.album_key).child(selectedAlbumData.album_key).child('album_photos').child(clicked_photo.photo_key).update(update_data);
-        showSuccessUpdate() 
+        showSuccessUpdatePhoto() 
     }) 
 }
 function deletePhoto(clicked_key){
@@ -445,8 +469,8 @@ function deletePhoto(clicked_key){
         text: "You won't be able to revert this photo!",
         type: 'warning',
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#ff5349',
+        cancelButtonColor: '#808080',
         confirmButtonText: 'Yes, delete it!'
       }).then((isConfirm) => {
         if (isConfirm) {

@@ -17,13 +17,13 @@
     <link rel="stylesheet" href="assets/css/material-kit/material-bootstrap-wizard.css">
 </head>
 
-<body class="image-container set-full-height" style="background-image: url('assets/img/wizard-profile.jpg'); background-repeat: no-repeat; background-attachment: fixed;">
+<body class="image-container set-full-height" style="background-image: url('assets/img/jeep.jpg'); background-repeat: no-repeat; background-attachment: fixed;">
     <main class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
                 <!-- Wizard container -->
                 <div class="wizard-container">
-                    <div class="card wizard-card" data-color="green" id="wizard_profile">
+                    <div class="card wizard-card" data-color="red" id="wizard_profile">
                         <form action="" method="">
                             <!-- You can switch " data-color="purple" "  with one of the next bright colors: "green", "orange", "red", "blue" -->
 
@@ -36,7 +36,6 @@
                             <div class="wizard-navigation">
                                 <ul>
                                     <li><a href="#about" data-toggle="tab">About</a></li>
-                                    <!-- <li><a href="#family" data-toggle="tab">Family</a></li> -->
                                     <li><a href="#address" data-toggle="tab">Address</a></li>
                                 </ul>
                             </div>
@@ -45,16 +44,22 @@
                                 <div class="tab-pane" id="about">
                                     <div class="row">
                                         <h4 class="info-text">Let's start with the basic information</h4>
-                                        <div class="col-sm-4 col-sm-offset-1">
-                                            <br><br>
-                                            <div class="picture-container">
-                                                <div class="picture">
-                                                    <img src="assets/img/default-avatar.png" class="picture-src" id="wizard_picture_preview" title="" />
-                                                    <input type="file" id="wizard_picture" accept="image/jpeg" required>
-                                                    <!-- <input type="file" id="wizard_picture" required> -->
-                                                </div>
-                                                <h6>Choose Picture <small>(required)</small></h6>
+                                        <div class="col-sm-12">
+                                            <div class="fileinput fileinput-new text-center" data-provides="fileinput">
+                                                <div class="picture-container">
+                                                        <div class="picture">
+                                                            <img src="assets/img/default-avatar.png" class="picture-src" id="wizard_picture_preview" title="" />
+                                                            <div class="input_file">
+                                                                <input type="file" id="wizard_picture" accept="image/jpeg" required>
+                                                            </div>
+                                                        </div>
+
+                                                        <div id="remove_btn">
+                                                            <h6>Choose Picture <small>(required)</small></h6>
+                                                        </div>
+                                                    </div> 
                                             </div>
+                                            <br><br><br><br>   
                                         </div>
 
                                         <div class="col-sm-6">
@@ -70,7 +75,7 @@
 
                                             <div class="input-group">
                                                 <span class="input-group-addon">
-													<i class="material-icons" style="color: white;">face</i>
+													<!-- <i class="material-icons" style="color: white;">face</i> -->
 												</span>
                                                 <div id="group_middle_name" class="form-group label-floating">
                                                     <label class="control-label">Middle Name</label>
@@ -80,7 +85,7 @@
 
                                             <div class="input-group">
                                                 <span class="input-group-addon">
-													<i class="material-icons">record_voice_over</i>
+													<!-- <i class="material-icons">record_voice_over</i> -->
 												</span>
                                                 <div id="group_last_name" class="form-group label-floating">
                                                     <label class="control-label">Last Name <small>(required)</small></label>
@@ -89,7 +94,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-5 col-sm-offset-1">
+                                        <div class="col-sm-6">
                                             <div class="input-group">
                                                 <span class="input-group-addon">
 													<i class="material-icons">cake</i>
@@ -99,7 +104,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-6">
                                             <div class="input-group">
                                                 <span class="input-group-addon">
 													<i class="material-icons">place</i>
@@ -111,7 +116,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-sm-10 col-sm-offset-1">
+                                        <div class="col-sm-6">
                                             <div class="input-group">
                                                 <span class="input-group-addon">
 													<i class="material-icons">email</i>
@@ -188,8 +193,8 @@
 
                             <div class="wizard-footer">
                                 <div class="pull-right">
-                                    <input id="next" type='button' class='btn btn-next btn-fill btn-success btn-wd' name='next' value='Next' />
-                                    <input id="finish" type='button' class='btn btn-finish btn-fill btn-success btn-wd' name='finish' value='Finish' />
+                                <input id="next" type='button' class='btn btn-next btn-fill btn-danger btn-wd' name='next' value='Next' />
+                                    <input id="finish" type='button' class='btn btn-finish btn-fill btn-danger btn-wd' name='finish' value='Finish' />
                                 </div>
 
                                 <div class="pull-left" id='previous'>
@@ -212,7 +217,7 @@
                 &copy;
                 <script>
                     document.write(new Date().getFullYear())
-                </script>, O H A N A &nbsp;<i class="fa fa-heart heart"></i>
+                    </script>&nbsp;| O H A N A &nbsp;<i class="fa fa-heart heart"></i>
                 <!-- made with <i class="fa fa-heart heart"></i> by Team Ohana -->
             </div>
         </div>

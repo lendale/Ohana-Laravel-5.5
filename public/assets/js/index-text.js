@@ -1,15 +1,15 @@
 function initHeaderText() {
     var data = [{
             title: "A Link To The Past.",
-            // sub: "Subtitle"
+            sub: "<i>Aloha Ke Ohana ..</i>"
         },
         {
             title: "A Key To Your Future.",
-            // sub: "Subtitle"
+            sub: "<i>Hele Mua Ka Ohana ..</i>"
         },
         {
             title: "Legacy Never Ends.",
-            // sub: "Subtitle"
+            sub: "<i>Ohana Ka Meaʻai I Nā Mea Āpau ..</i>"
         }
     ];
 
@@ -36,7 +36,7 @@ function initFeaturesText() {
             "sub": "With the Ohana notification system, you will never be outdated with the happenings around your clan. Receive invitations and announcements straight to your account in real-time."
         },
         {
-            "title": "Clan Album",
+            "title": "Album",
             "sub": "They say, \"a picture paints a thousand words.\" We care about your moments. With the clan album, you will be sure that your precious memories will forever be cherished and shared to everyone in your clan."
         }
     ];
@@ -101,7 +101,7 @@ function initTeamText() {
             "twitter": "https://www.twitter.com/andreadaksss",
             "gplus": "https://goo.gl/a3kRrQ",
             "insta": "https://www.instagram.com/andreadaksss",
-            "sub": "Ex Nihilo Nihil Fit"
+            "sub": "Que Sera, Sera"
         },
     ];
 

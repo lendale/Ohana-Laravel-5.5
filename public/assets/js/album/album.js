@@ -25,8 +25,6 @@ firebase.auth().onAuthStateChanged(function(user) {
     }
 })
 
-// lightGallery(document.getElementById('lightgallery')) 
-
 function getDate(){
     var currentdate = new Date();
     var month;
@@ -91,18 +89,14 @@ function getTime(){
 }
 function showSuccessPhoto() {
     swal({
-        // imageUrl: "assets/img/grow-tree.gif",
         title: "Photo/s Uploaded Successfully",
-        // text: "Please wait",
         timer: 5000,
         showConfirmButton: false,
         type: "success"
     }).then(function() {},
-
     function(dismiss) {
         if (dismiss === "timer") {
             location.reload()
-
         }
     })
 }
@@ -176,6 +170,19 @@ function showSuccessUpdate() {
         }
     })
 }
+function showSuccessUpdatePhoto() {
+    swal({
+        title: "Photo Caption Updated!",
+        timer: 5000,
+        showConfirmButton: false,
+        type: "success"
+    }).then(function() {},
+    function(dismiss) {
+        if (dismiss === "timer") {
+            location.reload()
+        }
+    })
+}
 function showSuccessPrivacyUpdate() {
     swal({
         title: "Album Privacy Updated!",
@@ -191,16 +198,10 @@ function showSuccessPrivacyUpdate() {
 }
 function showErrorAccess(){
     swal({
-        // title: "",
-        text: "You are not authorized to edit, update or delete this album.",
+        text: "You are not authorized to edit, update or delete.",
         timer: 7000,
         showConfirmButton: false,
         type: "error"
-    }).then(function() {},
-    function(dismiss) {
-        if (dismiss === "timer") {
-            location.reload()
-        }
     })
 }
 function showAccessErrorUpload(){
@@ -209,10 +210,11 @@ function showAccessErrorUpload(){
         timer: 7000,
         showConfirmButton: false,
         type: "error"
-    }).then(function() {},
-    function(dismiss) {
-        if (dismiss === "timer") {
-            location.reload()
-        }
     })
+    // .then(function() {},
+    // function(dismiss) {
+    //     if (dismiss === "timer") {
+    //         location.reload()
+    //     }
+    // })
 }

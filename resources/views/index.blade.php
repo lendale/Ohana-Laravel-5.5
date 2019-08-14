@@ -301,12 +301,12 @@
     </main>
 
     <footer class="footer">
-        <div class="container">
+    <div class="container text-center">
             <div class="copyright pull-center">
                 &copy;
                 <script>
                     document.write(new Date().getFullYear())
-                </script>, O H A N A &nbsp;<i class="fa fa-heart heart"></i>
+                </script>&nbsp;| O H A N A &nbsp;<i class="fa fa-heart heart"></i>
                 <!-- made with <i class="fa fa-heart heart"></i> by Team Ohana -->
             </div>
         </div>

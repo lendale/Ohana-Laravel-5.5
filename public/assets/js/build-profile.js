@@ -66,7 +66,7 @@ $('#next').click(function() {
     }
 })
 
-$('#finish').click(function() {    
+$('#finish').click(function() {
     console.log('finish')
     if (provider === "facebook.com") {
         createAcctWithFacebook();
@@ -252,7 +252,7 @@ function createAcctWithFacebook() {
     showSuccess();
 }
 
-function createAcctWithEmailAndPass(downloadURL) {
+function createAcctWithEmailAndPass(downloadURL, picLink) {
     var person = new Object();
     var middle_name = $('#middle_name').val();
     var birth_place = $('#birth_place').val();
@@ -368,6 +368,7 @@ function createAcctWithEmailAndPass(downloadURL) {
         person.photoURL = downloadURL
         person.familyId = fam_id
         person.extendedId = ext_id
+        person.photoLink = picLink
 
         $('#finish').click(function() {
             usersRef.child(currentUser.uid).set(person)
@@ -432,12 +433,22 @@ function handleWizardPic(eventData) {
     var fileExtension = fileName.split(".").pop();
     var picKey = FIREBASE_DATABASE.ref().child('url_display_pics').child(currentUser.uid).push().getKey();
     var fileNameOnStorage = picKey + '.' + fileExtension;
+    var picLink = 'PROFILE-PICS/' + fileNameOnStorage;
     var storageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
 
     console.log(file)
     console.log(fileName)
 
     if(file.size <= 100000) {
+        var remove_btn = '<button class="btn btn-danger btn-md btn-round" id="remove">Remove Photo</button>'
+        $('#remove_btn').html(remove_btn)
+
+        $('#remove').on('click', function(){
+            file = null;
+            console.log(file)
+            showNoImage()
+        })
+
         $('#next').on('click', function() {
             if(file == null) {
                 console.log('handlewizardpic')
@@ -450,7 +461,7 @@ function handleWizardPic(eventData) {
                         uid = firebase.auth().currentUser.uid;
                         downloadURL = task.snapshot.downloadURL;
                         console.log(downloadURL)
-                        createAcctWithEmailAndPass(downloadURL);
+                        createAcctWithEmailAndPass(downloadURL, picLink);
                 })
             }
         }) 
@@ -577,4 +588,19 @@ function showPhotoNull() {
         showConfirmButton: false,
         type: "error"
     })
+}
+
+function showNoImage(){
+    swal({
+        title: "Photo Removed",
+        text: "Please add a new photo..",
+        showConfirmButton: true,
+        confirmButtonColor: '#ff5349',
+        confirmButtonText: 'Continue',
+        type: "error"
+    }).then((isConfirm) => {
+        if (isConfirm) {
+            $('#wizard_picture').click();
+        }
+      })
 }

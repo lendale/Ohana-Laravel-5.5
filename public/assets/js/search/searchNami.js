@@ -446,6 +446,8 @@ function imm4(key1, key2) {
     var html_common = '';
     var spouse1;
     var spouse2;
+    var parent1 = [];
+    var parent2 = [];
 
     usersRef.child(key1).once("value").then(key1snap => {
         usersRef.child(key2).once("value").then(key2snap => {
@@ -455,7 +457,11 @@ function imm4(key1, key2) {
             if(key2snap.val().vir != undefined) spouse2 = key2snap.val().vir
             else if(key2snap.val().ux != undefined) spouse2 = key2snap.val().ux
 
+            parent1.push(key1snap.val().f); parent1.push(key1snap.val().m)
+            parent2.push(key2snap.val().f); parent2.push(key2snap.val().m)
+
             for(var a in key1snap.val().siblings) {
+                console.log("1")
                 for(var d in spouse2) {
                     if(a == d) {
                         html_common +='<h6>3rd degree affinity</h6>';
@@ -607,17 +613,107 @@ function imm4(key1, key2) {
                 }
             }
 
-            // for(var a in spouse1) {
-            //     usersRef.child(a).once("value").then(asnap => {
-            //         for(var b in asnap.val().siblings) {
-            //             for(var c in spouse2) {
-            //                 if(b == c) {
-
-            //                 }
-            //             }
-            //         }
-            //     })
-            // }
+            for(var a in spouse1) {
+                console.log("2")
+                usersRef.child(a).once("value").then(asnap => {
+                    for(var b in asnap.val().siblings) {
+                        for(var c in spouse2) {
+                            if(b == c || b == key2) {
+                                html_common +='<h6>3rd degree affinity</h6>';
+                                $('#common_txt').html(html_common)
+            
+                                html_common +='<h6>'+ key1snap.val().displayName +' is the sibling-in-law of '+ key2snap.val().displayName +'</h6>';
+                                    $('#common_txt').html(html_common)
+                            } else {
+                                usersRef.child(b).once("value").then(bsnap => {
+                                    for(var d in bsnap.val().children) {
+                                        if(d == c || d == key2) {
+                                            html_common +='<h6>4th degree affinity</h6>';
+                                            $('#common_txt').html(html_common)
+                        
+                                            if(key1snap.val().gender == "male") {
+                                                html_common +='<h6>'+ key1snap.val().displayName +' is the uncle-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } else {
+                                                html_common +='<h6>'+ key1snap.val().displayName +' is the aunt-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                $('#common_txt').html(html_common)
+                                            } 
+                                        } else {
+                                            usersRef.child(d).once("value").then(dsnap => {
+                                                for(var e in dsnap.val().children) {
+                                                    if(e == c || e == key2) {
+                                                        html_common +='<h6>5th degree affinity</h6>';
+                                                        $('#common_txt').html(html_common)
+                                    
+                                                        if(key1snap.val().gender == "male") {
+                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the granduncle-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                            $('#common_txt').html(html_common)
+                                                        } else {
+                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the grandaunt-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                            $('#common_txt').html(html_common)
+                                                        } 
+                                                    } else {
+                                                        usersRef.child(e).once("value").then(esnap => {
+                                                            for(var f in esnap.val().children) {
+                                                                if(f == c || f == key2) {
+                                                                    html_common +='<h6>6th degree affinity</h6>';
+                                                                    $('#common_txt').html(html_common)
+                                                
+                                                                    if(key1snap.val().gender == "male") {
+                                                                        html_common +='<h6>'+ key1snap.val().displayName +' is the great granduncle-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                                        $('#common_txt').html(html_common)
+                                                                    } else {
+                                                                        html_common +='<h6>'+ key1snap.val().displayName +' is the great grandaunt-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                                        $('#common_txt').html(html_common)
+                                                                    } 
+                                                                } else {
+                                                                    usersRef.child(f).once("value").then(fsnap => {
+                                                                        for(var g in fsnap.val().children) {
+                                                                            if(g == c || g == key2) {
+                                                                                html_common +='<h6>7th degree affinity</h6>';
+                                                                                $('#common_txt').html(html_common)
+                                                            
+                                                                                if(key1snap.val().gender == "male") {
+                                                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the great great granduncle-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                                                    $('#common_txt').html(html_common)
+                                                                                } else {
+                                                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the great great grandaunt-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                                                    $('#common_txt').html(html_common)
+                                                                                } 
+                                                                            } else {
+                                                                                usersRef.child(g).once("value").then(gsnap => {
+                                                                                    for(var h in gsnap.val().children) {
+                                                                                        if(h == c || h == key2) {
+                                                                                            html_common +='<h6>8th degree affinity</h6>';
+                                                                                            $('#common_txt').html(html_common)
+                                                                        
+                                                                                            if(key1snap.val().gender == "male") {
+                                                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the great great great granduncle-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                                                                $('#common_txt').html(html_common)
+                                                                                            } else {
+                                                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the great great great grandaunt-in-law of '+ key2snap.val().displayName +'</h6>';
+                                                                                                $('#common_txt').html(html_common)
+                                                                                            } 
+                                                                                        }
+                                                                                    }
+                                                                                })
+                                                                            }
+                                                                        }
+                                                                    })
+                                                                }
+                                                            }
+                                                        })
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                })
+                            }
+                        }
+                    }
+                })
+            }
         })
     })
 }

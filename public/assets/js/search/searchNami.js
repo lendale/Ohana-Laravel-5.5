@@ -457,8 +457,8 @@ function imm4(key1, key2) {
             if(key2snap.val().vir != undefined) spouse2 = key2snap.val().vir
             else if(key2snap.val().ux != undefined) spouse2 = key2snap.val().ux
 
-            parent1.push(key1snap.val().f); parent1.push(key1snap.val().m)
-            parent2.push(key2snap.val().f); parent2.push(key2snap.val().m)
+            parent1[key1snap.val().f] = key1snap.val().f
+            parent1[key1snap.val().m] = key1snap.val().m
 
             for(var a in key1snap.val().siblings) {
                 console.log("1")
@@ -713,6 +713,86 @@ function imm4(key1, key2) {
                         }
                     }
                 })
+            }
+
+            for(var a in parent1) {
+                for(var b in spouse2) {
+                    usersRef.child(a).once("value").then(asnap => {
+                        for(var c in asnap.val().siblings) {
+                            usersRef.child(c).once("value").then(csnap => {
+                                for(var d in csnap.val().children) {
+                                    if(d == key2) {
+                                        html_common +='<h6>4th degree consanguinity</h6>';
+                                        $('#common_txt').html(html_common)
+                            
+                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin of '+ key2snap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    } else if(d == b) {
+                                        html_common +='<h6>5th degree consanguinity</h6>';
+                                        $('#common_txt').html(html_common)
+                            
+                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law of '+ key2snap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    } else {
+                                        usersRef.child(d).once("value").then(dsnap => {
+                                            for(var e in dsnap.val().children) {
+                                                if(e == key2) {
+                                                    html_common +='<h6>4th degree consanguinity</h6>';
+                                                    $('#common_txt').html(html_common)
+                                        
+                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin once removed of '+ key2snap.val().displayName +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                } else if(e == b) {
+                                                    html_common +='<h6>5th degree consanguinity</h6>';
+                                                    $('#common_txt').html(html_common)
+                                        
+                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law once removed of '+ key2snap.val().displayName +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                } else {
+                                                    usersRef.child(e).once("value").then(esnap => {
+                                                        for(var f in esnap.val().children) {
+                                                            if(f == key2) {
+                                                                html_common +='<h6>4th degree consanguinity</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                    
+                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin twice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                            } else if(f == b) {
+                                                                html_common +='<h6>5th degree consanguinity</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                    
+                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law twice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                            } else {
+                                                                usersRef.child(f).once("value").then(fsnap => {
+                                                                    for(var g in fsnap.val().children) {
+                                                                        if(g == key2) {
+                                                                            html_common +='<h6>4th degree consanguinity</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                
+                                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin twice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                        } else if(g == b) {
+                                                                            html_common +='<h6>5th degree consanguinity</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                
+                                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law twice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                        }
+                                                                    }
+                                                                })
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
             }
         })
     })

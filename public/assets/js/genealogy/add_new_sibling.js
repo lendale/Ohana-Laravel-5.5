@@ -1,4 +1,4 @@
-function addSibling(downloadURL) {
+function addSibling(downloadURL, picLink) {
     var firstName = $("#sibling_first_name").val();
     var middleName = $("#sibling_middle_name").val();
     var lastName = $("#sibling_last_name").val();
@@ -21,6 +21,7 @@ function addSibling(downloadURL) {
 
     if (downloadURL !== undefined){
         person.photoURL = downloadURL
+        person.photoLink = picLink
     }
 
     if (middleName.length > 0) {
@@ -144,7 +145,8 @@ function handleSiblingPic(eventData) {
     var fileExtension = fileName.split(".").pop();
     var siblingPicKey = firebase.database().ref().child('sibling').push().getKey();
     var fileNameOnStorage = siblingPicKey + '.' + fileExtension;
-    var PicStorageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
+    var picLink = 'PROFILE-PICS/' + fileNameOnStorage
+    var PicStorageRef = FIREBASE_STORAGE.ref(picLink);
 
     if(file.size <= 100000) {
         var submit_sibling = '<button id="save_siblingwithPhoto" type="button" class="btn btn-success add" data-dismiss="modal">Save With Photo</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
@@ -170,7 +172,7 @@ function handleSiblingPic(eventData) {
                 }).then(function(){},
                     function(dismiss) {
                         if (dismiss === "timer") {
-                            addSibling(downloadURL);
+                            addSibling(downloadURL, picLink);
                         }
                     })
                 })

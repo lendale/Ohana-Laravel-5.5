@@ -178,7 +178,15 @@ function retrieveImmediate(){
     var family = [];
     immediateFamilyRef.child(familyId).once('value')
     .then(function(data){
-        family.push(data.val().mother, data.val().father, data.val().user)
+        if(data.val().mother != undefined || data.val().mother != null){
+            family.push(data.val().mother)
+        }
+        if(data.val().father != undefined || data.val().father != null){
+            family.push(data.val().father)
+        }
+        if(data.val().user != undefined || data.val().user != null){
+            family.push(data.val().user)
+        }
         data.forEach(function(data2){
             data2.forEach(function(data3){
                 family.push(data3.val())
@@ -191,7 +199,6 @@ function retrieveImmediate(){
                         albumRef.child(data2.val()).child(data2.val()).once('value')
                         .then(function(data3){
                             albumData.push(data3.val())
-                            // console.log('IMMEDIATE:',data3.val())
                             displayAlbumCard()
                         }) 
                         

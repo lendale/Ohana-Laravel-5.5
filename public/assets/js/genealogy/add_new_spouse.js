@@ -1,4 +1,4 @@
-function addSpouse(downloadURL) {
+function addSpouse(downloadURL, picLink) {
     var firstName = $("#spouse_first_name").val();
     var middleName = $("#spouse_middle_name").val();
     var lastName = $("#spouse_last_name").val();
@@ -23,6 +23,7 @@ function addSpouse(downloadURL) {
 
     if (downloadURL !== undefined){
         person.photoURL = downloadURL
+        person.photoLink = picLink
     }
 
     if (middleName.length > 0) {
@@ -147,7 +148,8 @@ function handleSpousePic(eventData) {
     var fileExtension = fileName.split(".").pop();
     var spousePicKey = firebase.database().ref().child('spouse').push().getKey();
     var fileNameOnStorage = spousePicKey + '.' + fileExtension;
-    var PicStorageRef = FIREBASE_STORAGE.ref('PROFILE-PICS/' + fileNameOnStorage);
+    var picLink = 'PROFILE-PICS/' + fileNameOnStorage
+    var PicStorageRef = FIREBASE_STORAGE.ref(picLink);
 
     if(file.size <= 100000) {
         var submit_spouse = '<button id="save_spousewithPhoto" type="button" class="btn btn-success add" data-dismiss="modal">Save With Photo</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
@@ -173,7 +175,7 @@ function handleSpousePic(eventData) {
                 }).then(function(){},
                     function(dismiss) {
                         if (dismiss === "timer") {
-                            addSpouse(downloadURL);
+                            addSpouse(downloadURL, picLink);
                         }
                     })
                 })

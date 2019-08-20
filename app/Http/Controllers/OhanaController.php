@@ -43,6 +43,6 @@ class OhanaController extends Controller
 
     public function search()
     {
-        return view('searchNina');
+        return view('searchNami');
     }
 }

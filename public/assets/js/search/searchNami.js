@@ -1,5 +1,3 @@
-// currently working update
-
 $('#submit_search').click(getSearchData);
 var usersRef= firebase.database().ref().child('users')
 var immediate_family = firebase.database().ref().child('immediate_family')
@@ -7,8 +5,6 @@ var person1;
 var person2;
 var person1_key;
 var person2_key;
-var person1_name;
-var person2_name;
 var person1_familyId;
 var person2_familyId;
 var person1_imm = [];
@@ -33,7 +29,6 @@ function getSearchData(){
                 console.log("search person1", person1 + true)
                 person1_key = snap2.val().key
                 person1_familyId = snap2.val().familyId
-                person1_name = snap2.val().displayName
 
                 usersRef.once("value").then(snap3 => {
                     snap3.forEach(snap4 => {
@@ -41,7 +36,6 @@ function getSearchData(){
                             console.log("search person2", person2 + true)
                             person2_key = snap4.val().key
                             person2_familyId = snap4.val().familyId
-                            person2_name = snap4.val().displayName
 
                             older = getAge(snap2.val().birthDate, snap4.val().birthDate)
 

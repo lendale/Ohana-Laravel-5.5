@@ -14,7 +14,7 @@ function showSuccess() {
         // imageUrl: "assets/img/grow-tree.gif",
         title: "Successfully Added",
         // text: "Please wait",
-        timer: 10000,
+        timer: 7000,
         showConfirmButton: false,
         type: "success"
     })

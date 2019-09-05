@@ -1,18 +1,7 @@
-LINKS
-https://gojs.net/latest/intro/panels.html
-https://gojs.net/latest/intro/palette.html
-https://gojs.net/latest/intro/nodes.html
-
 if (!(obj.ux === undefined || obj.ux === null)) {
     let arrUx = Object.values(obj.ux);
     
     obj.ux = arrUx;
-}
-    
-if (!(obj.vir === undefined || obj.vir === null)) {
-    let arrVir = Object.values(obj.vir);
-    
-    obj.vir = arrVir;
 }
 
 SCENARIOS
@@ -55,4 +44,5 @@ git push -u origin dev_branch
 
 create harry's immediate family
 recheck spouse becoming user
+check fred weasley, beauty bell relationship
 check search function

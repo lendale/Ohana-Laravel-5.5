@@ -2,7 +2,6 @@ function initGenogram(data, user_id) {
     var $ = go.GraphObject.make;
 
     myDiagram = $(go.Diagram, "genogram", {
-        // The diagram is initially displayed at the center
         initialContentAlignment: go.Spot.Center, // Centers diagram
         // initialAutoScale: go.Diagram.UniformToFill,
         // The user won't be able to move the elements
@@ -11,7 +10,7 @@ function initGenogram(data, user_id) {
         // Use a custom layout defined below
         layout: $(GenogramLayout, {
             direction: 90, // direction the graph grows toward
-            layerSpacing: 60, // space between parent and child node layers (30)
+            layerSpacing: 60, // space between parent and child node layers
             columnSpacing: 10, // space between children
         })
     });
@@ -45,7 +44,6 @@ function initGenogram(data, user_id) {
                         height: 33
                     },
                     new go.Binding("text", "displayName"),
-                    // new go.Binding("stroke", "", livingStatus)
                 )
             ))
     );
@@ -75,7 +73,6 @@ function initGenogram(data, user_id) {
                         height: 33
                     },
                     new go.Binding("text", "displayName"),
-                    // new go.Binding("stroke", "", livingStatus)
                 )
             ))
     );
@@ -160,9 +157,6 @@ function initGenogram(data, user_id) {
     */
     myDiagram.addDiagramListener("ObjectDoubleClicked", function(e) {
         var part = e.subject.part;
-
-        // if (!(part instanceof go.Link)) showNodeData(part.data);
-
         if (!(part instanceof go.Link)) getNodeData(part.data.key);
     });
 
@@ -178,45 +172,30 @@ function initGenogram(data, user_id) {
     setupDiagram(myDiagram, data, user_id);
 }
 
-// Gives specific color to shape for name
+// Gives specific color to shape
 function consanguinity(node) {
     if(node.registered == true) return "#D43143";
     else if(node.registered == false) {
-        if(node.livingStatus == "deceased") return "#cccccc";
-        else if(node.parenthood == "adopted") return "#4667E8";
+        if(node.parenthood == "adopted") return "#4667E8";
+        else if(node.livingStatus == "deceased") return "#cccccc";
         else if(node.livingStatus == "living") {
             switch (node.relationship) {
                 // a shade of red
-                case "mother":
-                    return "#e74c3c";
-                case "father":
-                    return "#e74c3c";
-                case "daughter":
-                    return "#e74c3c";
-                case "son":
-                    return "#e74c3c";
-                case "brother":
-                    return "#e74c3c";
-                case "sister":
-                    return "#e74c3c";
-                case "consanguinity":
-                    return "#e74c3c";
-                    // a shade of blue
-                case "wife":
-                    return "#4667E8";
-                case "husband":
-                    return "#4667E8";
-                default:
-                    return "#4667E8"; // a shade of gray
+                case "mother": return "#e74c3c";
+                case "father": return "#e74c3c";
+                case "daughter": return "#e74c3c";
+                case "son": return "#e74c3c";
+                case "brother": return "#e74c3c";
+                case "sister": return "#e74c3c";
+                case "consanguinity": return "#e74c3c";
+                // a shade of blue
+                case "wife": return "#4667E8";
+                case "husband": return "#4667E8";
+                case "affinity": return "#4667E8";
+                default: return "#4667E8"; // a shade of gray
             }
         }
     }
-    else return "#cccccc";
-}
-
-function livingStatus(node) {
-    if(node.livingStatus == "deceased") return "#666666";
-    else return "black";
 }
 
 function setupDiagram(diagram, array, focusId) {

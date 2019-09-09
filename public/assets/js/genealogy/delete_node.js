@@ -1,5 +1,6 @@
 function deleteNode(data) {
     if(data.key == currentUser.uid) {
+        console.log("delete user account")
         $("#delete_modal")
             .modal("show");
 
@@ -12,7 +13,7 @@ function deleteNode(data) {
             .append("If yes, your account will be deleted. Continue?");
     
         $('#delete_yes').click(function() {
-            // deleteUser(data);
+            deleteUser(data);
         })
     } else {
         $("#delete_modal")
@@ -26,8 +27,12 @@ function deleteNode(data) {
             .empty()
             .append("Are you sure you want to delete " + data.displayName + " as your " + data.relationship + "?");
 
-            $('#delete_yes').click(function() {
+        $('#delete_yes').click(function() {
+            
+            if(data.relationship == "father" || data.relationship == "mother") deleteParent(data)
+
             if(data.relationship == "brother") {
+                console.log("delete brother account")
                 usersRef.child(data.key).child("relationship").remove();
                 usersRef.child(data.key).child("siblings").child(currentUser.uid).remove();
                 usersRef.child(currentUser.uid).child("siblings").child(data.key).remove();
@@ -663,7 +668,7 @@ function deleteNode(data) {
 
             showDeleteSuccess();
             setTimeout(function() {
-                return location.reload();
+                // return location.reload();
             }, 3000);
         })
     }

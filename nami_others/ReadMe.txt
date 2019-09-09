@@ -48,4 +48,5 @@ git push -u origin dev_branch
 create harry's immediate family
 check fred weasley, beauty bell relationship
 check search function
-reload modals on update, delete, show
+check extended family function
+check delete child

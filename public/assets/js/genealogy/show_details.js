@@ -9,21 +9,18 @@ function getNodeData(key) {
 function showNodeData(data) {
     console.log(data.key)
 
-    if(data.registered == true) {
-        if(data.key != currentUser.uid) {
-            document.getElementById("node_delete").disabled = true;
-            document.getElementById("node_edit").disabled = true;
+    var template = null
+    $('#modal_show_details').on('show.bs.modal', function (event) {
+        if (template == null) {
+            template = $(this).html()
+        } else {
+            $(this).html(template)
         }
-    } else {
-        document.getElementById("node_delete").disabled = false;
-        document.getElementById("node_edit").disabled = false;
-    }
+    })
 
-    if(currentUserDetails.siblings) {
-        if(data.relationship == "father" || data.relationship == "mother") {
-            document.getElementById("node_delete").disabled = true;
-        }
-    } 
+    if(data.key != currentUser.uid && data.registered == true) {
+        document.getElementById("node_edit").disabled = true;
+    }
 
     $("#modal_show_details")
         .modal('show');
@@ -59,37 +56,55 @@ function showNodeData(data) {
             .append('Not available');
     }
 
-    if(data.registered == true) {
+    if(data.key == currentUser.uid) {
         $('#node_edit').click(function() {
-            updateUsersModal(data);
+            document.getElementById("node_edit").addEventListener("click", updateUsersModal(data));
         })
-    } else {
-        if(data.relationship == "father" || data.relationship == "mother") {
-            console.log(data.relationship)
-            $('#node_edit').click(function() {
-                updateParentModal(data);
-            })
-        } else if(data.relationship == "husband" || data.relationship == "wife") {
-            console.log(data.relationship)
-            $('#node_edit').click(function() {
-                updateSpouseModal(data);
-            })
-        } else if(data.relationship == "son" || data.relationship == "daughter") {
-            console.log(data.relationship)
-            $('#node_edit').click(function() {
-                updateChildModal(data);
-            })
-        } else if(data.relationship == "brother" || data.relationship == "sister") {
-            console.log(data.relationship)
-            $('#node_edit').click(function() {
-                updateSiblingModal(data);
-            })
-        }
+
+        $('#node_delete').click(function() {
+            document.getElementById("node_edit").addEventListener("click", deleteUser(data));
+        })
+    } 
+    
+    if(data.relationship == "father" || data.relationship == "mother") {
+        $('#node_edit').click(function() {
+            document.getElementById("node_edit").addEventListener("click", updateParentModal(data));
+        })
+
+        $('#node_delete').click(function() {
+            document.getElementById("node_edit").addEventListener("click", deleteParent(data));
+        })
     }
 
-    $('#node_delete').click(function() {
-        deleteNode(data);
-    })
+    if(data.relationship == "brother" || data.relationship == "sister") {
+        $('#node_edit').click(function() {
+            document.getElementById("node_edit").addEventListener("click", updateSiblingModal(data));
+        })
+
+        $('#node_delete').click(function() {
+            document.getElementById("node_edit").addEventListener("click", deleteSibling(data));
+        })
+    }
+    
+    if(data.relationship == "husband" || data.relationship == "wife") {
+        $('#node_edit').click(function() {
+            document.getElementById("node_edit").addEventListener("click", updateSpouseModal(data));
+        })
+
+        $('#node_delete').click(function() {
+            document.getElementById("node_edit").addEventListener("click", deleteSpouse(data));
+        })
+    }
+
+    if(data.relationship == "son" || data.relationship == "daughter") {
+        $('#node_edit').click(function() {
+            document.getElementById("node_edit").addEventListener("click", updateChildModal(data));
+        })
+
+        $('#node_delete').click(function() {
+            document.getElementById("node_edit").addEventListener("click", deleteChild(data));
+        })
+    }
 }
 
 function showSuccessPhotoDelete() {

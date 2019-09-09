@@ -1,8 +1,18 @@
 var userData; 
 
 function updateUsersModal(data) {
-    userData = data; 
-    console.log('update user')
+    console.log("updateUsersModal")
+    userData = data;
+
+    var template = null
+    $('#modal_update_parent').on('show.bs.modal', function (event) {
+        if (template == null) {
+            template = $(this).html()
+        } else {
+            $(this).html(template)
+        }
+    })
+    
     $("#modal_update_users")
         .modal('show');
 
@@ -140,8 +150,6 @@ function updateUsers(data, downloadURL, picLink) {
         registered: registered,
     };  
 
-    // console.log(downloadURL)
-
     if (downloadURL !== undefined) {
         person.photoURL = downloadURL
         person.photoLink = picLink
@@ -226,22 +234,21 @@ function handleUserUpdatePic(eventData){
             usersRef.child(userData.key).child('photoURL').remove()
             console.log('deleted and removed')
             uploadPic()
-        }
-        else{
+        } else{
             uploadPic()
         }
 
-            function uploadPic(){
+        function uploadPic() {
             var submit_user_btn = '<button id="update_users_pic" type="button" class="btn btn-success add" data-dismiss="modal">Save</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
             $('#update_footer_user').html(submit_user_btn);
 
             $('#update_users_pic').click(function() {    
-            var task = storageRef.put(file);
-            console.log('stored')
+                var task = storageRef.put(file);
+                console.log('stored')
                 task.on('state_changed',
                     function complete(){
                         downloadURL = task.snapshot.downloadURL;
-                        
+
                         swal({
                             imageUrl: "assets/img/icons/loader.gif",
                             imageWidth: '90',
@@ -256,35 +263,34 @@ function handleUserUpdatePic(eventData){
                                     updateUsers(userData, downloadURL, picLink);
                                 }
                             })
-                        })
-                })
-            }
-        } else {
-            console.log('photo size too large')
+                    })
+            })
         }
+    } else {
+        console.log('photo size too large')
+    }
 }
 
-function handleUserRemovePic(){
+function handleUserRemovePic() {
     swal({
-       title: 'Are you sure?',
-       text: "You won't be able to revert this photo!",
-       type: 'warning',
-       showCancelButton: true,
-       confirmButtonColor: '#3085d6',
-       cancelButtonColor: '#d33',
-       confirmButtonText: 'Yes, delete it!'
-     }).then((isConfirm) => {
-       if (isConfirm) {
-           delPic()
-       }
-   })
+        title: 'Are you sure?',
+        text: "You won't be able to revert this photo!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((isConfirm) => {
+        if (isConfirm) {
+            delPic()
+        }
+    })
 
-   function delPic(){
-       console.log(userData.photoURL)
-       console.log(userData.photoLink)
+    function delPic() {
        firebase.storage().ref(userData.photoLink).delete();
        usersRef.child(userData.key).child('photoLink').remove()
        usersRef.child(userData.key).child('photoURL').remove()
        showSuccessPhotoDelete()
-   }
+       console.log('photo deleted')
+    }
 }

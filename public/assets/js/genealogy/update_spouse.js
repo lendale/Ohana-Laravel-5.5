@@ -1,13 +1,17 @@
 var userData; 
 
 function updateSpouseModal(data) {
-    userData = data; 
     console.log('update spouse')
-    $("#modal_update_spouse").on("hidden.bs.modal", function(){
-        setTimeout(function() {
-            return location.reload();
-        }, 20000);
-    });
+    userData = data; 
+    
+    var template = null
+    $('#modal_update_parent').on('show.bs.modal', function (event) {
+        if (template == null) {
+            template = $(this).html()
+        } else {
+            $(this).html(template)
+        }
+    })
 
     $("#modal_update_spouse")
         .modal('show');
@@ -108,7 +112,6 @@ function updateSpouse(data, downloadURL, picLink) {
         maritalStatus: maritalStatus,
     };
 
-    console.log(downloadURL)
     if (downloadURL !== undefined) {
         person.photoURL = downloadURL
         person.photoLink = picLink
@@ -174,29 +177,26 @@ function handleSpouseUpdatePic(eventData){
     var storageRef = FIREBASE_STORAGE.ref(picLink);
 
     if(file.size <= 100000) {
-        console.log(file)
-        if(userData.photoLink !== undefined && userData.photoURL !== undefined){
+        if(userData.photoLink !== undefined && userData.photoURL !== undefined) {
             firebase.storage().ref(userData.photoLink).delete();
             usersRef.child(userData.key).child('photoLink').remove()
             usersRef.child(userData.key).child('photoURL').remove()
             console.log('deleted and removed')
             uploadPic()
-        }
-        else{
+        } else {
             uploadPic()
         }
 
-            function uploadPic(){
+        function uploadPic() {
             var submit_spouse_btn = '<button id="update_spouse_pic" type="button" class="btn btn-success add" data-dismiss="modal">Save</button><button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>';
             $('#update_footer_spouse').html(submit_spouse_btn);
 
             $('#update_spouse_pic').click(function() {    
-            var task = storageRef.put(file);
-            console.log('stored')
+                var task = storageRef.put(file);
+                console.log('stored')
                 task.on('state_changed',
-                    function complete(){
+                    function complete() {
                         downloadURL = task.snapshot.downloadURL;
-                        console.log(downloadURL)
 
                         swal({
                             imageUrl: "assets/img/icons/loader.gif",
@@ -212,36 +212,34 @@ function handleSpouseUpdatePic(eventData){
                                     updateSpouse(userData, downloadURL, picLink);
                                 }
                             })
-                        })
-                })
-            }
-        
-        } else {
-            console.log('photo size too large')
+                    })
+            })
         }
+    } else {
+        console.log('photo size too large')
+    }
 }
 
-function handleSpouseRemovePic(){
+function handleSpouseRemovePic() {
     swal({
-       title: 'Are you sure?',
-       text: "You won't be able to revert this photo!",
-       type: 'warning',
-       showCancelButton: true,
-       confirmButtonColor: '#3085d6',
-       cancelButtonColor: '#d33',
-       confirmButtonText: 'Yes, delete it!'
-     }).then((isConfirm) => {
-       if (isConfirm) {
-           delPic()
-       }
-   })
+        title: 'Are you sure?',
+        text: "You won't be able to revert this photo!",
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((isConfirm) => {
+        if (isConfirm) {
+            delPic()
+        }
+    })
 
-   function delPic(){
-       console.log(userData.photoURL)
-       console.log(userData.photoLink)
+    function delPic() {
        firebase.storage().ref(userData.photoLink).delete();
        usersRef.child(userData.key).child('photoLink').remove()
        usersRef.child(userData.key).child('photoURL').remove()
        showSuccessPhotoDelete()
-   }
+       console.log('photo deleted')
+    }
 }

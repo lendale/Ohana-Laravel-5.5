@@ -2166,8 +2166,6 @@
 <script src="assets/js/genealogy/search_existing.js"></script>
 <script src="assets/js/genealogy/onclick_button.js"></script>
 <script src="assets/js/genealogy/show_details.js"></script>
-<script src="assets/js/genealogy/delete_node.js"></script>
-<script src="assets/js/genealogy/delete_user.js"></script>
 
 <script src="assets/js/genealogy/add_existing_parent.js"></script>
 <script src="assets/js/genealogy/add_existing_sibling.js"></script>
@@ -2179,7 +2177,12 @@
 <script src="assets/js/genealogy/add_new_spouse.js"></script>
 <script src="assets/js/genealogy/add_new_child.js"></script>
 
+<!-- <script src="assets/js/genealogy/delete_node.js"></script> -->
+<script src="assets/js/genealogy/delete_user.js"></script>
 <script src="assets/js/genealogy/delete_parent.js"></script>
+<script src="assets/js/genealogy/delete_sibling.js"></script>
+<script src="assets/js/genealogy/delete_spouse.js"></script>
+<script src="assets/js/genealogy/delete_child.js"></script>
 
 <script src="assets/js/genealogy/update_user.js"></script>
 <script src="assets/js/genealogy/update_parent.js"></script>

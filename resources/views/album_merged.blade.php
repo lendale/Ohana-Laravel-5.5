@@ -17,9 +17,6 @@
 
     <!-- CSS Files -->
     <link href="assets/css/material-kit/bootstrap.min.css" rel="stylesheet" />
-    <!-- <link href="assets/css/test.css" rel="stylesheet" /> -->
-    <!-- <link rel="stylesheet" href="assets/css/lightgallery/lightgallery.css"> -->
-    <!-- <link rel="stylesheet" href="assets/css/lightbox/lightbox.css"> -->
     <link href="assets/css/lightbox.css" rel="stylesheet" />
 
     <link href="assets/css/material-kit/material-kit.css" rel="stylesheet" />
@@ -98,7 +95,6 @@
         <div class="row">
         <div id="section">
             <a type="button" id="create_album" class="btn btn-danger btn-sm" data-toggle="modal" title="Create Album" data-target="#createAlbumCoverModal">Create Album<br></a>
-            <!-- <a type="button" id="uploadBtn" onclick="getAlbumList()" class="btn btn-danger btn-sm" data-toggle="modal" title="Upload Photo" data-target="#uploadModal">Upload Photo</a> -->
         </div>
         <div id="album-title">
             
@@ -107,42 +103,7 @@
                 <div class="container">
                     <center>
                     <div id="card-container" class="row">
-                        <!-- <div class="col-md-4">
-                            <div class="card card-blog">
-                                <div class="card-image">
-                                    <img src="assets/img/filipino/album cover 1.jpg" id="cover">
-                                        <div class="card-title">                          
-                                            <p id="name">Album Name</p>
-                                        </div>
-                                </div>
-                                
-                                <div class="card-content">
-                                    <div class="card-description">
-                                        <i><p id="description">Album Description</p></i>
-                                    </div>
-                                    <div class="footer" align="left">
-                                        
-                                        
-                                        <div id="creator">Album Creator</div>
-                                        <br>
-                                        
-                                        <div id="timestamp">Timeeeeeeee</div>
-                                        <br>
-                                        
-                                        <div id="privacy">Ohana</div>
-                                        <br>
-                                    </div>
-                                    <div class="footer">
-                                        <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="View Photos" class="btn btn-sm btn-info btn-just-icon btn-fill btn-round"><i class="material-icons">photo_library</i>
-                                        </a>
-                                        <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Edit Album Information" class="btn btn-sm btn-success btn-just-icon btn-fill btn-round btn-wd"><i class="material-icons">edit</i>
-                                        </a>
-                                        <a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-just-icon btn-fill btn-round"><i class="material-icons">delete_forever</i>
-                                        </a>
-                                    </div>
-                                </div>  
-                            </div>  
-                        </div> -->
+                        <!-- display card -->
                     </div>
                 </div>
             </div>
@@ -485,5 +446,5 @@
 <!-- USER ALBUM JS -->
 <script src="assets/js/album/album.js"></script>
 <script src="assets/js/album/album_merged.js"></script>
-<script src="assets/js/lightbox.js"></script>
+<script src="assets/js/album/lightbox.js"></script>
 </html>

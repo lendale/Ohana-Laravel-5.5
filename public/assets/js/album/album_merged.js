@@ -259,18 +259,17 @@ function displayAlbumCard(){
         var html = '';
         $.each(albumData, function(key,value){
             index=key;
-            html+= '<div class="col-md-3"><div class="card card-blog"><div class="card-image"><a href="'+value.album_cover+'"><img src="' + value.album_cover + '" id="cover" style="width:235px;height:200px;"></a><div class="card-title"><p id="name">'+ value.album_name+'</p></div></div><div class="card-content"><div class="card-description"><i><p id="description">'+value.album_description+'</p></i></div><div class="footer" align="left"><div id="creator">'+value.album_creator+'</div><br><div id="timestamp">'+value.album_date+'</div><br><div id="privacy"><strong>'+value.album_privacy+'</strong></div></div><div class="footer"><a type="button" id="'+key+'" onClick="retrieveAlbumPhotos(this.id)" href="#" data-toggle="tooltip" data-placement="bottom" title="View Photos" class="btn btn-info btn-just-icon btn-fill btn-round btn-sm"><i class="material-icons">photo_library</i></a><a type="button" href="" title="Update Album Privacy" class="btn btn-warning btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="#updatePrivacy" id="'+key+'" onClick="verifyAccessUpdate(this.id)"><i class="material-icons">settings</i></a><a type="button" href="" title="Edit Album Information" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyAccessEdit(this.id)"><i class="material-icons">edit</i></a><a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-just-icon btn-fill btn-round btn-sm" id="'+key+'" onClick="verifyAccessDelete(this.id)"><i class="material-icons">delete_forever</i></a></div></div></div></div>';
+
+            if(value.album_event_key != undefined){
+                var event = ' | Event Album'
+            }else{
+                var event = ''
+            }
+
+            html+= '<div class="col-md-3"><div class="card card-blog"><div class="card-image"><a href="'+value.album_cover+'"><img src="' + value.album_cover + '" id="cover" style="width:235px;height:200px;"></a><div class="card-title"><p id="name">'+ value.album_name+'</p></div></div><div class="card-content"><div class="card-description"><i><p id="description">'+value.album_description+'</p></i></div><div class="footer" align="left"><div id="creator">'+value.album_creator+'</div><br><div id="timestamp">'+value.album_date+'</div><br><div id="privacy"><strong>'+value.album_privacy+ event +'</strong></div></div><div class="footer"><a type="button" id="'+key+'" onClick="retrieveAlbumPhotos(this.id)" href="#" data-toggle="tooltip" data-placement="bottom" title="View Photos" class="btn btn-info btn-just-icon btn-fill btn-round btn-sm"><i class="material-icons">photo_library</i></a><a type="button" href="" title="Update Album Privacy" class="btn btn-warning btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="#updatePrivacy" id="'+key+'" onClick="verifyAccessUpdate(this.id)"><i class="material-icons">settings</i></a><a type="button" href="" title="Edit Album Information" class="btn btn-success btn-just-icon btn-fill btn-round btn-wd btn-sm" data-toggle="modal" data-target="" id="'+key+'" onClick="verifyAccessEdit(this.id)"><i class="material-icons">edit</i></a><a type="button" href="#pablo" data-toggle="tooltip" data-placement="bottom" title="Delete Album" class="btn btn-danger btn-just-icon btn-fill btn-round btn-sm" id="'+key+'" onClick="verifyAccessDelete(this.id)"><i class="material-icons">delete_forever</i></a></div></div></div></div>';
         })
         $('#card-container').html(html);
 }
-// function getAlbumName(albumkey){
-
-//     console.log(selectedAlbumData.album_key)
-//     var aKey = '<div class="col-sm-6" id= "photo_album" value="'+selectedAlbumData.album_key+'">'+selectedAlbumData.album_name+'</div>';
-//     // $('#albumNameInModal').html(aKey)
-
-//     verifyAccessUpload(albumkey)
-// }
 function handlePhotoInStr(imageFile){
     var fileName = imageFile.name;
     var strRef = 'PHOTOS/' + selectedAlbumData.album_key + '/' + fileName;
@@ -367,10 +366,25 @@ function deleteAlbum(clicked_key){
         cancelButtonColor: '#808080',
         confirmButtonText: 'Yes, delete it!'
       }).then((isConfirm) => {
-        if (isConfirm) {
-            deletePhotos()
-        }
-      })
+            if (isConfirm) {
+                deletePhotos()
+            }
+        })   
+
+    function deletePhotos(){
+        albumRef.child(delete_selected.album_key).child(delete_selected.album_key).child('album_photos').once('value')
+        .then(function (snapPhotoKeys){
+            console.log(snapPhotoKeys.val())
+            snapPhotoKeys.forEach(function (snapData){
+                console.log(snapData.val().photo_link)
+                var photoLink = snapData.val().photo_link
+                firebase.storage().ref(photoLink).delete()
+                console.log('photos deleted in storage')
+            })
+        }).then(function(){
+            continueDelete()
+        })
+    }
 
     function continueDelete(){
         if(delete_selected.album_privacy == 'Extended'){      
@@ -402,26 +416,101 @@ function deleteAlbum(clicked_key){
             albumRef.child(delete_selected.album_key).remove()
                 .then(function(){
                     firebase.storage().ref(delete_selected.album_url).delete()
-                    // deletePhotos()
                 }).then(function(){
                     showSuccessDelete()
                 })
         }
     }
-    function deletePhotos(){
-        albumRef.child(delete_selected.album_key).child(delete_selected.album_key).child('album_photos').once('value')
-        .then(function (snapPhotoKeys){
-            console.log(snapPhotoKeys.val())
-            snapPhotoKeys.forEach(function (snapData){
-                console.log(snapData.val().photo_link)
-                var photoLink = snapData.val().photo_link
-                firebase.storage().ref(photoLink).delete()
-                console.log('photos deleted in storage')
-            })
-        }).then(function(){
-            continueDelete()
-        })
-    }
+}
+function deleteEventAlbum(clicked_key){
+    console.log('album selected has associated an event')
+    var selected_event_album = albumData[clicked_key];
+
+    console.log(selected_event_album)
+    eventsRef.child(selected_event_album.album_event_key).once('value').then(eventsnap =>{
+        console.log(eventsnap.val())
+        if(eventsnap.val() != null){
+            swal({
+                title: 'Album associated with event',
+                text: "Deleting this album won't delete the event. Continue?",
+                type: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#ff5349',
+                cancelButtonColor: '#808080',
+                confirmButtonText: 'Continue'
+              }).then((isConfirm) =>{
+                    if (isConfirm){
+                        swal({
+                            title: 'Continue to delete this album?',
+                            text: "You won't be able revert this album once you delete it.",
+                            type: 'info',
+                            showCancelButton: true,
+                            confirmButtonColor: '#ff5349',
+                            cancelButtonColor: '#808080',
+                            confirmButtonText: 'Delete Now'
+                        }).then((isConfirm)=>{
+                            if(isConfirm){
+                                deleteEventPhotos()
+                            }
+                        })
+                    }
+                })
+
+                function deleteEventPhotos(){
+                    albumRef.child(selected_event_album.album_key).child(selected_event_album.album_key).child('album_photos').once('value')
+                    .then(function (snapPhotoKeys){
+                        console.log(snapPhotoKeys.val())
+                        snapPhotoKeys.forEach(function (snapData){
+                            console.log(snapData.val().photo_link)
+                            var photoLink = snapData.val().photo_link
+                            firebase.storage().ref(photoLink).delete()
+                            console.log('photos deleted in storage')
+                        })
+                    }).then(function(){
+                        continueEventDelete()
+                    })
+                }
+            
+                function continueEventDelete(){
+                    if(selected_event_album.album_privacy == 'Extended'){      
+                        albumPrivacyRefExtended.child(uid).child(selected_event_album.album_key).remove()
+                            .then(function(){
+                                deleteInStr();
+                            })   
+                    }
+                    if(selected_event_album.album_privacy == 'Immediate'){
+                       albumPrivacyRefImmediate.child(uid).child(selected_event_album.album_key).remove()
+                            .then(function(){
+                                deleteInStr();
+                            })  
+                    }
+                    if(selected_event_album.album_privacy == 'Public'){
+                        albumPrivacyRefPublic.child(uid).child(selected_event_album.album_key).remove()
+                             .then(function(){
+                                 deleteInStr();
+                             })  
+                    }
+                    if(selected_event_album.album_privacy == 'Only Me'){
+                        albumPrivacyRefUsers.child(uid).child(selected_event_album.album_key).remove()
+                             .then(function(){
+                                 deleteInStr();
+                             })  
+                    }
+            
+                    function deleteInStr(){
+                        albumRef.child(selected_event_album.album_key).remove()
+                            .then(function(){
+                                firebase.storage().ref(selected_event_album.album_url).delete()
+                            }).then(function(){
+                                showSuccessDelete()
+                            })
+                    }
+                }
+
+        }else{
+            console.log('the event has been deleted')
+        }
+    })
 }
 function updateAlbum(clicked_key){
     var clicked_album = albumData[clicked_key];
@@ -563,7 +652,11 @@ function verifyAccessDelete(clicked_key){
     console.log(selected_alb.album_name)
     if(currentUser.uid == selected_alb.album_creatorId){
         console.log('User is authorized to delete!')
-        deleteAlbum(clicked_key)
+        if(selected_alb.album_event_key != null || selected_alb.album_event_key != undefined){
+            deleteEventAlbum(clicked_key)
+        }else{
+            deleteAlbum(clicked_key)
+        }
     }else{
         showErrorAccess()
     }

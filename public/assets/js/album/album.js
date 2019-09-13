@@ -9,6 +9,7 @@ var albumPrivacyRefPublic = albumPrivacyRef.child('public')
 var extendedFamilyRef = firebase.database().ref().child('extended_family')
 var immediateFamilyRef = firebase.database().ref().child('immediate_family')
 var eventResponseRef = firebase.database().ref().child('event_response')
+var eventsRef = firebase.database().ref().child('events')
 
 var uid;
 var familyId;

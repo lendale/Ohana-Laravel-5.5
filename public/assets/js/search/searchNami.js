@@ -803,6 +803,122 @@ function imm5(key1, key2) {
 
             parent1[key1snap.val().f] = key1snap.val().f
             parent1[key1snap.val().m] = key1snap.val().m
+
+            for(var a in parent1) {
+                for(var b in spouse2) {
+                    usersRef.child(a).once("value").then(asnap => {
+                        for(var c in asnap.val().siblings) {
+                            usersRef.child(c).once("value").then(csnap => {
+                                for(var d in csnap.val().children) {
+                                    if(d == key2) {
+                                        html_common +='<h6>4th degree consanguinity</h6>';
+                                        $('#common_txt').html(html_common)
+                            
+                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin of '+ key2snap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    } else if(d == b) {
+                                        html_common +='<h6>5th degree affinity</h6>';
+                                        $('#common_txt').html(html_common)
+                            
+                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law of '+ key2snap.val().displayName +'</h6>';
+                                        $('#common_txt').html(html_common)
+                                    } else {
+                                        usersRef.child(d).once("value").then(dsnap => {
+                                            for(var e in dsnap.val().children) {
+                                                if(e == key2) {
+                                                    html_common +='<h6>5th degree consanguinity</h6>';
+                                                    $('#common_txt').html(html_common)
+                                        
+                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin once removed of '+ key2snap.val().displayName +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                } else if(e == b) {
+                                                    html_common +='<h6>6th degree affinity</h6>';
+                                                    $('#common_txt').html(html_common)
+                                        
+                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law once removed of '+ key2snap.val().displayName +'</h6>';
+                                                    $('#common_txt').html(html_common)
+                                                } else {
+                                                    usersRef.child(e).once("value").then(esnap => {
+                                                        for(var f in esnap.val().children) {
+                                                            if(f == key2) {
+                                                                html_common +='<h6>6th degree consanguinity</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                    
+                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin twice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                            } else if(f == b) {
+                                                                html_common +='<h6>7th degree affinity</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                    
+                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law twice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                $('#common_txt').html(html_common)
+                                                            } else {
+                                                                usersRef.child(f).once("value").then(fsnap => {
+                                                                    for(var g in fsnap.val().children) {
+                                                                        if(g == key2) {
+                                                                            html_common +='<h6>7th degree consanguinity</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                
+                                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin thrice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                        } else if(g == b) {
+                                                                            html_common +='<h6>8th degree affinity</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                
+                                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law thrice removed of '+ key2snap.val().displayName +'</h6>';
+                                                                            $('#common_txt').html(html_common)
+                                                                        } else {
+                                                                            usersRef.child(g).once("value").then(gsnap => {
+                                                                                for(var h in gsnap.val().children) {
+                                                                                    if(h == key2) {
+                                                                                        html_common +='<h6>8th degree consanguinity</h6>';
+                                                                                        $('#common_txt').html(html_common)
+                                                                            
+                                                                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin four times removed of '+ key2snap.val().displayName +'</h6>';
+                                                                                        $('#common_txt').html(html_common)
+                                                                                    } else if(h == b) {
+                                                                                        html_common +='<h6>9th degree affinity</h6>';
+                                                                                        $('#common_txt').html(html_common)
+                                                                            
+                                                                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law four times removed of '+ key2snap.val().displayName +'</h6>';
+                                                                                        $('#common_txt').html(html_common)
+                                                                                    } else {
+                                                                                        usersRef.child(h).once("value").then(hsnap => {
+                                                                                            for(var i in hsnap.val().children) {
+                                                                                                if(i == key2) {
+                                                                                                    html_common +='<h6>9th degree consanguinity</h6>';
+                                                                                                    $('#common_txt').html(html_common)
+                                                                                        
+                                                                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin five times removed of '+ key2snap.val().displayName +'</h6>';
+                                                                                                    $('#common_txt').html(html_common)
+                                                                                                } else if(i == b) {
+                                                                                                    html_common +='<h6>10th degree affinity</h6>';
+                                                                                                    $('#common_txt').html(html_common)
+                                                                                        
+                                                                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law five times removed of '+ key2snap.val().displayName +'</h6>';
+                                                                                                    $('#common_txt').html(html_common)
+                                                                                                }
+                                                                                            }
+                                                                                        })
+                                                                                    }
+                                                                                }
+                                                                            })
+                                                                        }
+                                                                    }
+                                                                })
+                                                            }
+                                                        }
+                                                    })
+                                                }
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    })
+                }
+            }
             
             for(var a in spouse1) {
                 usersRef.child(a).once("value").then(asnap => {
@@ -812,8 +928,10 @@ function imm5(key1, key2) {
                     for(var b in parenta) {
                         for(var c in spouse2) {
                             usersRef.child(b).once("value").then(bsnap => {
+                                if(!bsnap.val().siblings) imm6(key1, key2)
                                 for(var d in bsnap.val().siblings) {
                                     usersRef.child(d).once("value").then(dsnap => {
+                                        if(dsnap.val().children == undefined) imm6(key1, key2)
                                         for(var e in dsnap.val().children) {
                                             if(e == key2 || e == c) {
                                                 html_common +='<h6>5th degree affinity</h6>';
@@ -823,6 +941,7 @@ function imm5(key1, key2) {
                                                 $('#common_txt').html(html_common)
                                             } else {
                                                 usersRef.child(e).once("value").then(esnap => {
+                                                    if(esnap.val().children == undefined) imm6(key1, key2)
                                                     for(var f in esnap.val().children) {
                                                         if(f == key2 || f == c) {
                                                             html_common +='<h6>6th degree affinity</h6>';
@@ -832,6 +951,7 @@ function imm5(key1, key2) {
                                                             $('#common_txt').html(html_common)
                                                         } else {
                                                             usersRef.child(f).once("value").then(fsnap => {
+                                                                if(fsnap.val().children == undefined) imm6(key1, key2)
                                                                 for(var g in fsnap.val().children) {
                                                                     if(g == key2 || g == c) {
                                                                         html_common +='<h6>7th degree affinity</h6>';
@@ -841,6 +961,7 @@ function imm5(key1, key2) {
                                                                         $('#common_txt').html(html_common)
                                                                     } else {
                                                                         usersRef.child(g).once("value").then(gsnap => {
+                                                                            if(gsnap.val().children == undefined) imm6(key1, key2)
                                                                             for(var h in gsnap.val().children) {
                                                                                 if(h == key2 || h == c) {
                                                                                     html_common +='<h6>8th degree affinity</h6>';
@@ -850,6 +971,7 @@ function imm5(key1, key2) {
                                                                                     $('#common_txt').html(html_common)
                                                                                 } else {
                                                                                     usersRef.child(h).once("value").then(hsnap => {
+                                                                                        if(hsnap.val().children == undefined) imm6(key1, key2)
                                                                                         for(var i in hsnap.val().children) {
                                                                                             if(i == key2 || i == c) {
                                                                                                 html_common +='<h6>9th degree affinity</h6>';
@@ -859,6 +981,7 @@ function imm5(key1, key2) {
                                                                                                 $('#common_txt').html(html_common)
                                                                                             } else {
                                                                                                 usersRef.child(i).once("value").then(isnap => {
+                                                                                                    if(isnap.val().children == undefined) imm6(key1, key2)
                                                                                                     for(var j in isnap.val().children) {
                                                                                                         if(j == key2 || j == c) {
                                                                                                             html_common +='<h6>10th degree affinity</h6>';
@@ -866,7 +989,7 @@ function imm5(key1, key2) {
                                                                                                 
                                                                                                             html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law five times removed of '+ key2snap.val().displayName +'</h6>';
                                                                                                             $('#common_txt').html(html_common)
-                                                                                                        }
+                                                                                                        } else imm6(key1, key2)
                                                                                                     }
                                                                                                 })
                                                                                             }
@@ -889,128 +1012,6 @@ function imm5(key1, key2) {
                         }
                     }
                 })
-            }
-
-            for(var a in parent1) {
-                for(var b in spouse2) {
-                    usersRef.child(a).once("value").then(asnap => {
-                        for(var c in asnap.val().siblings) {
-                            usersRef.child(c).once("value").then(csnap => {
-                                if(csnap.val().children == undefined) imm6(key1, key2)
-                                for(var d in csnap.val().children) {
-                                    if(d == key2) {
-                                        html_common +='<h6>4th degree consanguinity</h6>';
-                                        $('#common_txt').html(html_common)
-                            
-                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin of '+ key2snap.val().displayName +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else if(d == b) {
-                                        html_common +='<h6>5th degree affinity</h6>';
-                                        $('#common_txt').html(html_common)
-                            
-                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law of '+ key2snap.val().displayName +'</h6>';
-                                        $('#common_txt').html(html_common)
-                                    } else {
-                                        usersRef.child(d).once("value").then(dsnap => {
-                                            if(dsnap.val().children == undefined) imm6(key1, key2)
-                                            for(var e in dsnap.val().children) {
-                                                if(e == key2) {
-                                                    html_common +='<h6>5th degree consanguinity</h6>';
-                                                    $('#common_txt').html(html_common)
-                                        
-                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin once removed of '+ key2snap.val().displayName +'</h6>';
-                                                    $('#common_txt').html(html_common)
-                                                } else if(e == b) {
-                                                    html_common +='<h6>6th degree affinity</h6>';
-                                                    $('#common_txt').html(html_common)
-                                        
-                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law once removed of '+ key2snap.val().displayName +'</h6>';
-                                                    $('#common_txt').html(html_common)
-                                                } else {
-                                                    usersRef.child(e).once("value").then(esnap => {
-                                                        if(esnap.val().children == undefined) imm6(key1, key2)
-                                                        for(var f in esnap.val().children) {
-                                                            if(f == key2) {
-                                                                html_common +='<h6>6th degree consanguinity</h6>';
-                                                                $('#common_txt').html(html_common)
-                                                    
-                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin twice removed of '+ key2snap.val().displayName +'</h6>';
-                                                                $('#common_txt').html(html_common)
-                                                            } else if(f == b) {
-                                                                html_common +='<h6>7th degree affinity</h6>';
-                                                                $('#common_txt').html(html_common)
-                                                    
-                                                                html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law twice removed of '+ key2snap.val().displayName +'</h6>';
-                                                                $('#common_txt').html(html_common)
-                                                            } else {
-                                                                usersRef.child(f).once("value").then(fsnap => {
-                                                                    if(fsnap.val().children == undefined) imm6(key1, key2)
-                                                                    for(var g in fsnap.val().children) {
-                                                                        if(g == key2) {
-                                                                            html_common +='<h6>7th degree consanguinity</h6>';
-                                                                            $('#common_txt').html(html_common)
-                                                                
-                                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin thrice removed of '+ key2snap.val().displayName +'</h6>';
-                                                                            $('#common_txt').html(html_common)
-                                                                        } else if(g == b) {
-                                                                            html_common +='<h6>8th degree affinity</h6>';
-                                                                            $('#common_txt').html(html_common)
-                                                                
-                                                                            html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law thrice removed of '+ key2snap.val().displayName +'</h6>';
-                                                                            $('#common_txt').html(html_common)
-                                                                        } else {
-                                                                            usersRef.child(g).once("value").then(gsnap => {
-                                                                                if(gsnap.val().children == undefined) imm6(key1, key2)
-                                                                                for(var h in gsnap.val().children) {
-                                                                                    if(h == key2) {
-                                                                                        html_common +='<h6>8th degree consanguinity</h6>';
-                                                                                        $('#common_txt').html(html_common)
-                                                                            
-                                                                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin four times removed of '+ key2snap.val().displayName +'</h6>';
-                                                                                        $('#common_txt').html(html_common)
-                                                                                    } else if(h == b) {
-                                                                                        html_common +='<h6>9th degree affinity</h6>';
-                                                                                        $('#common_txt').html(html_common)
-                                                                            
-                                                                                        html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law four times removed of '+ key2snap.val().displayName +'</h6>';
-                                                                                        $('#common_txt').html(html_common)
-                                                                                    } else {
-                                                                                        usersRef.child(h).once("value").then(hsnap => {
-                                                                                            if(hsnap.val().children == undefined) imm6(key1, key2)
-                                                                                            for(var i in hsnap.val().children) {
-                                                                                                if(i == key2) {
-                                                                                                    html_common +='<h6>9th degree consanguinity</h6>';
-                                                                                                    $('#common_txt').html(html_common)
-                                                                                        
-                                                                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin five times removed of '+ key2snap.val().displayName +'</h6>';
-                                                                                                    $('#common_txt').html(html_common)
-                                                                                                } else if(i == b) {
-                                                                                                    html_common +='<h6>10th degree affinity</h6>';
-                                                                                                    $('#common_txt').html(html_common)
-                                                                                        
-                                                                                                    html_common +='<h6>'+ key1snap.val().displayName +' is the first cousin-in-law five times removed of '+ key2snap.val().displayName +'</h6>';
-                                                                                                    $('#common_txt').html(html_common)
-                                                                                                } else imm6(key1, key2)
-                                                                                            }
-                                                                                        })
-                                                                                    }
-                                                                                }
-                                                                            })
-                                                                        }
-                                                                    }
-                                                                })
-                                                            }
-                                                        }
-                                                    })
-                                                }
-                                            }
-                                        })
-                                    }
-                                }
-                            })
-                        }
-                    })
-                }
             }
         })
     })
@@ -1177,8 +1178,10 @@ function imm6(key1, key2) {
                                 parentc[csnap.val().m] = csnap.val().m
                                 for(var d in parentc) {
                                     usersRef.child(d).once("value").then(dsnap => {
+                                        if(dsnap.val().siblings == undefined) imm7(key1, key2)
                                         for(var e in dsnap.val().siblings) {
                                             usersRef.child(e).once("value").then(esnap => {
+                                                if(esnap.val().children == undefined) imm7(key1, key2)
                                                 for(var f in esnap.val().children) {
                                                     usersRef.child(f).once("value").then(fsnap => {
                                                         if(fsnap.val().children == undefined) imm7(key1, key2)
@@ -1447,13 +1450,13 @@ function imm7(key1, key2) {
                                         parentc[csnap.val().f] = csnap.val().f
                                         parentc[csnap.val().m] = csnap.val().m
                                         for(var d in parentc) {
-                                            usersRef.child(d).once("value").then(dsnap => {                
+                                            usersRef.child(d).once("value").then(dsnap => {
                                                 for(var e in dsnap.val().siblings) {
-                                                    usersRef.child(e).once("value").then(esnap => {                
+                                                    usersRef.child(e).once("value").then(esnap => {
                                                         for(var f in esnap.val().children) {
-                                                            usersRef.child(f).once("value").then(fsnap => {                
+                                                            usersRef.child(f).once("value").then(fsnap => {
                                                                 for(var g in fsnap.val().children) {
-                                                                    usersRef.child(g).once("value").then(gsnap => {                
+                                                                    usersRef.child(g).once("value").then(gsnap => {
                                                                         for(var h in gsnap.val().children) {
                                                                             if(h == key2) {
                                                                                 html_common +='<h6>8th degree consanguinity</h6>';

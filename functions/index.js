@@ -203,8 +203,8 @@ exports.addBrotherToClan = functions.database.ref('/user_family/{uid}/brothers/{
     return addSibling.addBrother(data, context)
 })
 
-exports.notifications = functions.database.ref('/notifications/{uid}/{notificationId}').onWrite((event) => {
-    return notif.sendNotifications(event)
+exports.notifications = functions.database.ref('/pushNotif/{uid}/{notificationId}').onCreate((data, context) => {
+    return notif.sendNotifications(data, context)
 })
 
 exports.cronJob = functions.https.onRequest((req, res) => {
@@ -212,5 +212,7 @@ exports.cronJob = functions.https.onRequest((req, res) => {
 }) 
 
 exports.eventsReminder = functions.database.ref('/eventsReminder/{uid}/{notificationId}').onWrite((event) =>{
+    console.log(event.data)
     return eReminder.eventsReminder(event)
+
 })

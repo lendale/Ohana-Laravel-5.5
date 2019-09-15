@@ -16,6 +16,7 @@
     <link href="assets/css/material-kit/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/material-kit/material-bootstrap-wizard.css">
 
+
    
   
 </head>
@@ -152,7 +153,7 @@
                                         
                                         <div class="col-sm-5">
                                             <div class="input-group">
-                                                 <input id="time" type="text" placeholder="Time" class="datetimepicker form-control" autocomplete="off">
+                                                 <input id="time" name="time" type="time" placeholder="Time" class="timepicker form-control" autocomplete="off">
                                             </div>
                                         </div>
                                     </div>
@@ -176,9 +177,9 @@
                                     <!-- <button type="submit" class="btn btn-finish btn-fill btn-danger" onclick="addClick()" required>Post</button> -->
                                 </div>
 
-                                <div class="pull-left">
+                                <!-- <div class="pull-left">
                                     <input type='button' class='btn btn-previous btn-fill btn-default btn-wd' name='previous' value="previous" />
-                                </div>
+                                </div> -->
                                 <div class="clearfix"></div>
                             </div>
                         </form>
@@ -201,41 +202,6 @@
             </div>
         </div>
     </footer>
-    
-    <!-- <div class="modal fade" id="potential_data" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        <i class="material-icons">clear</i>
-                    </button>
-                    <h4 class="modal-title"></h4>
-                </div>
-
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <img src="assets/img/default-avatar.png" class="picture-src" id="potential_pic" title="" style="height: 150px; width: 150px" />
-                        </div>
-
-                        <div class="col-md-8">
-                            <div class="input-group">
-                                <span class="input-group-addon">
-									<i class="material-icons">face</i>
-								</span>
-                                <div id="group_first_name" class="form-group label-floating">
-                                    <label class="control-label">First Name <small>(required)</small></label>
-                                    <input id="first_name" name="firstname" type="text" class="form-control">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-
-                <div class="modal-footer"></div>
-            </div>
-        </div>
-    </div>
 </body>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/4.5.0/firebase-auth.js"></script>
@@ -245,9 +211,21 @@
 <script src="assets/js/init.js "></script>
 
 <!--   Core JS Files   -->
-<script src="assets/js/jquery-3.2.1.min.js " type="text/javascript "></script>
+
+
+<script >
+    function activatePlacesSearch(){
+    
+    var input = document.getElementById('venue');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+}
+</script>
+    
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsiI_EKcPBjZbWyfU6dDgvnIXYblQff9Y&libraries=places&callback=activatePlacesSearch"></script>
+<script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
 <script src="assets/js/material-kit/bootstrap.min.js " type="text/javascript "></script>
 <script src="assets/js/material-kit/jquery.bootstrap.js "></script>
+<script src="assets/js/material-kit/material.min.js" type="text/javascript"></script>
 
 <!-- Sweet Alert 2 plugin -->
 <script src="assets/js/material-kit/sweetalert2.js"></script>
@@ -260,11 +238,9 @@
 <!--    Plugin for Date Picker   -->
 <script src="assets/js/material-kit/bootstrap-datepicker.js"></script>
 
+<!-- <script src="assets/js/auth.js"></script> -->
 
-<script src="assets/js/material-kit/material-kit.js" type="text/javascript"></script>
 <script src="assets/js/material-kit/moment.min.js"></script>
-<!-- Authentication -->
-<script src="assets/js/auth.js"></script>
-<script src="assets/js/genealogy.js"></script>
+<script src="assets/js/material-kit/bootstrap-datetimepicker.js"></script>
 <script defer src="assets/js/messaging.js"></script>
 </html>

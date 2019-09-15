@@ -145,3 +145,11 @@ body {
 .no-padding {
     padding: 0 !important;
 }
+
+.contain {
+  width: 500px;
+  margin: 0 auto;
+  position: relative;
+  padding: 20px;
+}
+

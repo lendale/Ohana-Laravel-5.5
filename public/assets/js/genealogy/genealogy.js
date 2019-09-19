@@ -58,6 +58,8 @@
             spouseGenderSetter();
             document.getElementById("add_sibling").disabled = true;
             document.getElementById("add_sibling2").disabled = true;
+            document.getElementById("add_child").disabled = true;
+            document.getElementById("add_child2").disabled = true;
     
             if((obj.m != undefined || obj.m != null) &&
                 (obj.f != undefined || obj.f!= null)) {
@@ -121,6 +123,8 @@
     
                 document.getElementById("add_spouse").disabled = true;
                 document.getElementById("add_spouse2").disabled = true;
+                document.getElementById("add_child").disabled = false;
+                document.getElementById("add_child2").disabled = false;
             }
     
             if(obj.ux != undefined || obj.ux != null) {
@@ -133,6 +137,8 @@
     
                 document.getElementById("add_spouse").disabled = true;
                 document.getElementById("add_spouse2").disabled = true;
+                document.getElementById("add_child").disabled = false;
+                document.getElementById("add_child2").disabled = false;
             }
     
             if (!(obj.ms === undefined || obj.ms === null)) {

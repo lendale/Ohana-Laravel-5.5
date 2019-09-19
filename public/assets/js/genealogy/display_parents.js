@@ -4,16 +4,6 @@ function getAvailableParents(uid) {
     var fatherKeys = [];
     var fatherNames = [];
 
-    let single = $(`
-        <git class="radio">
-            <label>
-                <input type="radio" name="availableParents2" value="${currentUser.uid}">
-                ${currentUser.displayName}
-            </label>
-        </div>
-    `);
-    single.appendTo("#parents_container2");
-
     usersRef.child(uid).child('vir').once('value').then(snap => {
         if (!(snap.val() === undefined || snap.val() === null)) {
             fatherKeys = Object.keys(snap.val());
@@ -63,16 +53,6 @@ function getAvailableParentsNew(uid) {
     var fatherKeys = [];
     var fatherNames = [];
 
-    let single = $(`
-        <git class="radio">
-            <label>
-                <input type="radio" name="availableParents" value="${currentUser.uid}">
-                ${currentUser.displayName}
-            </label>
-        </div>
-    `);
-    single.appendTo("#parents_container");
-
     usersRef.child(uid).child('vir').once('value').then(snap => {
         if (!(snap.val() === undefined || snap.val() === null)) {
             fatherKeys = Object.keys(snap.val());
@@ -121,17 +101,7 @@ function getAvailableParentsUpdate(uid) {
     var motherNames = [];
     var fatherKeys = [];
     var fatherNames = [];
-
-    let single = $(`
-        <git class="radio">
-            <label>
-                <input type="radio" id="${currentUser.uid}" name="availableParents3" value="${currentUser.uid}">
-                ${currentUser.displayName}
-            </label>
-        </div>
-    `);
-    single.appendTo("#parents_container3");
-
+    
     usersRef.child(uid).child('vir').once('value').then(snap => {
         if (!(snap.val() === undefined || snap.val() === null)) {
             fatherKeys = Object.keys(snap.val());

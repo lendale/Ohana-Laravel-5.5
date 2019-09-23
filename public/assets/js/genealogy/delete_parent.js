@@ -8,16 +8,10 @@ function deleteParent(data) {
 
         if(currentUserGender == "female") {
             userFamilyRef.child(data.key).child("daughters").child(currentUser.uid).remove();
-            userFamilyRef.child(currentUser.uid).child("fathers").child(data.key).remove();
-
             immFamilyRef.child(data.familyId).child("daughter").child(currentUser.uid).remove();
-            immFamilyRef.child(currentUserDetails.familyId).child("father").remove();
         } else if(currentUserGender == "male") {
             userFamilyRef.child(data.key).child("sons").child(currentUser.uid).remove();
-            userFamilyRef.child(currentUser.uid).child("fathers").child(data.key).remove();
-
             immFamilyRef.child(data.familyId).child("son").child(currentUser.uid).remove();
-            immFamilyRef.child(currentUserDetails.familyId).child("father").remove();
         }
 
         if(currentUserDetails.vir) {
@@ -53,6 +47,9 @@ function deleteParent(data) {
 
         if(data.relationship == "father") {
             usersRef.child(currentUser.uid).child("f").remove();
+
+            userFamilyRef.child(currentUser.uid).child("fathers").child(data.key).remove();
+            immFamilyRef.child(currentUserDetails.familyId).child("father").remove();
             
             usersRef.child(currentUser.uid).child("m").once("value").then(snap => {
                 usersRef.child(snap.val()).once("value").then(snap2 => {
@@ -74,6 +71,9 @@ function deleteParent(data) {
             })
         } else if(data.relationship == "mother") {
             usersRef.child(currentUser.uid).child("m").remove();
+
+            userFamilyRef.child(currentUser.uid).child("mothers").child(data.key).remove();
+            immFamilyRef.child(currentUserDetails.familyId).child("mother").remove();
             
             usersRef.child(currentUser.uid).child("f").once("value").then(snap => {
                 usersRef.child(snap.val()).once("value").then(snap2 => {

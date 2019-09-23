@@ -30,13 +30,11 @@ PROBLEMS
     Add new member but exists, no name displayed
 
 TO DO
-    Check update, delete member
-    Check firebase functions
+    / Check update, delete member
+    / Check firebase functions
     Check spouse becoming user
     / If siblings exist, instead of deleting parents, user can only update data
-    Retrieve ms from parents only on retrieving tree (for user's child w/o parent2)
     User must be able to add an existing member as one parent
-    User adds child, child adds parent2
     Email verification
     Keyboard	Add enter, tab events
 
@@ -46,6 +44,5 @@ console.log(key)
 git push -u origin dev_branch
 
 create harry's immediate family
-check search function
 check extended family function
-check delete child
+add parenthood on genealogy on children
